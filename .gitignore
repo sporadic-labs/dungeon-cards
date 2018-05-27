@@ -1,0 +1,6 @@
+types
+node_modules
+public
+
+# Ignore files used for publishing to gh-pages!
+.publish

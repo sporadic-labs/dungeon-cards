@@ -1,0 +1,36 @@
+{"frames": {
+
+"kenney-ship":
+{
+	"frame": {"x":1,"y":403,"w":114,"h":82},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":114,"h":82},
+	"sourceSize": {"w":114,"h":82}
+},
+"ship":
+{
+	"frame": {"x":117,"y":403,"w":27,"h":21},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":7,"w":27,"h":21},
+	"sourceSize": {"w":35,"h":35}
+},
+"subtle-pattern-ep-natural-black":
+{
+	"frame": {"x":1,"y":1,"w":400,"h":400},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":400,"h":400},
+	"sourceSize": {"w":400,"h":400}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "assets.png",
+	"format": "RGBA8888",
+	"size": {"w":402,"h":486},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:cbc70e95704003943991d91f41e0d4a9:0cd57f3e24eb6727cb03b576946c2a28:a759b6bbc8381ac9c472b28f589ad0d6$"
+}
+}

@@ -1,0 +1,63 @@
+{
+  "name": "phaser-3-sanbox",
+  "description": "Phaser 3 & Webpack 4 Sandbox",
+  "version": "0.1.0",
+  "authors": [
+    "Rex Twedt",
+    "Mike Hadley"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/sporadic-labs/phaser-3-sandbox.git#readme.md",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.3",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "copy-webpack-plugin": "^4.5.1",
+    "css-loader": "^0.28.11",
+    "eslint": "^4.19.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.0",
+    "eslint-plugin-react": "^7.8.2",
+    "expose-loader": "^0.7.5",
+    "file-loader": "^1.1.11",
+    "gh-pages": "^1.1.0",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.4.0",
+    "node-sass": "^4.9.0",
+    "phaser": "^3.9.0",
+    "prettier": "^1.13.0",
+    "sass-loader": "^7.0.1",
+    "style-loader": "^0.21.0",
+    "typescript": "^2.8.3",
+    "webpack": "^4.9.1",
+    "webpack-cli": "^2.1.4",
+    "webpack-dev-server": "^3.1.4"
+  },
+  "prettier": {
+    "printWidth": 100
+  },
+  "scripts": {
+    "update-types": "curl https://raw.githubusercontent.com/photonstorm/phaser3-docs/master/typescript/phaser.d.ts --create-dirs --location --output ./types/phaser.d.ts",
+    "postinstall": "npm run update-types",
+    "build": "webpack --mode production",
+    "dev": "webpack-dev-server --mode development --open",
+    "dev:production": "webpack-dev-server --mode production --open",
+    "clean": "rm -rf ./public",
+    "predeploy": "npm run clean && npm run build",
+    "deploy": "gh-pages --dist public --dest .",
+    "prettier": "prettier --write ./src/js/**/*.{js,jsx,json}"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sporadic-labs/phaser-3-sandbox.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sporadic-labs/phaser-3-sandbox.git/issues"
+  },
+  "dependencies": {}
+}
