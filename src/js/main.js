@@ -1,12 +1,12 @@
 import "../css/main.scss";
-import Phaser from "phaser";
+import { AUTO, Game } from "phaser";
 import { Loading, Play, SCENE_NAME } from "./scenes";
 
 const gameDimensions = 750;
 const containerId = "game-container";
 
-const game = new Phaser.Game({
-  type: Phaser.AUTO,
+const game = new Game({
+  type: AUTO,
   parent: containerId,
   width: gameDimensions,
   height: gameDimensions,

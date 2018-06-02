@@ -1,8 +1,9 @@
-import Phaser from "phaser";
+import { Scene } from "phaser";
 import DraggableCard from "../game-objects/draggable-card";
 import Deck from "../game-objects/deck/deck";
+import { GameBoard } from "../game-objects/gameboard/gameboard";
 
-export default class PlayScene extends Phaser.Scene {
+export default class PlayScene extends Scene {
   create() {
     this.add
       .tileSprite(0, 0, 750, 750, "assets", "subtle-pattern-ep-natural-black")
@@ -11,6 +12,8 @@ export default class PlayScene extends Phaser.Scene {
     new DraggableCard(this, 100, 100);
     new DraggableCard(this, 300, 100);
     new DraggableCard(this, 500, 100);
+
+    this.board = new GameBoard(this, 4, 5);
 
     const ENEMY_CARD_TYPES = {
       WEAK_ENEMY: 0,

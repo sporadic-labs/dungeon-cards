@@ -2,10 +2,10 @@
  * LoadingScene - this is the loading screen
  */
 
-import Phaser from "phaser";
+import { Scene } from "phaser";
 import { SCENE_NAME } from "./index.js";
 
-export default class LoadingScene extends Phaser.Scene {
+export default class LoadingScene extends Scene {
   preload() {
     const loadingBar = this.add.graphics();
     this.load.on("progress", value => {
