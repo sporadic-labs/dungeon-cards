@@ -13,6 +13,7 @@ export default class DraggableCard extends LifecycleObject {
     this.sprite = scene.add
       .sprite(x, y, "assets", "cardBack_blue5")
       .setTint(0x8fdaff)
+      .setDepth(3)
       .setInteractive(); // Enables pointer events but not drag
 
     scene.input.setDraggable(this.sprite);
