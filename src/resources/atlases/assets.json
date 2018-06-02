@@ -1,8 +1,16 @@
 {"frames": {
 
+"cardBack_blue5":
+{
+	"frame": {"x":146,"y":1,"w":140,"h":190},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":140,"h":190},
+	"sourceSize": {"w":140,"h":190}
+},
 "kenney-ship":
 {
-	"frame": {"x":1,"y":403,"w":114,"h":82},
+	"frame": {"x":30,"y":1,"w":114,"h":82},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":114,"h":82},
@@ -10,7 +18,7 @@
 },
 "ship":
 {
-	"frame": {"x":117,"y":403,"w":27,"h":21},
+	"frame": {"x":1,"y":1,"w":27,"h":21},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":4,"y":7,"w":27,"h":21},
@@ -18,7 +26,7 @@
 },
 "subtle-pattern-ep-natural-black":
 {
-	"frame": {"x":1,"y":1,"w":400,"h":400},
+	"frame": {"x":1,"y":193,"w":400,"h":400},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":400,"h":400},
@@ -29,8 +37,8 @@
 	"version": "1.0",
 	"image": "assets.png",
 	"format": "RGBA8888",
-	"size": {"w":402,"h":486},
+	"size": {"w":402,"h":594},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:cbc70e95704003943991d91f41e0d4a9:0cd57f3e24eb6727cb03b576946c2a28:a759b6bbc8381ac9c472b28f589ad0d6$"
+	"smartupdate": "$TexturePacker:SmartUpdate:2812bbee548db1901acb4d2e018487ee:e0188756ef320c0924bed02ae3b92eca:a759b6bbc8381ac9c472b28f589ad0d6$"
 }
 }

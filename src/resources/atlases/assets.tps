@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>4.3.3</string>
         <key>fileName</key>
-        <string>E:/Github/phaser-3-sandbox/src/resources/atlases/assets.tps</string>
+        <string>C:/Users/mikewesthad/Documents/GitHub/dungeon-cards/src/resources/atlases/assets.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -197,6 +197,19 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">assets/cardBack_blue5.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>35,48,70,95</rect>
+                <key>scale9Paddings</key>
+                <rect>35,48,70,95</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">assets/kenney-ship.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
