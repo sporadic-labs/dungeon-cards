@@ -2,11 +2,19 @@
 
 "cardBack_blue5":
 {
-	"frame": {"x":146,"y":1,"w":140,"h":190},
+	"frame": {"x":212,"y":1,"w":140,"h":190},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":140,"h":190},
 	"sourceSize": {"w":140,"h":190}
+},
+"cards/blank":
+{
+	"frame": {"x":146,"y":1,"w":64,"h":96},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
+	"sourceSize": {"w":64,"h":96}
 },
 "kenney-ship":
 {
@@ -39,6 +47,6 @@
 	"format": "RGBA8888",
 	"size": {"w":402,"h":594},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:2812bbee548db1901acb4d2e018487ee:e0188756ef320c0924bed02ae3b92eca:a759b6bbc8381ac9c472b28f589ad0d6$"
+	"smartupdate": "$TexturePacker:SmartUpdate:71fc0ab053e3d35d5cad14e84d8abcd7:018093748c6e0fa6247f519715c98fb8:a759b6bbc8381ac9c472b28f589ad0d6$"
 }
 }
