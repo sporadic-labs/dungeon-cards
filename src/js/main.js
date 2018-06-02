@@ -1,6 +1,6 @@
 import "../css/main.scss";
 import Phaser from "phaser";
-import { Loading, Test, SCENE_NAME } from "./scenes";
+import { Loading, Play, SCENE_NAME } from "./scenes";
 
 const gameDimensions = 750;
 const containerId = "game-container";
@@ -27,5 +27,5 @@ document.getElementById(containerId).addEventListener("contextmenu", e => {
 });
 
 game.scene.add(SCENE_NAME.LOADING, Loading);
-game.scene.add(SCENE_NAME.TEST, Test);
+game.scene.add(SCENE_NAME.PLAY, Play);
 game.scene.start(SCENE_NAME.LOADING);

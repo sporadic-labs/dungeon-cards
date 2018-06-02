@@ -1,9 +1,9 @@
 import Loading from "./loading-scene";
-import Test from "./test-scene";
+import Play from "./play-scene";
 
 const SCENE_NAME = {
   LOADING: "LOADING",
-  TEST: "TEST"
+  PLAY: "PLAY"
 };
 
-export { Loading, Test, SCENE_NAME };
+export { Loading, Play, SCENE_NAME };
