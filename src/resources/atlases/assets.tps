@@ -211,6 +211,8 @@
                 <false/>
             </struct>
             <key type="filename">assets/cards/blank.png</key>
+            <key type="filename">assets/cards/strong-enemy.png</key>
+            <key type="filename">assets/cards/weak-enemy.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -220,32 +222,6 @@
                 <rect>16,24,32,48</rect>
                 <key>scale9Paddings</key>
                 <rect>16,24,32,48</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">assets/kenney-ship.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>29,21,57,41</rect>
-                <key>scale9Paddings</key>
-                <rect>29,21,57,41</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">assets/ship.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>9,9,18,18</rect>
-                <key>scale9Paddings</key>
-                <rect>9,9,18,18</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

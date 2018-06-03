@@ -2,7 +2,7 @@
 
 "cardBack_blue5":
 {
-	"frame": {"x":212,"y":1,"w":140,"h":190},
+	"frame": {"x":199,"y":1,"w":140,"h":190},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":140,"h":190},
@@ -10,27 +10,27 @@
 },
 "cards/blank":
 {
-	"frame": {"x":146,"y":1,"w":64,"h":96},
+	"frame": {"x":1,"y":1,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
 	"sourceSize": {"w":64,"h":96}
 },
-"kenney-ship":
+"cards/strong-enemy":
 {
-	"frame": {"x":30,"y":1,"w":114,"h":82},
+	"frame": {"x":67,"y":1,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":114,"h":82},
-	"sourceSize": {"w":114,"h":82}
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
+	"sourceSize": {"w":64,"h":96}
 },
-"ship":
+"cards/weak-enemy":
 {
-	"frame": {"x":1,"y":1,"w":27,"h":21},
+	"frame": {"x":133,"y":1,"w":64,"h":96},
 	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":4,"y":7,"w":27,"h":21},
-	"sourceSize": {"w":35,"h":35}
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
+	"sourceSize": {"w":64,"h":96}
 },
 "subtle-pattern-ep-natural-black":
 {
@@ -47,6 +47,6 @@
 	"format": "RGBA8888",
 	"size": {"w":402,"h":594},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:71fc0ab053e3d35d5cad14e84d8abcd7:018093748c6e0fa6247f519715c98fb8:a759b6bbc8381ac9c472b28f589ad0d6$"
+	"smartupdate": "$TexturePacker:SmartUpdate:7b5356d019f45f17d0ee24804cbf7f86:e00c3730f7a11fa2a96fe393c2c20cb5:a759b6bbc8381ac9c472b28f589ad0d6$"
 }
 }
