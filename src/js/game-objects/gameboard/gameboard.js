@@ -58,6 +58,15 @@ export class GameBoard {
     return { x, y };
   }
 
+  findPositionOf(card) {
+    for (let x = 0; x < this.boardWidth; x++) {
+      for (let y = 0; y < this.boardHeight; y++) {
+        if (this.board[y][x].getCard() === card) return { x, y };
+      }
+    }
+    return null;
+  }
+
   canAttack(enemy) {}
 
   /**
