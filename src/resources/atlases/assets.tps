@@ -197,19 +197,6 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">assets/cardBack_blue5.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>35,48,70,95</rect>
-                <key>scale9Paddings</key>
-                <rect>35,48,70,95</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
             <key type="filename">assets/cards/back.png</key>
             <key type="filename">assets/cards/blank.png</key>
             <key type="filename">assets/cards/strong-enemy.png</key>
