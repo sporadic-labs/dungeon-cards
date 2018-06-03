@@ -1,7 +1,18 @@
-export default class EnemyManager {
-  constructor() {}
+import Logger from "../../helpers/logger";
 
-  update() {
+export default class EnemyManager {
+  /**
+   * @param {Phaser.Scene} scene
+   * @param {GameBoard} gameBoard
+   * @param {Deck} enemyDeck
+   */
+  constructor(scene, gameBoard, enemyDeck) {
+    this.scene = scene;
+    this.gameBoard = gameBoard;
+    this.deck = enemyDeck;
+  }
+
+  async update() {
     this.moveEnemies();
     this.spawnEnemies();
   }
@@ -16,14 +27,20 @@ export default class EnemyManager {
   }
 
   spawnEnemies() {
-    // If no cards remaining OR no open locations in game board
-    //  Skip
-    // Else
-    //  Loop over open locations from game board
-    //  Draw a card ID from enemy deck
-    //  Contruct an EnemyCard from the card ID
-    //  Register the card with the game board
-    //  Tell the EnemyCard where to animate to
-    //  Wait for last animation to finish before game advances
+    const cardsRemaining = this.deck.getNumCardsRemaining();
+    if (cardsRemaining === 0) return;
+
+    // Limit number of locations to number of cards remaining
+    const locations = this.gameBoard.getOpenSpawnLocations().slice(0, cardsRemaining);
+    if (locations.length === 0) return;
+
+    locations.map(location => {
+      const card = this.deck.draw();
+      //  Contruct an EnemyCard from the card ID
+      Logger.log(`Spawn enemy with card ${card}`);
+      // Tell enemy to animate to location
+    });
+
+    // Wait for last animation to finish before game advances
   }
 }

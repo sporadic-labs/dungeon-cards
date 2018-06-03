@@ -23,5 +23,7 @@ export class GameBoard {
 
   canAttack(enemy) {}
 
-  getOpenSpawnLocations() {}
+  getOpenSpawnLocations() {
+    return [];
+  }
 }
