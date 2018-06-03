@@ -1,4 +1,4 @@
-import { ENEMY_CARD_TYPES } from "../../card-types";
+import ENEMY_CARD_TYPES from "./enemy-card-types";
 
 export default class EnemyCard {
   /**

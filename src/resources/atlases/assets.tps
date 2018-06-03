@@ -199,6 +199,15 @@
         <map type="IndividualSpriteSettingsMap">
             <key type="filename">assets/cards/back.png</key>
             <key type="filename">assets/cards/blank.png</key>
+            <key type="filename">assets/cards/player-attack-grid.png</key>
+            <key type="filename">assets/cards/player-attack-one.png</key>
+            <key type="filename">assets/cards/player-attack-three-horizontal.png</key>
+            <key type="filename">assets/cards/player-attack-three-vertical.png</key>
+            <key type="filename">assets/cards/player-block.png</key>
+            <key type="filename">assets/cards/player-draw.png</key>
+            <key type="filename">assets/cards/player-energy.png</key>
+            <key type="filename">assets/cards/player-shift-left.png</key>
+            <key type="filename">assets/cards/player-shift-right.png</key>
             <key type="filename">assets/cards/strong-enemy.png</key>
             <key type="filename">assets/cards/weak-enemy.png</key>
             <struct type="IndividualSpriteSettings">
