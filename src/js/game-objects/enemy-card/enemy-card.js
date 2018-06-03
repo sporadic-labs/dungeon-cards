@@ -7,7 +7,7 @@ export default class EnemyCard {
    */
   constructor(scene, type, x, y) {
     const key = type === ENEMY_CARD_TYPES.STRONG_ENEMY ? "strong-enemy" : "weak-enemy";
-    this.sprite = scene.add.sprite(x, y, "assets", `cards/${key}`);
+    this.sprite = scene.add.sprite(x, y, "assets", `cards/${key}`).setOrigin(0, 0);
 
     this.health = type === ENEMY_CARD_TYPES.STRONG_ENEMY ? 2 : 1;
   }

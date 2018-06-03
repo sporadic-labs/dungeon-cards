@@ -1,4 +1,6 @@
 import Logger from "../../helpers/logger";
+import EnemyCard from "../enemy-card";
+import { ENEMY_CARD_TYPES } from "../../card-types";
 
 export default class EnemyManager {
   /**
@@ -10,6 +12,8 @@ export default class EnemyManager {
     this.scene = scene;
     this.gameBoard = gameBoard;
     this.deck = enemyDeck;
+
+    this.enemies = [];
   }
 
   update() {
@@ -36,10 +40,15 @@ export default class EnemyManager {
     if (locations.length === 0) return;
 
     locations.map(location => {
-      const card = this.deck.draw();
-      //  Contruct an EnemyCard from the card ID
-      Logger.log(`Spawn enemy with card ${card}`);
-      // Tell enemy to animate to location
+      const enemyType = this.deck.draw();
+      if (enemyType !== ENEMY_CARD_TYPES.BLANK) {
+        const { x, y } = this.gameBoard.getWorldPosition(location.x, location.y);
+        const enemy = new EnemyCard(this.scene, enemyType, x, y);
+        this.enemies.push(enemy);
+        this.gameBoard.putAt(location.x, location.y, enemy);
+        Logger.log(`Spawn enemy with card ${enemyType}`);
+        // Tell enemy to animate to location
+      }
     });
 
     // Wait for last animation to finish before game advances
