@@ -12,9 +12,10 @@ export default class EnemyManager {
     this.deck = enemyDeck;
   }
 
-  async update() {
+  update() {
     this.moveEnemies();
     this.spawnEnemies();
+    return new Promise(resolve => setTimeout(resolve, 3000));
   }
 
   moveEnemies() {
