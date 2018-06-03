@@ -22,13 +22,11 @@ export default class PlayScene extends Scene {
 
     this.board = new GameBoard(this, 4, 5);
 
-    const composition = [
+    const enemyDeckComposition = [
       { id: ENEMY_CARD_TYPES.WEAK_ENEMY, quantity: 17 },
       { id: ENEMY_CARD_TYPES.STRONG_ENEMY, quantity: 3 },
       { id: ENEMY_CARD_TYPES.BLANK, quantity: 30 }
     ];
-
-    const deck = new Deck(composition);
 
     const yPos = i => 600 + 110 * i;
     const xPos = i => 0 + 74 * i;
@@ -42,8 +40,23 @@ export default class PlayScene extends Scene {
     new PlayerCard(this, PLAYER_CARD_TYPES.SHIFT_LEFT, xPos(2), yPos(1));
     new PlayerCard(this, PLAYER_CARD_TYPES.SHIFT_RIGHT, xPos(3), yPos(1));
 
-    this.enemyManager = new EnemyManager(this, this.board, deck);
-    this.playerManager = new PlayerManager(this, this.board, deck);
+    const enemyDeck = new Deck(enemyDeckComposition);
+    this.enemyManager = new EnemyManager(this, this.board, enemyDeck);
+        
+    const playerDeckComposition = [
+      { id: PLAYER_CARD_TYPES.ATTACK_ONE, quantity: 12 },
+      { id: PLAYER_CARD_TYPES.ATTACK_THREE_VERTICAL, quantity: 7 },
+      { id: PLAYER_CARD_TYPES.ATTACK_THREE_HORIZONTAL, quantity: 7 },
+      { id: PLAYER_CARD_TYPES.ATTACK_GRID, quantity: 5 },
+      { id: PLAYER_CARD_TYPES.ENERGY, quantity: 10 },
+      { id: PLAYER_CARD_TYPES.DRAW_THREE, quantity: 4 },
+      { id: PLAYER_CARD_TYPES.SHIFT_RIGHT, quantity: 5 },
+      { id: PLAYER_CARD_TYPES.SHIFT_LEFT, quantity: 5 },
+      { id: PLAYER_CARD_TYPES.BLOCK, quantity: 5 }
+    ];
+    
+    const playerDeck = new Deck(playerDeckComposition);
+    this.playerManager = new PlayerManager(this, this.board, playerDeck);
 
     this.runGameStep();
   }

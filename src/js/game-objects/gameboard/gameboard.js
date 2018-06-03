@@ -1,21 +1,21 @@
 import { GameBoardCell } from "./gameboard-cell";
 
 export class GameBoard {
-  constructor(scene, width, height) {
+  constructor(scene, rows, columns) {
     // Look up cell size from a card in the atlas
     const assetsJson = scene.cache.json.get("assets");
     const { w, h } = assetsJson.frames["cards/back"].sourceSize;
     this.cellWidth = w;
     this.cellHeight = h;
-
     this.cellPadding = 5;
-    this.boardWidth = width;
-    this.boardHeight = height;
+
+    this.boardRows = rows;
+    this.boardColumns = columns;
 
     this.board = [];
-    for (let boardY = 0; boardY < height; boardY++) {
+    for (let boardY = 0; boardY < columns; boardY++) {
       this.board[boardY] = [];
-      for (let boardX = 0; boardX < width; boardX++) {
+      for (let boardX = 0; boardX < rows; boardX++) {
         const { x, y } = this.getWorldPosition(boardX, boardY);
         this.board[boardY][boardX] = new GameBoardCell(scene, x, y);
       }
@@ -37,7 +37,7 @@ export class GameBoard {
   }
 
   isInBounds(x, y) {
-    return x >= 0 && x < this.boardWidth && y >= 0 && y < this.boardHeight;
+    return x >= 0 && x < this.boardRows && y >= 0 && y < this.boardColumns;
   }
 
   isEmpty(x, y) {
@@ -59,8 +59,8 @@ export class GameBoard {
   }
 
   findPositionOf(card) {
-    for (let x = 0; x < this.boardWidth; x++) {
-      for (let y = 0; y < this.boardHeight; y++) {
+    for (let x = 0; x < this.boardRows; x++) {
+      for (let y = 0; y < this.boardColumns; y++) {
         if (this.board[y][x].getCard() === card) return { x, y };
       }
     }

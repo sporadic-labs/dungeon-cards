@@ -14,20 +14,25 @@ export default class PlayerManager {
     this.energy = 0;
   }
 
-  update() {
+  async update() {
     this.drawCard();
-    this.takeActions();
-    return new Promise(resolve => setTimeout(resolve, 1000));
+    await this.takeActions();
   }
 
   drawCard() {
     // Tell a card to animate from deck position to hand
   }
 
-  takeActions() {
+  endTurn() {
+    // Tell the GameManager to start the next game loop
+    return new Promise(resolve => setTimeout(resolve, 1000));
+  }
+
+  async takeActions() {
     // Wait for player to select a card
     // Wait for second click to select target
     // Branching logic based on card
     // Click on end turn button ends the turn
+    await this.endTurn();
   }
 }
