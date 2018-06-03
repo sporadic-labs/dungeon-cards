@@ -7,11 +7,11 @@ export default class DraggableCard extends LifecycleObject {
    * @param {*} y
    * @memberof Player
    */
-  constructor(scene, x, y) {
+  constructor(scene, x, y, frame) {
     super(scene);
 
     this.sprite = scene.add
-      .sprite(x, y, "assets", "cards/strong-enemy")
+      .sprite(x, y, "assets", frame)
       .setDepth(3)
       .setInteractive(); // Enables pointer events but not drag
 

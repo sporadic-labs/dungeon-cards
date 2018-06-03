@@ -15,7 +15,7 @@ export class GameBoardCell {
 
     this.card = null;
 
-    this.sprite = scene.add.sprite(0, 0, "assets", "cards/blank");
+    this.sprite = scene.add.sprite(0, 0, "assets", "cards/back");
 
     const x = this.column * this.sprite.displayWidth;
     const y = this.row * this.sprite.displayHeight;

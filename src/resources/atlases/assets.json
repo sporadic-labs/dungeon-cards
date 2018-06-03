@@ -2,13 +2,13 @@
 
 "cardBack_blue5":
 {
-	"frame": {"x":199,"y":1,"w":140,"h":190},
+	"frame": {"x":265,"y":1,"w":140,"h":190},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":140,"h":190},
 	"sourceSize": {"w":140,"h":190}
 },
-"cards/blank":
+"cards/back":
 {
 	"frame": {"x":1,"y":1,"w":64,"h":96},
 	"rotated": false,
@@ -16,7 +16,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
 	"sourceSize": {"w":64,"h":96}
 },
-"cards/strong-enemy":
+"cards/blank":
 {
 	"frame": {"x":67,"y":1,"w":64,"h":96},
 	"rotated": false,
@@ -24,9 +24,17 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
 	"sourceSize": {"w":64,"h":96}
 },
-"cards/weak-enemy":
+"cards/strong-enemy":
 {
 	"frame": {"x":133,"y":1,"w":64,"h":96},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
+	"sourceSize": {"w":64,"h":96}
+},
+"cards/weak-enemy":
+{
+	"frame": {"x":199,"y":1,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -45,8 +53,8 @@
 	"version": "1.0",
 	"image": "assets.png",
 	"format": "RGBA8888",
-	"size": {"w":402,"h":594},
+	"size": {"w":406,"h":594},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:7b5356d019f45f17d0ee24804cbf7f86:e00c3730f7a11fa2a96fe393c2c20cb5:a759b6bbc8381ac9c472b28f589ad0d6$"
+	"smartupdate": "$TexturePacker:SmartUpdate:78fd68ef563cf7db051702d4ceb41da7:444bf99b1e51f5c3d0a061d492d9272c:a759b6bbc8381ac9c472b28f589ad0d6$"
 }
 }

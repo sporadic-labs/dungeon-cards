@@ -210,6 +210,7 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">assets/cards/back.png</key>
             <key type="filename">assets/cards/blank.png</key>
             <key type="filename">assets/cards/strong-enemy.png</key>
             <key type="filename">assets/cards/weak-enemy.png</key>
