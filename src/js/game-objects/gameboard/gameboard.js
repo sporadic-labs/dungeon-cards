@@ -23,7 +23,17 @@ export class GameBoard {
 
   canAttack(enemy) {}
 
+  /**
+   * Get an array of game board locations where enemies can spawn.
+   *
+   * @returns {Object[]} An array of objects in the form { x, y }
+   * @memberof GameBoard
+   */
   getOpenSpawnLocations() {
-    return [];
+    const locations = [];
+    this.board[0].forEach((cell, x) => {
+      if (!cell.getCard()) locations.push({ x, y: 0 });
+    });
+    return locations;
   }
 }
