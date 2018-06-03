@@ -2,6 +2,9 @@ import { Scene } from "phaser";
 import DraggableCard from "../game-objects/draggable-card";
 import Deck from "../game-objects/deck/deck";
 import { GameBoard } from "../game-objects/gameboard/gameboard";
+import EnemyManager from "../game-objects/enemy-manager";
+import PlayerManager from "../game-objects/player-manager";
+import Logger from "../helpers/logger";
 
 export default class PlayScene extends Scene {
   create() {
@@ -28,6 +31,23 @@ export default class PlayScene extends Scene {
     ];
 
     const deck = new Deck(composition);
+
+    this.enemyManager = new EnemyManager(this, this.board, deck);
+    this.playerManager = new PlayerManager(this, this.board, deck);
+
+    this.runGameStep();
+  }
+
+  async runGameStep() {
+    Logger.log("Enemy starting turn");
+    await this.enemyManager.update();
+    Logger.log("Enemy ending turn");
+
+    Logger.log("Player starting turn");
+    await this.playerManager.update();
+    Logger.log("Player ending turn");
+
+    this.runGameStep();
   }
 
   update(time, delta) {}
