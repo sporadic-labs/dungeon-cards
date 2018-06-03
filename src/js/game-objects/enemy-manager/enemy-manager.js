@@ -19,7 +19,8 @@ export default class EnemyManager {
   update() {
     this.moveEnemies();
     this.spawnEnemies();
-    return new Promise(resolve => setTimeout(resolve, 3000));
+    return new Promise(resolve => setTimeout(resolve, 1000));
+  }
 
   /**
    * Sort enemies in the following order: top to bottom then left to right.

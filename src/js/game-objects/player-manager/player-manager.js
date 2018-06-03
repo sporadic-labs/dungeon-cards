@@ -17,7 +17,7 @@ export default class PlayerManager {
   update() {
     this.drawCard();
     this.takeActions();
-    return new Promise(resolve => setTimeout(resolve, 3000));
+    return new Promise(resolve => setTimeout(resolve, 1000));
   }
 
   drawCard() {
