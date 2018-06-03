@@ -5,6 +5,7 @@ import { GameBoard } from "../game-objects/gameboard/gameboard";
 import EnemyManager from "../game-objects/enemy-manager";
 import PlayerManager from "../game-objects/player-manager";
 import Logger from "../helpers/logger";
+import { ENEMY_CARD_TYPES } from "../card-types";
 
 export default class PlayScene extends Scene {
   create() {
@@ -18,12 +19,6 @@ export default class PlayScene extends Scene {
     new DraggableCard(this, 500, 100, "cards/strong-enemy");
 
     this.board = new GameBoard(this, 4, 5);
-
-    const ENEMY_CARD_TYPES = {
-      WEAK_ENEMY: 0,
-      STRONG_ENEMY: 1,
-      BLANK: 2
-    };
 
     const composition = [
       { id: ENEMY_CARD_TYPES.WEAK_ENEMY, quantity: 17 },
