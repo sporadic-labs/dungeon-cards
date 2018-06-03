@@ -2,6 +2,14 @@ import { GameBoardCell } from "./gameboard-cell";
 
 export class GameBoard {
   constructor(scene, width, height) {
+    // Look up cell size from a card in the atlas
+    const assetsJson = scene.cache.json.get("assets");
+    const { w, h } = assetsJson.frames["cards/back"].sourceSize;
+    this.cellWidth = w;
+    this.cellHeight = h;
+
+    this.cellPadding = 5;
+
     this.board = [];
     for (let i = 0; i < height; i++) {
       this.board[i] = [];
@@ -19,6 +27,12 @@ export class GameBoard {
     if (this.board[y] && this.board[y][x] && !this.board[y][x].getCard()) {
       this.board[y][x].setCard(card);
     }
+  }
+
+  getWorldPosition(boardX, boardY) {
+    const x = boardX * (this.cellWidth + this.cellPadding);
+    const y = boardY * (this.cellHeight + this.cellPadding);
+    return { x, y };
   }
 
   canAttack(enemy) {}
