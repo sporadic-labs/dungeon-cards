@@ -6,6 +6,7 @@ import EnemyManager from "../game-objects/enemy-manager";
 import PlayerManager from "../game-objects/player-manager";
 import Logger from "../helpers/logger";
 import { ENEMY_CARD_TYPES } from "../card-types";
+import EnemyCard from "../game-objects/enemy-card";
 
 export default class PlayScene extends Scene {
   create() {
@@ -27,6 +28,9 @@ export default class PlayScene extends Scene {
     ];
 
     const deck = new Deck(composition);
+
+    new EnemyCard(this, ENEMY_CARD_TYPES.WEAK_ENEMY, 100, 600);
+    new EnemyCard(this, ENEMY_CARD_TYPES.STRONG_ENEMY, 200, 600);
 
     this.enemyManager = new EnemyManager(this, this.board, deck);
     this.playerManager = new PlayerManager(this, this.board, deck);

@@ -1,7 +1,15 @@
+import { ENEMY_CARD_TYPES } from "../../card-types";
+
 export default class EnemyCard {
-  constructor(scene) {
-    // Make a sprite
-    this.sprite;
+  /**
+   * @param {Phaser.Scene} scene
+   * @param {*} type
+   */
+  constructor(scene, type, x, y) {
+    const key = type === ENEMY_CARD_TYPES.STRONG_ENEMY ? "strong-enemy" : "weak-enemy";
+    this.sprite = scene.add.sprite(x, y, "assets", `cards/${key}`);
+
+    this.health = type === ENEMY_CARD_TYPES.STRONG_ENEMY ? 2 : 1;
   }
 
   moveTo() {
