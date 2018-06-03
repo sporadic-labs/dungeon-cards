@@ -7,7 +7,6 @@ import PlayerManager from "../game-objects/player-manager";
 import Logger from "../helpers/logger";
 import { ENEMY_CARD_TYPES } from "../game-objects/enemy-card";
 import { PLAYER_CARD_TYPES } from "../game-objects/player-card";
-import PlayerCard from "../game-objects/player-card";
 
 export default class PlayScene extends Scene {
   create() {
@@ -27,18 +26,6 @@ export default class PlayScene extends Scene {
       { id: ENEMY_CARD_TYPES.STRONG_ENEMY, quantity: 3 },
       { id: ENEMY_CARD_TYPES.BLANK, quantity: 30 }
     ];
-
-    const yPos = i => 600 + 110 * i;
-    const xPos = i => 0 + 74 * i;
-    new PlayerCard(this, PLAYER_CARD_TYPES.ATTACK_ONE, xPos(0), yPos(0));
-    new PlayerCard(this, PLAYER_CARD_TYPES.ATTACK_THREE_HORIZONTAL, xPos(1), yPos(0));
-    new PlayerCard(this, PLAYER_CARD_TYPES.ATTACK_THREE_VERTICAL, xPos(2), yPos(0));
-    new PlayerCard(this, PLAYER_CARD_TYPES.ATTACK_GRID, xPos(3), yPos(0));
-    new PlayerCard(this, PLAYER_CARD_TYPES.ENERGY, xPos(4), yPos(0));
-    new PlayerCard(this, PLAYER_CARD_TYPES.BLOCK, xPos(0), yPos(1));
-    new PlayerCard(this, PLAYER_CARD_TYPES.DRAW, xPos(1), yPos(1));
-    new PlayerCard(this, PLAYER_CARD_TYPES.SHIFT_LEFT, xPos(2), yPos(1));
-    new PlayerCard(this, PLAYER_CARD_TYPES.SHIFT_RIGHT, xPos(3), yPos(1));
 
     const enemyDeck = new Deck(enemyDeckComposition);
     this.enemyManager = new EnemyManager(this, this.board, enemyDeck);
