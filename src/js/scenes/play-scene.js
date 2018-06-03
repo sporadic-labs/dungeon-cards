@@ -8,8 +8,9 @@ import Logger from "../helpers/logger";
 
 export default class PlayScene extends Scene {
   create() {
+    const { width, height } = this.sys.game.config;
     this.add
-      .tileSprite(0, 0, 750, 750, "assets", "subtle-pattern-ep-natural-black")
+      .tileSprite(0, 0, width, height, "assets", "subtle-pattern-ep-natural-black")
       .setOrigin(0, 0);
 
     new DraggableCard(this, 100, 100);
