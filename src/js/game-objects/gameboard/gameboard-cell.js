@@ -18,21 +18,6 @@ export class GameBoardCell {
       .setOrigin(0, 0)
       .setPosition(x, y)
       .setInteractive(); // Enables pointer events but not drag
-
-    this.sprite.on("pointerdown", () => {
-      Logger.log(
-        `Row: ${this.row} Column: ${this.column} is ${
-          this.card ? "occupied by" + this.card : "empty!"
-        }`
-      );
-    });
-    // NOTE(rex): Need this to work when you are holding a card as well.
-    this.sprite.on("pointerover", () => {
-      Logger.log(`Hovering over Row: ${this.row} Column: ${this.column}!`);
-    });
-    this.sprite.on("pointerout", () => {
-      Logger.log(`No longer hovering over Row: ${this.row} Column: ${this.column}`);
-    });
   }
 
   /**
