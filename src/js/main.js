@@ -1,6 +1,9 @@
 import "../css/main.scss";
 import { AUTO, Game } from "phaser";
 import { Loading, Play, SCENE_NAME } from "./scenes";
+import logger, { LOG_LEVEL } from "./helpers/logger";
+
+logger.setLevel(PRODUCTION ? LOG_LEVEL.OFF : LOG_LEVEL.ALL);
 
 const gameDimensions = 750;
 const containerId = "game-container";

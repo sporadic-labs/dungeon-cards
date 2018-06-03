@@ -1,3 +1,5 @@
+import Logger from "../../helpers/logger";
+
 /**
  * Class to represent a deck of cards (represented as IDs). Each card can in one of three places: in
  * the deck, in discard or in play.
@@ -57,7 +59,7 @@ export default class Deck {
       ];
       this.cardsInDiscard.push(card);
     } else {
-      console.warn("Attempting to discard a card that is not in the deck!");
+      Logger.warn("Attempting to discard a card that is not in the deck!");
     }
   }
 
