@@ -32,9 +32,18 @@ export class GameBoard {
     }
   }
 
+  removeAt(x, y) {
+    if (this.isInBounds(x, y)) this.board[y][x].clearCard();
+  }
+
   isInBounds(x, y) {
     return x >= 0 && x < this.boardWidth && y >= 0 && y < this.boardHeight;
   }
+
+  isEmpty(x, y) {
+    return this.isInBounds(x, y) && this.board[y][x].isEmpty();
+  }
+
   /**
    * Convert from boardX (column) and boardY (row) positions to world position in game.
    *

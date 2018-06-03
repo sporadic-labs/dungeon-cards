@@ -50,6 +50,10 @@ export class GameBoardCell {
     this.card = card;
   }
 
+  isEmpty() {
+    return this.card === null;
+  }
+
   /**
    * Remove the current card.
    */
