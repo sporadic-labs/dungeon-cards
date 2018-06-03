@@ -11,13 +11,13 @@ export class GameBoard {
     }
   }
 
-  getAt(column, row) {
-    return this.board[column] && this.board[column][row] ? this.board[column][row].getCard() : null;
+  getAt(x, y) {
+    return this.board[y] && this.board[y][x] ? this.board[y][x].getCard() : null;
   }
 
-  putAt(column, row, card) {
-    if (this.board[column] && this.board[column][row] && !this.board[column][row].getCard()) {
-      this.board[column][row].setCard(card);
+  putAt(x, y, card) {
+    if (this.board[y] && this.board[y][x] && !this.board[y][x].getCard()) {
+      this.board[y][x].setCard(card);
     }
   }
 
