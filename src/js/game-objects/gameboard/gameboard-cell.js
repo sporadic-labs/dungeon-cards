@@ -7,7 +7,7 @@ export class GameBoardCell {
    * @param {number} column
    * @param {number} row
    */
-  constructor(scene, column, row) {
+  constructor(scene, row, column) {
     this.scene = scene;
 
     this.column = column;
