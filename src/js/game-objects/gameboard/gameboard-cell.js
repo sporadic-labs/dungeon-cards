@@ -2,23 +2,18 @@ import Logger from "../../helpers/logger";
 
 export class GameBoardCell {
   /**
-   *
    * @param {Phaser.Scene} scene
-   * @param {number} column
-   * @param {number} row
+   * @param {number} x
+   * @param {number} y
+   * @memberof GameBoardCell
    */
-  constructor(scene, row, column) {
+  constructor(scene, x, y) {
     this.scene = scene;
-
-    this.column = column;
-    this.row = row;
 
     this.card = null;
 
     this.sprite = scene.add.sprite(0, 0, "assets", "cards/back");
 
-    const x = this.column * (this.sprite.displayWidth + 10);
-    const y = this.row * (this.sprite.displayHeight + 10);
     this.sprite
       .setOrigin(0, 0)
       .setPosition(x, y)

@@ -11,10 +11,11 @@ export class GameBoard {
     this.cellPadding = 5;
 
     this.board = [];
-    for (let i = 0; i < height; i++) {
-      this.board[i] = [];
-      for (let j = 0; j < width; j++) {
-        this.board[i][j] = new GameBoardCell(scene, i, j);
+    for (let boardY = 0; boardY < height; boardY++) {
+      this.board[boardY] = [];
+      for (let boardX = 0; boardX < width; boardX++) {
+        const { x, y } = this.getWorldPosition(boardX, boardY);
+        this.board[boardY][boardX] = new GameBoardCell(scene, x, y);
       }
     }
   }
@@ -29,6 +30,14 @@ export class GameBoard {
     }
   }
 
+  /**
+   * Convert from boardX (column) and boardY (row) positions to world position in game.
+   *
+   * @param {number} boardX
+   * @param {number} boardY
+   * @returns {object} Location in the form {x, y}
+   * @memberof GameBoard
+   */
   getWorldPosition(boardX, boardY) {
     const x = boardX * (this.cellWidth + this.cellPadding);
     const y = boardY * (this.cellHeight + this.cellPadding);
