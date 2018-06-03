@@ -12,6 +12,19 @@ export default class EnemyCard {
     this.health = type === ENEMY_CARD_TYPES.STRONG_ENEMY ? 2 : 1;
   }
 
+  isBlocked() {
+    return false;
+  }
+
+  getPosition() {
+    return { x: this.sprite.x, y: this.sprite.y };
+  }
+
+  setPosition(x, y) {
+    this.sprite.x = x;
+    this.sprite.y = y;
+  }
+
   moveTo() {
     // Animate and move to world pixel positions
   }

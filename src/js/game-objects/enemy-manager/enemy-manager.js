@@ -20,9 +20,38 @@ export default class EnemyManager {
     this.moveEnemies();
     this.spawnEnemies();
     return new Promise(resolve => setTimeout(resolve, 3000));
+
+  /**
+   * Sort enemies in the following order: top to bottom then left to right.
+   *
+   * @memberof EnemyManager
+   */
+  sortEnemies() {
+    this.enemies.sort((enemy1, enemy2) => {
+      const p1 = enemy1.getPosition();
+      const p2 = enemy2.getPosition();
+      if (p1.y > p2.y) return -1;
+      else if (p1.y < p2.y) return 1;
+      else {
+        if (p1.x < p2.x) return -1;
+        if (p1.x > p2.x) return 1;
+        else return 0;
+      }
+    });
   }
 
   moveEnemies() {
+    this.sortEnemies();
+    this.enemies.map(enemy => {
+      const boardPosition = this.gameBoard.findPositionOf(enemy);
+      if (!enemy.isBlocked() && this.gameBoard.isEmpty(boardPosition.x, boardPosition.y + 1)) {
+        const { x, y } = this.gameBoard.getWorldPosition(boardPosition.x, boardPosition.y + 1);
+        enemy.setPosition(x, y);
+        this.gameBoard.removeAt(boardPosition.x, boardPosition.y);
+        this.gameBoard.putAt(boardPosition.x, boardPosition.y + 1, enemy);
+      }
+    });
+
     // Loop over all enemies from bottom left to top right
     //  If enemy is not blocked
     //    Ask enemy where it wants to move
