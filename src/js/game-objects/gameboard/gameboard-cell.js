@@ -17,8 +17,8 @@ export class GameBoardCell {
 
     this.sprite = scene.add.sprite(0, 0, "assets", "cards/back");
 
-    const x = this.column * this.sprite.displayWidth;
-    const y = this.row * this.sprite.displayHeight;
+    const x = this.column * (this.sprite.displayWidth + 10);
+    const y = this.row * (this.sprite.displayHeight + 10);
     this.sprite
       .setOrigin(0, 0)
       .setPosition(x, y)
