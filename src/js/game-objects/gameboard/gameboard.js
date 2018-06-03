@@ -9,6 +9,8 @@ export class GameBoard {
     this.cellHeight = h;
 
     this.cellPadding = 5;
+    this.boardWidth = width;
+    this.boardHeight = height;
 
     this.board = [];
     for (let boardY = 0; boardY < height; boardY++) {
@@ -21,15 +23,18 @@ export class GameBoard {
   }
 
   getAt(x, y) {
-    return this.board[y] && this.board[y][x] ? this.board[y][x].getCard() : null;
+    return this.isInBounds(x, y) ? this.board[y][x].getCard() : null;
   }
 
   putAt(x, y, card) {
-    if (this.board[y] && this.board[y][x] && !this.board[y][x].getCard()) {
+    if (this.isInBounds(x, y) && this.board[y][x].isEmpty()) {
       this.board[y][x].setCard(card);
     }
   }
 
+  isInBounds(x, y) {
+    return x >= 0 && x < this.boardWidth && y >= 0 && y < this.boardHeight;
+  }
   /**
    * Convert from boardX (column) and boardY (row) positions to world position in game.
    *
