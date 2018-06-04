@@ -13,9 +13,9 @@ export class GameBoard {
     this.boardColumns = columns;
 
     this.board = [];
-    for (let boardY = 0; boardY < columns; boardY++) {
+    for (let boardY = 0; boardY < rows; boardY++) {
       this.board[boardY] = [];
-      for (let boardX = 0; boardX < rows; boardX++) {
+      for (let boardX = 0; boardX < columns; boardX++) {
         const { x, y } = this.getWorldPosition(boardX, boardY);
         this.board[boardY][boardX] = new GameBoardCell(scene, x, y);
       }
@@ -37,7 +37,7 @@ export class GameBoard {
   }
 
   isInBounds(x, y) {
-    return x >= 0 && x < this.boardRows && y >= 0 && y < this.boardColumns;
+    return x >= 0 && x < this.boardColumns && y >= 0 && y < this.boardRows;
   }
 
   isEmpty(x, y) {
@@ -59,8 +59,8 @@ export class GameBoard {
   }
 
   findPositionOf(card) {
-    for (let x = 0; x < this.boardRows; x++) {
-      for (let y = 0; y < this.boardColumns; y++) {
+    for (let x = 0; x < this.boardColumns; x++) {
+      for (let y = 0; y < this.boardRows; y++) {
         if (this.board[y][x].getCard() === card) return { x, y };
       }
     }

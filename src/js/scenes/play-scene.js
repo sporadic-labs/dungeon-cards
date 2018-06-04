@@ -19,7 +19,7 @@ export default class PlayScene extends Scene {
     new DraggableCard(this, 700, 100, "cards/weak-enemy");
     new DraggableCard(this, 800, 100, "cards/strong-enemy");
 
-    this.board = new GameBoard(this, 4, 5);
+    this.board = new GameBoard(this, 5, 4);
 
     const enemyDeckComposition = [
       { id: ENEMY_CARD_TYPES.WEAK_ENEMY, quantity: 17 },
