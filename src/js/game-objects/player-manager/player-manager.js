@@ -25,7 +25,6 @@ export default class PlayerManager {
     new PlayerCard(scene, PLAYER_CARD_TYPES.DRAW, xPos(6), yPos(0));
     new PlayerCard(scene, PLAYER_CARD_TYPES.SHIFT_LEFT, xPos(7), yPos(0));
     new PlayerCard(scene, PLAYER_CARD_TYPES.SHIFT_RIGHT, xPos(8), yPos(0));
-
   }
 
   async update() {
@@ -39,7 +38,7 @@ export default class PlayerManager {
   dealCards() {
     for (let x = 0; x < 6; x++) {
       this.deck.draw();
-    };
+    }
   }
 
   /**
@@ -47,7 +46,7 @@ export default class PlayerManager {
    */
   drawCard() {
     // Tell a card to animate from deck position to hand
-    this.deck.draw()
+    this.deck.draw();
   }
 
   endTurn() {

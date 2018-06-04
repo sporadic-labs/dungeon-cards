@@ -29,7 +29,7 @@ export default class PlayScene extends Scene {
 
     const enemyDeck = new Deck(enemyDeckComposition);
     this.enemyManager = new EnemyManager(this, this.board, enemyDeck);
-        
+
     const playerDeckComposition = [
       { id: PLAYER_CARD_TYPES.ATTACK_ONE, quantity: 12 },
       { id: PLAYER_CARD_TYPES.ATTACK_THREE_VERTICAL, quantity: 7 },
@@ -41,7 +41,7 @@ export default class PlayScene extends Scene {
       { id: PLAYER_CARD_TYPES.SHIFT_LEFT, quantity: 5 },
       { id: PLAYER_CARD_TYPES.BLOCK, quantity: 5 }
     ];
-    
+
     const playerDeck = new Deck(playerDeckComposition);
     this.playerManager = new PlayerManager(this, this.board, playerDeck);
 
