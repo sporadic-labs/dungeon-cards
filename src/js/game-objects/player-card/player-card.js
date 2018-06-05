@@ -26,4 +26,8 @@ export default class PlayerCard {
   moveTo() {
     // Animate and move to world pixel positions
   }
+
+  destroy() {
+    this.sprite.destroy();
+  }
 }

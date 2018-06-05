@@ -1,5 +1,5 @@
 import Logger from "../../helpers/logger";
-import PlayerCard, { PLAYER_CARD_TYPES } from "../player-card";
+import PlayerCard from "../player-card";
 
 export default class PlayerManager {
   /**
@@ -13,32 +13,36 @@ export default class PlayerManager {
     this.deck = playerDeck;
 
     this.energy = 0;
+    this.playerHand = [];
 
-    const yPos = i => 600 + 110 * i;
-    const xPos = i => 0 + 74 * i;
-    new PlayerCard(scene, PLAYER_CARD_TYPES.ATTACK_ONE, xPos(0), yPos(0));
-    new PlayerCard(scene, PLAYER_CARD_TYPES.ATTACK_THREE_HORIZONTAL, xPos(1), yPos(0));
-    new PlayerCard(scene, PLAYER_CARD_TYPES.ATTACK_THREE_VERTICAL, xPos(2), yPos(0));
-    new PlayerCard(scene, PLAYER_CARD_TYPES.ATTACK_GRID, xPos(3), yPos(0));
-    new PlayerCard(scene, PLAYER_CARD_TYPES.ENERGY, xPos(4), yPos(0));
-    new PlayerCard(scene, PLAYER_CARD_TYPES.BLOCK, xPos(5), yPos(0));
-    new PlayerCard(scene, PLAYER_CARD_TYPES.DRAW, xPos(6), yPos(0));
-    new PlayerCard(scene, PLAYER_CARD_TYPES.SHIFT_LEFT, xPos(7), yPos(0));
-    new PlayerCard(scene, PLAYER_CARD_TYPES.SHIFT_RIGHT, xPos(8), yPos(0));
+    this.dealCards();
   }
 
   async update() {
     this.drawCard();
+    this.arrangeCards();
     await this.takeActions();
+    if (this.playerHand.length > 10) await this.discardCard();
   }
 
   /**
    * First draw.
    */
-  dealCards() {
-    for (let x = 0; x < 6; x++) {
-      this.deck.draw();
+  dealCards(numToDeal = 6) {
+    for (let x = 0; x < numToDeal; x++) {
+      const cardId = this.deck.draw();
+      this.playerHand.push(new PlayerCard(this.scene, cardId, 0, 0));
     }
+    this.arrangeCards();
+  }
+
+  arrangeCards() {
+    const x = 0;
+    const y = 550;
+    this.playerHand.forEach((card, i) =>
+      // 2D grid with 6 columns
+      card.setPosition(x + 74 * (i % 6), y + 100 * Math.floor(i / 6))
+    );
   }
 
   /**
@@ -46,7 +50,17 @@ export default class PlayerManager {
    */
   drawCard() {
     // Tell a card to animate from deck position to hand
-    this.deck.draw();
+    const cardId = this.deck.draw();
+    this.playerHand.push(new PlayerCard(this.scene, cardId, 0, 0));
+  }
+
+  discardCard() {
+    // TODO: this should wait for the player to choose a card to discard
+    const card = this.playerHand.shift();
+    card.destroy();
+    this.deck.discard(card.type);
+    this.arrangeCards();
+    return Promise.resolve();
   }
 
   endTurn() {
