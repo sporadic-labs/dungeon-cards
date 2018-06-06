@@ -199,6 +199,7 @@
         <map type="IndividualSpriteSettingsMap">
             <key type="filename">assets/cards/back.png</key>
             <key type="filename">assets/cards/blank.png</key>
+            <key type="filename">assets/cards/outline.png</key>
             <key type="filename">assets/cards/player-attack-grid.png</key>
             <key type="filename">assets/cards/player-attack-one.png</key>
             <key type="filename">assets/cards/player-attack-three-horizontal.png</key>
