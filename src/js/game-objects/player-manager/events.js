@@ -1,5 +1,4 @@
-import { Events } from "phaser";
-import Logger from "../../helpers/logger";
+import EmitterWithLogging from "../../helpers/emitter-with-logging";
 
 const EVENT_NAMES = {
   ACTION_START: "ACTION_START",
@@ -13,12 +12,6 @@ const EVENT_NAMES = {
   END_PLAYER_TURN: "END_PLAYER_TURN"
 };
 
-const emitter = new Events.EventEmitter();
-
-// Snoop on the emitter for debugging
-emitter.emit = function(event, ...args) {
-  Logger.log(`Event emitted: ${event}`);
-  Events.EventEmitter.prototype.emit.call(emitter, event, ...args);
-};
+const emitter = new EmitterWithLogging(`Player Manager`);
 
 export { emitter, EVENT_NAMES };
