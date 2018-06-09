@@ -1,4 +1,5 @@
 import { PLAYER_CARD_INFO } from "./player-card-info";
+import { EVENTS } from "../events";
 
 export default class PlayerCard {
   /**
@@ -46,6 +47,7 @@ export default class PlayerCard {
       duration: 200,
       ease: "Quad.easeOut"
     });
+    this.scene.events.emit(EVENTS.SELECT_PLAYER_CARD, this);
   }
 
   deselect() {
