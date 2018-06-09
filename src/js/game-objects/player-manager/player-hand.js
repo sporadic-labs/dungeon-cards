@@ -67,11 +67,12 @@ export default class PlayerHand {
   }
 
   arrangeCards() {
-    const x = 0;
-    const y = 550;
+    const x = 200;
+    const y = 580;
+    const col = 6;
     this.cards.forEach((card, i) =>
       // 2D grid with 6 columns
-      card.setPosition(x + 74 * (i % 6), y + 100 * Math.floor(i / 6))
+      card.setPosition(x + 68 * (i % col), y + 100 * Math.floor(i / col))
     );
   }
 

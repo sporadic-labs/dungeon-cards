@@ -1,8 +1,8 @@
 import { getFontString } from "../../font";
 
-const style = {
+const defaultStyle = {
   font: getFontString("Chivo", { size: "24px", weight: 600 }),
-  fill: "#FFF"
+  fill: "#FFC936"
 };
 
 export default class PopupText {
@@ -12,22 +12,23 @@ export default class PopupText {
    * @param {number} x
    * @param {number} y
    */
-  constructor(scene, text, x, y) {
+  constructor(scene, text, x, y, style) {
 
     this.text = text;
     this.scene = scene;
+    this.style = style || defaultStyle
 
     this.text = scene.add
-      .text(0, 0, text, style)
+      .text(0, 0, text, this.style)
       .setOrigin(0.5, 0.5);
 
     this.setPosition(x, y);
 
     this.scene.tweens.add({
       targets: this.text,
-      scaleY: 1.05,
-      scaleX: 1.05,
-      y: y - 10,
+      scaleY: 1.02,
+      scaleX: 1.02,
+      y: y - 2,
       duration: 800,
       ease: "Quad.easeOut",
       onComplete: () => this.destroy()

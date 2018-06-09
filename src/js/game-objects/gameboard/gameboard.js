@@ -7,7 +7,7 @@ export class GameBoard {
     const { w, h } = assetsJson.frames["cards/back"].sourceSize;
     this.cellWidth = w;
     this.cellHeight = h;
-    this.cellPadding = 5;
+    this.cellPadding = 4;
 
     this.boardRows = rows;
     this.boardColumns = columns;
@@ -53,8 +53,10 @@ export class GameBoard {
    * @memberof GameBoard
    */
   getWorldPosition(boardX, boardY) {
-    const x = boardX * (this.cellWidth + this.cellPadding);
-    const y = boardY * (this.cellHeight + this.cellPadding);
+    const xOffset = 268;
+    const yOffset = 50;
+    const x = (boardX * (this.cellWidth + this.cellPadding)) + xOffset;
+    const y = (boardY * (this.cellHeight + this.cellPadding)) + yOffset;
     return { x, y };
   }
 

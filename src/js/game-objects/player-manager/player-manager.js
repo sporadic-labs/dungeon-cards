@@ -19,8 +19,8 @@ export default class PlayerManager {
     this.playerHand.drawCards(6);
 
     const { width, height } = scene.sys.game.config;
-    this.endTurnButton = new EndTurnButton(scene, width - 80, height - 400);
-    this.discardPile = new DiscardPile(scene, width - 50, height - 200);
+    this.endTurnButton = new EndTurnButton(scene, width - 80, height / 2);
+    this.discardPile = new DiscardPile(scene, width - 50, height - 170);
     this.energyDisplay = new EnergyDisplay(scene, width - 50, height - 50);
 
   }
@@ -71,7 +71,7 @@ export default class PlayerManager {
         } else {
           // Some UI to indicate player can't end turn yet.
           const { width, height } = this.scene.sys.game.config;
-          new PopupText(this.scene, "You must have 10 cards or less to continue!", width / 4, 50);
+          new PopupText(this.scene, "You must have 10 cards or less to continue!", width / 4, 20);
         }
       });
     });
