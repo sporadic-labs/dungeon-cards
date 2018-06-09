@@ -1,8 +1,6 @@
 import PlayerHand from "./player-hand";
-import { PLAYER_CARD_TYPES } from "./player-card";
-import actions from "./actions";
+import runCardAction from "./actions";
 import { emitter, EVENT_NAMES } from "./events";
-import PLAYER_EVENTS from "./events";
 import EndTurnButton from "../hud/end-turn-button";
 
 export default class PlayerManager {
@@ -26,7 +24,10 @@ export default class PlayerManager {
   async update() {
     this.drawCard();
     await this.takeActions();
-    if (this.playerHand.getNumCards() > 10) await this.discardCard();
+    if (this.playerHand.getNumCards() > 10) {
+      // TODO: this should be controlled by player selection, hard-coding for now
+      await this.discardCard(this.playerHand.cards[0]);
+    }
   }
 
   /**
@@ -50,6 +51,17 @@ export default class PlayerManager {
   async takeActions() {
     this.endTurnButton.activate();
     this.playerHand.enableSelecting();
+
+    emitter.on(EVENT_NAMES.PLAYER_CARD_SELECT, card => runCardAction(this, card));
+
+    emitter.on(EVENT_NAMES.ACTION_COMPLETE, card => {
+      this.discardCard(card);
+    });
+
+    emitter.on(EVENT_NAMES.ACTION_CANCEL, card => {
+      // Return card to its normal state
+    });
+
     // Wait for player to select a card
     // Wait for second click to select target
     // Branching logic based on card

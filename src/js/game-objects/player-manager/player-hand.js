@@ -67,8 +67,6 @@ export default class PlayerHand {
   }
 
   discardCard(card) {
-    // TODO: this shouldn't be hardcoded. It should be passed in by the UX flow.
-    card = this.cards[0];
     if (this.cards.includes(card)) {
       this.cards = this.cards.filter(c => c !== card);
       this.deck.discard(card.type);
