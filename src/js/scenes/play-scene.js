@@ -1,5 +1,4 @@
 import { Scene } from "phaser";
-import DraggableCard from "../game-objects/draggable-card";
 import Deck from "../game-objects/deck/deck";
 import { GameBoard } from "../game-objects/gameboard/gameboard";
 import EnemyManager from "../game-objects/enemy-manager";
@@ -14,10 +13,6 @@ export default class PlayScene extends Scene {
     this.add
       .tileSprite(0, 0, width, height, "assets", "subtle-pattern-ep-natural-black")
       .setOrigin(0, 0);
-
-    new DraggableCard(this, 540, 100, "cards/blank");
-    new DraggableCard(this, 620, 100, "cards/weak-enemy");
-    new DraggableCard(this, 700, 100, "cards/strong-enemy");
 
     this.board = new GameBoard(this, 5, 4);
 
