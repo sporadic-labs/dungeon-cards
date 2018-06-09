@@ -71,15 +71,13 @@ export default class PlayerManager {
     this.endTurnButton.activate();
     this.playerHand.enableSelecting();
 
-    emitter.on(EVENT_NAMES.PLAYER_CARD_SELECT, card => runCardAction(this, card));
+    const onSelect = card => runCardAction(this, card);
+    const onComplete = card => this.discardCard(card);
+    const onCancel = () => {};
 
-    emitter.on(EVENT_NAMES.ACTION_COMPLETE, card => {
-      this.discardCard(card);
-    });
-
-    emitter.on(EVENT_NAMES.ACTION_CANCEL, card => {
-      // Return card to its normal state
-    });
+    emitter.on(EVENT_NAMES.PLAYER_CARD_SELECT, onSelect);
+    emitter.on(EVENT_NAMES.ACTION_COMPLETE, onComplete);
+    emitter.on(EVENT_NAMES.ACTION_CANCEL, onCancel);
 
     // Wait for player to select a card
     // Wait for second click to select target
@@ -89,5 +87,9 @@ export default class PlayerManager {
 
     this.playerHand.disableSelecting();
     this.endTurnButton.deactivate();
+
+    emitter.off(EVENT_NAMES.PLAYER_CARD_SELECT, onSelect);
+    emitter.off(EVENT_NAMES.ACTION_COMPLETE, onComplete);
+    emitter.off(EVENT_NAMES.ACTION_CANCEL, onCancel);
   }
 }
