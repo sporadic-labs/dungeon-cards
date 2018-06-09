@@ -20,10 +20,9 @@ export default class PlayerManager {
     this.playerHand = new PlayerHand(scene, this.deck);
     this.playerHand.drawCards(6);
 
-    this.endTurnButton = new EndTurnButton(this.scene, 620, 360);
-    this.discardPile = new DiscardPile(this.scene, 620, 600);
-
     const { width, height } = scene.sys.game.config;
+    this.endTurnButton = new EndTurnButton(scene, width - 80, height - 400);
+    this.discardPile = new DiscardPile(scene, width - 50, height - 200);
     this.energyDisplay = new EnergyDisplay(scene, width - 50, height - 50);
 
   }
