@@ -10,7 +10,26 @@ const PLAYER_CARD_INFO = {
   SHIFT_RIGHT: { key: "player-shift-right" }
 };
 
-// Create "enum" from keys above so there's no chance of typos
+/**
+ * Enum for types of player cards. Created dynamically from PLAYER_CARD_INFO so there's no chance of
+ * typos.
+ * @typedef PLAYER_CARD_TYPES
+ * @property {string} ATTACK_ONE
+ * @property {string} ATTACK_THREE_HORIZONTAL
+ * @property {string} ATTACK_THREE_VERTICAL
+ * @property {string} ATTACK_GRID
+ * @property {string} BLOCK
+ * @property {string} DRAW_THREE
+ * @property {string} ENERGY
+ * @property {string} SHIFT_LEFT
+ * @property {string} SHIFT_RIGHT
+ */
+
+/**
+ * @enum {PLAYER_CARD_TYPES}
+ * @readonly
+ * @export
+ */
 const PLAYER_CARD_TYPES = {};
 Object.keys(PLAYER_CARD_INFO).forEach(key => (PLAYER_CARD_TYPES[key] = key));
 

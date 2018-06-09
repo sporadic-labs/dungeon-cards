@@ -4,7 +4,7 @@ import { EVENTS } from "../events";
 export default class PlayerCard {
   /**
    * @param {Phaser.Scene} scene
-   * @param {*} type
+   * @param {PLAYER_CARD_TYPES} type
    */
   constructor(scene, type, x, y) {
     this.type = type;
