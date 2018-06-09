@@ -1,12 +1,15 @@
 import { PLAYER_CARD_INFO } from "./player-card-info";
 import EVENTS from "../events";
+import LifecycleObject from "../lifecycle-object";
 
-export default class PlayerCard {
+export default class PlayerCard extends LifecycleObject {
   /**
    * @param {Phaser.Scene} scene
    * @param {PLAYER_CARD_TYPES} type
    */
   constructor(scene, type, x, y) {
+    super(scene);
+
     this.type = type;
     this.scene = scene;
 
@@ -24,36 +27,74 @@ export default class PlayerCard {
     this.setPosition(x, y);
 
     this.selected = false;
+    this.focused = false;
+
+    // TODO: this should only be enabled after the card as tweened into position. It shouldn't start
+    // enabled.
+    this.enableFocusing();
   }
 
   getPosition() {
     return { x: this.sprite.x, y: this.sprite.y };
   }
 
-  enableSelecting() {
+  enableFocusing() {
     this.sprite.on("pointerover", this.onPointerOver);
     this.sprite.on("pointerout", this.onPointerOut);
   }
 
-  disableSelecting() {
+  disableFocusing() {
     this.sprite.off("pointerover", this.onPointerOver);
     this.sprite.off("pointerout", this.onPointerOut);
   }
 
-  onPointerOver = () => this.scene.events.emit(EVENTS.SELECT_PLAYER_CARD, this);
-  onPointerOut = () => this.scene.events.emit(EVENTS.DESELECT_PLAYER_CARD, this);
+  enableSelecting() {
+    this.sprite.on("pointerdown", this.onPointerDown);
+  }
 
-  select() {
-    if (this.selected) return;
-    this.selected = true;
-    this.scene.tweens.killTweensOf(this.outline);
+  disableSelecting() {
+    this.sprite.off("pointerdown", this.onPointerDown);
+  }
+
+  onPointerOver = () => this.scene.events.emit(EVENTS.FOCUS_PLAYER_CARD, this);
+
+  onPointerOut = () => this.scene.events.emit(EVENTS.DEFOCUS_PLAYER_CARD, this);
+
+  onPointerDown = () => {
+    const name = this.selected ? EVENTS.DESELECT_PLAYER_CARD : EVENTS.SELECT_PLAYER_CARD;
+    this.scene.events.emit(name, this);
+  };
+
+  focus() {
+    if (this.focused) return;
+    this.focused = true;
+    this.scene.tweens.killTweensOf(this.sprite);
     this.scene.tweens.add({
-      targets: [this.sprite, this.outline],
+      targets: this.sprite,
       scaleY: 1.1,
       scaleX: 1.1,
       duration: 200,
       ease: "Quad.easeOut"
     });
+  }
+
+  defocus() {
+    if (!this.focused) return;
+    this.focused = false;
+    this.scene.tweens.killTweensOf(this.sprite);
+    this.scene.tweens.add({
+      targets: this.sprite,
+      scaleY: 1,
+      scaleX: 1,
+      duration: 200,
+      ease: "Quad.easeOut"
+    });
+  }
+
+  select() {
+    if (this.selected) return;
+    this.selected = true;
+    this.scene.tweens.killTweensOf(this.outline);
     this.scene.tweens.add({
       targets: this.outline,
       alpha: 1,
@@ -66,13 +107,6 @@ export default class PlayerCard {
     if (!this.selected) return;
     this.selected = false;
     this.scene.tweens.killTweensOf(this.outline);
-    this.scene.tweens.add({
-      targets: [this.sprite, this.outline],
-      scaleY: 1,
-      scaleX: 1,
-      duration: 200,
-      ease: "Quad.easeOut"
-    });
     this.scene.tweens.add({
       targets: this.outline,
       alpha: 0,
@@ -88,6 +122,10 @@ export default class PlayerCard {
     this.sprite.y = cy;
     this.outline.x = this.sprite.x;
     this.outline.y = this.sprite.y;
+  }
+
+  update() {
+    this.outline.setScale(this.sprite.scaleX, this.sprite.scaleY);
   }
 
   moveTo() {

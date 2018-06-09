@@ -19,6 +19,14 @@ export default class PlayerHand {
     this.scene.events.on(EVENTS.DESELECT_PLAYER_CARD, card => {
       card.deselect();
     });
+
+    this.scene.events.on(EVENTS.FOCUS_PLAYER_CARD, card => {
+      this.cards.forEach(c => c.defocus());
+      card.focus();
+    });
+    this.scene.events.on(EVENTS.DEFOCUS_PLAYER_CARD, card => {
+      card.defocus();
+    });
   }
 
   enableSelecting() {
