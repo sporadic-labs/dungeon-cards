@@ -4,9 +4,9 @@
         <key>fileFormatVersion</key>
         <int>4</int>
         <key>texturePackerVersion</key>
-        <string>4.3.3</string>
+        <string>4.5.0</string>
         <key>fileName</key>
-        <string>C:/Users/mikewesthad/Documents/GitHub/dungeon-cards/src/resources/atlases/assets.tps</string>
+        <string>C:/Users/rex/Documents/GitHub/dungeon-cards/src/resources/atlases/assets.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -172,6 +172,8 @@
         <true/>
         <key>prependSmartFolderName</key>
         <false/>
+        <key>autodetectAnimations</key>
+        <true/>
         <key>globalSpriteSettings</key>
         <struct type="SpriteSettings">
             <key>scale</key>
@@ -199,6 +201,7 @@
         <map type="IndividualSpriteSettingsMap">
             <key type="filename">assets/cards/back.png</key>
             <key type="filename">assets/cards/blank.png</key>
+            <key type="filename">assets/cards/discard.png</key>
             <key type="filename">assets/cards/outline.png</key>
             <key type="filename">assets/cards/player-attack-grid.png</key>
             <key type="filename">assets/cards/player-attack-one.png</key>
