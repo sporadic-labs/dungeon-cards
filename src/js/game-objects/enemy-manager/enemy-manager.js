@@ -1,6 +1,5 @@
 import Logger from "../../helpers/logger";
-import EnemyCard from "../enemy-card";
-import { ENEMY_CARD_TYPES } from "../enemy-card";
+import EnemyCard, { ENEMY_CARD_TYPES } from "./enemy-card";
 
 export default class EnemyManager {
   /**

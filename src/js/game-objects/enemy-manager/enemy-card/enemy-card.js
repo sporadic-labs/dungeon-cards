@@ -1,5 +1,4 @@
 import ENEMY_CARD_TYPES from "./enemy-card-types";
-import EVENTS from "../events";
 
 export default class EnemyCard {
   /**
@@ -16,8 +15,6 @@ export default class EnemyCard {
       .setInteractive();
 
     this.health = type === ENEMY_CARD_TYPES.STRONG_ENEMY ? 2 : 1;
-
-    this.sprite.on("pointerdown", () => this.select());
   }
 
   isBlocked() {
@@ -34,7 +31,7 @@ export default class EnemyCard {
   }
 
   select() {
-    this.scene.events.emit(EVENTS.SELECT_ENEMY_CARD, this);
+    // TODO(rex): Do something useful here...
   }
 
   moveTo() {

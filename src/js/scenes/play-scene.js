@@ -4,7 +4,7 @@ import { GameBoard } from "../game-objects/gameboard/gameboard";
 import EnemyManager from "../game-objects/enemy-manager";
 import PlayerManager from "../game-objects/player-manager";
 import Logger from "../helpers/logger";
-import { ENEMY_CARD_TYPES } from "../game-objects/enemy-card";
+import { ENEMY_CARD_TYPES } from "../game-objects/enemy-manager";
 import { PLAYER_CARD_TYPES } from "../game-objects/player-manager";
 
 export default class PlayScene extends Scene {
