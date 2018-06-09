@@ -2,6 +2,7 @@ import PlayerHand from "./player-hand";
 import runCardAction from "./actions";
 import { emitter, EVENT_NAMES } from "./events";
 import EndTurnButton from "../hud/end-turn-button";
+import { EnergyDisplay } from "./hud";
 
 export default class PlayerManager {
   /**
@@ -19,6 +20,9 @@ export default class PlayerManager {
     this.playerHand.drawCards(6);
 
     this.endTurnButton = new EndTurnButton(this.scene, 620, 360);
+
+    const { width, height } = scene.sys.game.config;
+    this.energyDisplay = new EnergyDisplay(scene, width - 50, height - 50);
   }
 
   async update() {
@@ -35,6 +39,21 @@ export default class PlayerManager {
    */
   drawCard() {
     this.playerHand.drawCard();
+  }
+
+  addEnergy(amount) {
+    this.energy += amount;
+    this.energyDisplay.setEnergy(this.energy);
+  }
+
+  useEnergy(amount) {
+    this.energy -= amount;
+    if (this.energy < 0) this.energy = 0;
+    this.energyDisplay.setEnergy(this.energy);
+  }
+
+  getEnergy() {
+    return this.energy;
   }
 
   discardCard(card) {

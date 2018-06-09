@@ -2,7 +2,7 @@
 
 "cards/back":
 {
-	"frame": {"x":403,"y":1,"w":64,"h":96},
+	"frame": {"x":161,"y":403,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -10,7 +10,7 @@
 },
 "cards/blank":
 {
-	"frame": {"x":469,"y":1,"w":64,"h":96},
+	"frame": {"x":227,"y":403,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -18,7 +18,7 @@
 },
 "cards/outline":
 {
-	"frame": {"x":535,"y":1,"w":64,"h":96},
+	"frame": {"x":293,"y":403,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -26,7 +26,7 @@
 },
 "cards/player-attack-grid":
 {
-	"frame": {"x":403,"y":99,"w":64,"h":96},
+	"frame": {"x":359,"y":403,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -34,7 +34,7 @@
 },
 "cards/player-attack-one":
 {
-	"frame": {"x":469,"y":99,"w":64,"h":96},
+	"frame": {"x":403,"y":1,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -42,7 +42,7 @@
 },
 "cards/player-attack-three-horizontal":
 {
-	"frame": {"x":535,"y":99,"w":64,"h":96},
+	"frame": {"x":403,"y":99,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -58,7 +58,7 @@
 },
 "cards/player-block":
 {
-	"frame": {"x":469,"y":197,"w":64,"h":96},
+	"frame": {"x":403,"y":295,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -66,7 +66,7 @@
 },
 "cards/player-draw":
 {
-	"frame": {"x":535,"y":197,"w":64,"h":96},
+	"frame": {"x":425,"y":393,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -74,7 +74,7 @@
 },
 "cards/player-energy":
 {
-	"frame": {"x":403,"y":295,"w":64,"h":96},
+	"frame": {"x":469,"y":1,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -82,7 +82,7 @@
 },
 "cards/player-shift-left":
 {
-	"frame": {"x":403,"y":393,"w":64,"h":96},
+	"frame": {"x":469,"y":99,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -90,7 +90,7 @@
 },
 "cards/player-shift-right":
 {
-	"frame": {"x":469,"y":295,"w":64,"h":96},
+	"frame": {"x":469,"y":197,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -98,7 +98,7 @@
 },
 "cards/strong-enemy":
 {
-	"frame": {"x":535,"y":295,"w":64,"h":96},
+	"frame": {"x":469,"y":295,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -106,7 +106,7 @@
 },
 "cards/weak-enemy":
 {
-	"frame": {"x":469,"y":393,"w":64,"h":96},
+	"frame": {"x":491,"y":393,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -122,11 +122,11 @@
 },
 "energy-background":
 {
-	"frame": {"x":161,"y":403,"w":78,"h":78},
+	"frame": {"x":535,"y":1,"w":50,"h":50},
 	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":1,"y":1,"w":78,"h":78},
-	"sourceSize": {"w":80,"h":80}
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
+	"sourceSize": {"w":50,"h":50}
 },
 "subtle-pattern-ep-natural-black":
 {
@@ -141,8 +141,8 @@
 	"version": "1.0",
 	"image": "assets.png",
 	"format": "RGBA8888",
-	"size": {"w":600,"h":490},
+	"size": {"w":586,"h":500},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:034e2becdb4d3c1b74d43ce0966172f3:047118a91c6a3ff5d13055dfb9a5d8c3:a759b6bbc8381ac9c472b28f589ad0d6$"
+	"smartupdate": "$TexturePacker:SmartUpdate:096c04a1a2d5d8969ed0378c450fa76f:b36514ebbdf4832fd2e924bf2767d22b:a759b6bbc8381ac9c472b28f589ad0d6$"
 }
 }
