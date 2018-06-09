@@ -1,5 +1,5 @@
-import PlayerCard from "../player-card";
-import EVENTS from "../events";
+import PlayerCard from "./player-card";
+import { emitter, EVENT_NAMES } from "./events";
 
 export default class PlayerHand {
   /**
@@ -12,19 +12,21 @@ export default class PlayerHand {
     this.deck = deck;
     this.cards = [];
 
-    this.scene.events.on(EVENTS.SELECT_PLAYER_CARD, card => {
+    emitter.on(EVENT_NAMES.PLAYER_CARD_SELECT, card => {
       this.cards.forEach(c => c.deselect());
       card.select();
     });
-    this.scene.events.on(EVENTS.DESELECT_PLAYER_CARD, card => {
+
+    emitter.on(EVENT_NAMES.PLAYER_CARD_DESELECT, card => {
       card.deselect();
     });
 
-    this.scene.events.on(EVENTS.FOCUS_PLAYER_CARD, card => {
+    emitter.on(EVENT_NAMES.PLAYER_CARD_FOCUS, card => {
       this.cards.forEach(c => c.defocus());
       card.focus();
     });
-    this.scene.events.on(EVENTS.DEFOCUS_PLAYER_CARD, card => {
+
+    emitter.on(EVENT_NAMES.PLAYER_CARD_DEFOCUS, card => {
       card.defocus();
     });
   }

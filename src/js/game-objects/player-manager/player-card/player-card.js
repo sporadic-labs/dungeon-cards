@@ -1,6 +1,6 @@
 import { PLAYER_CARD_INFO } from "./player-card-info";
-import EVENTS from "../events";
-import LifecycleObject from "../lifecycle-object";
+import { emitter, EVENT_NAMES } from "../events";
+import LifecycleObject from "../../lifecycle-object";
 
 export default class PlayerCard extends LifecycleObject {
   /**
@@ -56,13 +56,14 @@ export default class PlayerCard extends LifecycleObject {
     this.sprite.off("pointerdown", this.onPointerDown);
   }
 
-  onPointerOver = () => this.scene.events.emit(EVENTS.FOCUS_PLAYER_CARD, this);
+  onPointerOver = () => emitter.emit(EVENT_NAMES.PLAYER_CARD_FOCUS, this);
 
-  onPointerOut = () => this.scene.events.emit(EVENTS.DEFOCUS_PLAYER_CARD, this);
+  onPointerOut = () => emitter.emit(EVENT_NAMES.PLAYER_CARD_DEFOCUS, this);
 
   onPointerDown = () => {
-    const name = this.selected ? EVENTS.DESELECT_PLAYER_CARD : EVENTS.SELECT_PLAYER_CARD;
-    this.scene.events.emit(name, this);
+    const { PLAYER_CARD_DESELECT, PLAYER_CARD_SELECT } = EVENT_NAMES;
+    const name = this.selected ? PLAYER_CARD_DESELECT : PLAYER_CARD_SELECT;
+    emitter.emit(name, this);
   };
 
   focus() {

@@ -1,5 +1,8 @@
 import PlayerHand from "./player-hand";
-import EVENTS from "../events";
+import { PLAYER_CARD_TYPES } from "./player-card";
+import actions from "./actions";
+import { emitter, EVENT_NAMES } from "./events";
+import PLAYER_EVENTS from "./events";
 import EndTurnButton from "../hud/end-turn-button";
 
 export default class PlayerManager {
@@ -40,7 +43,7 @@ export default class PlayerManager {
 
   endTurn() {
     return new Promise(resolve => {
-      this.scene.events.once(EVENTS.END_PLAYER_TURN, () => resolve());
+      emitter.once(EVENT_NAMES.END_PLAYER_TURN, () => resolve());
     });
   }
 

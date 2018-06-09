@@ -1,4 +1,4 @@
-import EVENTS from "../events";
+import { emitter, EVENT_NAMES } from "../player-manager";
 
 /**
  * @export
@@ -45,7 +45,7 @@ export default class EndTurnButton {
   }
 
   select() {
-    this.scene.events.emit(EVENTS.END_PLAYER_TURN);
+    emitter.emit(EVENT_NAMES.END_PLAYER_TURN);
   }
 
   activate() {
