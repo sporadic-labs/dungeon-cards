@@ -7,6 +7,8 @@ import PlayerManager from "../game-objects/player-manager";
 import Logger from "../helpers/logger";
 import { ENEMY_CARD_TYPES } from "../game-objects/enemy-card";
 import { PLAYER_CARD_TYPES } from "../game-objects/player-card";
+import EndTurnButton from "../game-objects/hud/end-turn-button";
+import { EVENTS } from "../game-objects/events";
 
 export default class PlayScene extends Scene {
   create() {
@@ -44,6 +46,21 @@ export default class PlayScene extends Scene {
 
     const playerDeck = new Deck(playerDeckComposition);
     this.playerManager = new PlayerManager(this, this.board, playerDeck);
+
+    this.endTurnButton = new EndTurnButton(this, 620, 360);
+
+    // Setup event listeners
+    this.events.addListener(EVENTS.SELECT_PLAYER_CARD, card => {
+      console.log(`Play Scene: Player Card selected: `);
+      console.log(card);
+    });
+    this.events.addListener(EVENTS.SELECT_ENEMY_CARD, card => {
+      console.log(`Play Scene: Enemy Card selected: `);
+      console.log(card);
+    });
+    this.events.addListener(EVENTS.END_PLAYER_TURN, () => {
+      console.log(`Play Scene: End Player Turn`);
+    });
 
     this.runGameStep();
   }
