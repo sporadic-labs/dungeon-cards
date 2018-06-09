@@ -80,6 +80,7 @@ export default class PlayerCard {
   }
 
   destroy() {
+    this.outline.destroy();
     this.sprite.destroy();
   }
 }
