@@ -43,6 +43,10 @@ export default class PlayerHand {
     this.cards.forEach(c => c.disableSelecting());
   }
 
+  getSelected() {
+    return this.cards.find(card => card.selected)
+  }
+
   getNumCards() {
     return this.cards.length;
   }
