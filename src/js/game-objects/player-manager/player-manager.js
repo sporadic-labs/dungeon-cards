@@ -50,14 +50,16 @@ export default class PlayerManager {
 
   endTurn() {
     // Tell the GameManager to start the next game loop
-    return new Promise(resolve => setTimeout(resolve, 1000));
+    return new Promise(resolve => setTimeout(resolve, 5000));
   }
 
   async takeActions() {
+    this.playerHand.enableSelecting();
     // Wait for player to select a card
     // Wait for second click to select target
     // Branching logic based on card
     // Click on end turn button ends the turn
     await this.endTurn();
+    this.playerHand.disableSelecting();
   }
 }

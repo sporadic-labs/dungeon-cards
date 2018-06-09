@@ -1,4 +1,5 @@
 import PlayerCard from "../player-card";
+import EVENTS from "../events";
 
 export default class PlayerHand {
   /**
@@ -10,6 +11,23 @@ export default class PlayerHand {
     this.scene = scene;
     this.deck = deck;
     this.cards = [];
+
+    this.scene.events.on(EVENTS.SELECT_PLAYER_CARD, card => {
+      this.cards.forEach(c => c.deselect());
+      card.select();
+    });
+    this.scene.events.on(EVENTS.DESELECT_PLAYER_CARD, card => {
+      card.deselect();
+    });
+  }
+
+  enableSelecting() {
+    this.cards.forEach(c => c.enableSelecting());
+  }
+
+  disableSelecting() {
+    this.cards.forEach(c => c.deselect());
+    this.cards.forEach(c => c.disableSelecting());
   }
 
   getNumCards() {

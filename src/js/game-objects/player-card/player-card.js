@@ -24,14 +24,27 @@ export default class PlayerCard {
     this.setPosition(x, y);
 
     this.selected = false;
-    this.sprite.on("pointerdown", () => (this.selected ? this.deselect() : this.select()));
   }
 
   getPosition() {
     return { x: this.sprite.x, y: this.sprite.y };
   }
 
+  enableSelecting() {
+    this.sprite.on("pointerover", this.onPointerOver);
+    this.sprite.on("pointerout", this.onPointerOut);
+  }
+
+  disableSelecting() {
+    this.sprite.off("pointerover", this.onPointerOver);
+    this.sprite.off("pointerout", this.onPointerOut);
+  }
+
+  onPointerOver = () => this.scene.events.emit(EVENTS.SELECT_PLAYER_CARD, this);
+  onPointerOut = () => this.scene.events.emit(EVENTS.DESELECT_PLAYER_CARD, this);
+
   select() {
+    if (this.selected) return;
     this.selected = true;
     this.scene.tweens.killTweensOf(this.outline);
     this.scene.tweens.add({
@@ -47,10 +60,10 @@ export default class PlayerCard {
       duration: 200,
       ease: "Quad.easeOut"
     });
-    this.scene.events.emit(EVENTS.SELECT_PLAYER_CARD, this);
   }
 
   deselect() {
+    if (!this.selected) return;
     this.selected = false;
     this.scene.tweens.killTweensOf(this.outline);
     this.scene.tweens.add({
