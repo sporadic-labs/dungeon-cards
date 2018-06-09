@@ -1,4 +1,5 @@
 import ENEMY_CARD_TYPES from "./enemy-card-types";
+import { EVENTS } from "../events";
 
 export default class EnemyCard {
   /**
@@ -6,10 +7,17 @@ export default class EnemyCard {
    * @param {*} type
    */
   constructor(scene, type, x, y) {
+    this.scene = scene;
+
     const key = type === ENEMY_CARD_TYPES.STRONG_ENEMY ? "strong-enemy" : "weak-enemy";
-    this.sprite = scene.add.sprite(x, y, "assets", `cards/${key}`).setOrigin(0, 0);
+    this.sprite = scene.add
+      .sprite(x, y, "assets", `cards/${key}`)
+      .setOrigin(0, 0)
+      .setInteractive();
 
     this.health = type === ENEMY_CARD_TYPES.STRONG_ENEMY ? 2 : 1;
+
+    this.sprite.on("pointerdown", () => this.select());
   }
 
   isBlocked() {
@@ -23,6 +31,10 @@ export default class EnemyCard {
   setPosition(x, y) {
     this.sprite.x = x;
     this.sprite.y = y;
+  }
+
+  select() {
+    this.scene.events.emit(EVENTS.SELECT_ENEMY_CARD, this);
   }
 
   moveTo() {
