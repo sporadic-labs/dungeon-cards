@@ -1,5 +1,6 @@
 import PlayerHand from "./player-hand";
 import EVENTS from "../events";
+import EndTurnButton from "../hud/end-turn-button";
 
 export default class PlayerManager {
   /**
@@ -15,6 +16,8 @@ export default class PlayerManager {
     this.energy = 0;
     this.playerHand = new PlayerHand(scene, this.deck);
     this.playerHand.drawCards(6);
+
+    this.endTurnButton = new EndTurnButton(this.scene, 620, 360);
   }
 
   async update() {
@@ -30,8 +33,8 @@ export default class PlayerManager {
     this.playerHand.drawCard();
   }
 
-  discardCard() {
-    this.playerHand.discardCard();
+  discardCard(card) {
+    this.playerHand.discardCard(card);
     return Promise.resolve();
   }
 
@@ -42,6 +45,7 @@ export default class PlayerManager {
   }
 
   async takeActions() {
+    this.endTurnButton.activate();
     this.playerHand.enableSelecting();
     // Wait for player to select a card
     // Wait for second click to select target
@@ -50,5 +54,6 @@ export default class PlayerManager {
     await this.endTurn();
 
     this.playerHand.disableSelecting();
+    this.endTurnButton.deactivate();
   }
 }

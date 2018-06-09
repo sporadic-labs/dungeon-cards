@@ -46,8 +46,6 @@ export default class PlayScene extends Scene {
     const playerDeck = new Deck(playerDeckComposition);
     this.playerManager = new PlayerManager(this, this.board, playerDeck);
 
-    this.endTurnButton = new EndTurnButton(this, 620, 360);
-
     this.runGameStep();
   }
 
