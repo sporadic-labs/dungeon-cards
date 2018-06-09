@@ -65,7 +65,9 @@ export default class PlayerManager {
   drawCard() {
     // Tell a card to animate from deck position to hand
     const cardId = this.deck.draw();
-    this.playerHand.push(new PlayerCard(this.scene, cardId, 0, 0));
+    if (cardId) {
+      this.playerHand.push(new PlayerCard(this.scene, cardId, 0, 0));
+    }
   }
 
   discardCard() {
