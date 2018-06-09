@@ -3,6 +3,7 @@ import runCardAction from "./actions";
 import { emitter, EVENT_NAMES } from "./events";
 import EndTurnButton from "../hud/end-turn-button";
 import { EnergyDisplay } from "./hud";
+import DiscardPile from "../hud/discard";
 
 export default class PlayerManager {
   /**
@@ -23,15 +24,17 @@ export default class PlayerManager {
 
     const { width, height } = scene.sys.game.config;
     this.energyDisplay = new EnergyDisplay(scene, width - 50, height - 50);
+
+    this.discardPile = new DiscardPile(this.scene, 620, 600);
   }
 
   async update() {
     this.drawCard();
     await this.takeActions();
-    if (this.playerHand.getNumCards() > 10) {
-      // TODO: this should be controlled by player selection, hard-coding for now
-      await this.discardCard(this.playerHand.cards[0]);
-    }
+    // if (this.playerHand.getNumCards() > 10) {
+    //   // TODO: this should be controlled by player selection, hard-coding for now
+    //   await this.discardCard(this.playerHand.cards[0]);
+    // }
   }
 
   /**
