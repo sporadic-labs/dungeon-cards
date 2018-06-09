@@ -112,7 +112,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
 	"sourceSize": {"w":64,"h":96}
 },
-"end_turn_button":
+"end-turn-button":
 {
 	"frame": {"x":1,"y":403,"w":158,"h":78},
 	"rotated": false,
@@ -120,7 +120,7 @@
 	"spriteSourceSize": {"x":1,"y":1,"w":158,"h":78},
 	"sourceSize": {"w":160,"h":80}
 },
-"energy_background":
+"energy-background":
 {
 	"frame": {"x":161,"y":403,"w":78,"h":78},
 	"rotated": false,
@@ -143,6 +143,6 @@
 	"format": "RGBA8888",
 	"size": {"w":600,"h":490},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:97ca74616e475a89adcc6d9b5abb8e6b:0192f1cbe3aea86296c97bcfcf9ec570:a759b6bbc8381ac9c472b28f589ad0d6$"
+	"smartupdate": "$TexturePacker:SmartUpdate:034e2becdb4d3c1b74d43ce0966172f3:047118a91c6a3ff5d13055dfb9a5d8c3:a759b6bbc8381ac9c472b28f589ad0d6$"
 }
 }
