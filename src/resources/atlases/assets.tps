@@ -4,9 +4,9 @@
         <key>fileFormatVersion</key>
         <int>4</int>
         <key>texturePackerVersion</key>
-        <string>4.3.3</string>
+        <string>4.5.0</string>
         <key>fileName</key>
-        <string>C:/Users/mikewesthad/Documents/GitHub/dungeon-cards/src/resources/atlases/assets.tps</string>
+        <string>C:/Users/rex/Documents/GitHub/dungeon-cards/src/resources/atlases/assets.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -172,6 +172,8 @@
         <true/>
         <key>prependSmartFolderName</key>
         <false/>
+        <key>autodetectAnimations</key>
+        <true/>
         <key>globalSpriteSettings</key>
         <struct type="SpriteSettings">
             <key>scale</key>
@@ -220,6 +222,32 @@
                 <rect>16,24,32,48</rect>
                 <key>scale9Paddings</key>
                 <rect>16,24,32,48</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/end_turn_button.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>40,20,80,40</rect>
+                <key>scale9Paddings</key>
+                <rect>40,20,80,40</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/energy_background.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>20,20,40,40</rect>
+                <key>scale9Paddings</key>
+                <rect>20,20,40,40</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
