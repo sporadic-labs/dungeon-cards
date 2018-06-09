@@ -17,7 +17,6 @@ export default class LoadingScene extends Scene {
 
     this.load.setPath("resources/");
     this.load.atlas("assets", "atlases/assets.png", "atlases/assets.json");
-    this.load.image("ship", "images/ship.png");
   }
 
   create() {
