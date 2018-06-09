@@ -63,6 +63,10 @@ export default class Deck {
     }
   }
 
+  anyCardsRemaining() {
+    return this.getNumCardsRemaining() !== 0;
+  }
+
   getNumCardsRemaining() {
     return this.cardsInDeck.length;
   }
