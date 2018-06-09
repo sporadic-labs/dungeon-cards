@@ -6,7 +6,7 @@ import logger, { LOG_LEVEL } from "./helpers/logger";
 
 logger.setLevel(PRODUCTION ? LOG_LEVEL.OFF : LOG_LEVEL.ALL);
 
-const gameDimensions = 750;
+const gameDimensions = 800;
 const containerId = "game-container";
 
 const game = new Game({
