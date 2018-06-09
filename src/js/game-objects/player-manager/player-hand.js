@@ -12,6 +12,10 @@ export default class PlayerHand {
     this.cards = [];
   }
 
+  getNumCards() {
+    return this.cards.length;
+  }
+
   drawCard() {
     if (!this.deck.anyCardsRemaining()) return;
     // Tell a card to animate from deck position to hand

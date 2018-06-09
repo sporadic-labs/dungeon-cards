@@ -35,7 +35,7 @@ export default class PlayerManager {
   async update() {
     this.drawCard();
     await this.takeActions();
-    if (this.playerHand.length > 10) await this.discardCard();
+    if (this.playerHand.getNumCards() > 10) await this.discardCard();
   }
 
   /**
