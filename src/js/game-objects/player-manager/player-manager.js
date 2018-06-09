@@ -79,10 +79,6 @@ export default class PlayerManager {
     emitter.on(EVENT_NAMES.ACTION_COMPLETE, onComplete);
     emitter.on(EVENT_NAMES.ACTION_CANCEL, onCancel);
 
-    // Wait for player to select a card
-    // Wait for second click to select target
-    // Branching logic based on card
-    // Click on end turn button ends the turn
     await this.endTurn();
 
     this.playerHand.disableSelecting();
