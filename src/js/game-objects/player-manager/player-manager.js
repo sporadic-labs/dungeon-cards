@@ -28,10 +28,6 @@ export default class PlayerManager {
   async update() {
     this.drawCard();
     await this.takeActions();
-    // if (this.playerHand.getNumCards() > 10) {
-    //   // TODO: this should be controlled by player selection, hard-coding for now
-    //   await this.discardCard(this.playerHand.cards[0]);
-    // }
   }
 
   /**
@@ -68,7 +64,14 @@ export default class PlayerManager {
 
   endTurn() {
     return new Promise(resolve => {
-      emitter.once(EVENT_NAMES.END_PLAYER_TURN, () => resolve());
+      emitter.on(EVENT_NAMES.END_PLAYER_TURN, () => {
+        if (this.playerHand.getNumCards() <= 10) {
+          resolve();
+        } else {
+          // TODO(rex): Some UI to indicate player can't end turn yet.
+          console.log("You must have 10 cards or less to continue!")
+        }
+      });
     });
   }
 
@@ -98,5 +101,6 @@ export default class PlayerManager {
     emitter.off(EVENT_NAMES.ACTION_COMPLETE, onComplete);
     emitter.off(EVENT_NAMES.ACTION_CANCEL, onCancel);
     emitter.off(EVENT_NAMES.PLAYER_CARD_DISCARD, onDiscard);
+    emitter.off(EVENT_NAMES.END_PLAYER_TURN);  // TODO(rex): Is function needed here...?
   }
 }
