@@ -18,8 +18,9 @@ export default class EndTurnButton {
     this.isActive = true;
 
     this.sprite = scene.add
-      .sprite(0, 0, "assets", `cards/back`)
+      .sprite(0, 0, "assets", `end-turn-button`)
       .setOrigin(0.5, 0.5)
+      .setScale(0.8, 0.8)
       .setInteractive();
 
     this.sprite.setPosition(x, y);
