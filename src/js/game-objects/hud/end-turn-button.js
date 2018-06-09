@@ -20,7 +20,9 @@ export default class EndTurnButton {
     this.sprite = scene.add
       .sprite(0, 0, "assets", `end-turn-button`)
       .setOrigin(0.5, 0.5)
+      .setAlpha(0.9)
       .setScale(0.8, 0.8)
+      .setVisible(false)
       .setInteractive();
 
     this.sprite.setPosition(x, y);
@@ -30,18 +32,27 @@ export default class EndTurnButton {
         this.select();
       }
     });
+
+    this.sprite.on("pointerover", () => {
+      this.sprite.setAlpha(1);
+      this.sprite.setScale(0.85);
+    });
+
+    this.sprite.on("pointerout", () => {
+      this.sprite.setAlpha(0.9);
+      this.sprite.setScale(0.8);
+    });
   }
 
   select() {
     this.scene.events.emit(EVENTS.END_PLAYER_TURN);
-    // this.deactivate();
   }
 
   activate() {
-    this.isActive = true;
+    this.sprite.setVisible(true);
   }
 
   deactivate() {
-    this.isActive = false;
+    this.sprite.setVisible(false);
   }
 }
