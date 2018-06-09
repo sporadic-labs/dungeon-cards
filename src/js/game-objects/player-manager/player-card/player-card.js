@@ -34,6 +34,10 @@ export default class PlayerCard extends LifecycleObject {
     this.enableFocusing();
   }
 
+  getEnergy() {
+    return PLAYER_CARD_INFO[this.type].energy;
+  }
+
   getPosition() {
     return { x: this.sprite.x, y: this.sprite.y };
   }

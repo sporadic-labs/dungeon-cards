@@ -1,13 +1,40 @@
 const PLAYER_CARD_INFO = {
-  ATTACK_ONE: { key: "player-attack-one" },
-  ATTACK_THREE_HORIZONTAL: { key: "player-attack-three-horizontal" },
-  ATTACK_THREE_VERTICAL: { key: "player-attack-three-vertical" },
-  ATTACK_GRID: { key: "player-attack-grid" },
-  BLOCK: { key: "player-block" },
-  DRAW_THREE: { key: "player-draw" },
-  ENERGY: { key: "player-energy" },
-  SHIFT_LEFT: { key: "player-shift-left" },
-  SHIFT_RIGHT: { key: "player-shift-right" }
+  ATTACK_ONE: {
+    key: "player-attack-one",
+    energy: 0
+  },
+  ATTACK_THREE_HORIZONTAL: {
+    key: "player-attack-three-horizontal",
+    energy: 1
+  },
+  ATTACK_THREE_VERTICAL: {
+    key: "player-attack-three-vertical",
+    energy: 1
+  },
+  ATTACK_GRID: {
+    key: "player-attack-grid",
+    energy: 3
+  },
+  BLOCK: {
+    key: "player-block",
+    energy: 0
+  },
+  DRAW_THREE: {
+    key: "player-draw",
+    energy: 0
+  },
+  ENERGY: {
+    key: "player-energy",
+    energy: 1
+  },
+  SHIFT_LEFT: {
+    key: "player-shift-left",
+    energy: 1
+  },
+  SHIFT_RIGHT: {
+    key: "player-shift-right",
+    energy: 1
+  }
 };
 
 /**
