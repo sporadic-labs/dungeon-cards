@@ -1,7 +1,7 @@
 import PlayerHand from "./player-hand";
 import runCardAction from "./actions";
 import { emitter, EVENT_NAMES } from "./events";
-import { DiscardPile, EndTurnButton, EnergyDisplay } from "../hud";
+import { DiscardPile, EndTurnButton, EnergyDisplay, PopupText } from "../hud";
 
 export default class PlayerManager {
   /**
@@ -65,11 +65,13 @@ export default class PlayerManager {
   endTurn() {
     return new Promise(resolve => {
       emitter.on(EVENT_NAMES.END_PLAYER_TURN, () => {
+        // If the player has more than 10 cards, they can't end their turn yet.
         if (this.playerHand.getNumCards() <= 10) {
           resolve();
         } else {
-          // TODO(rex): Some UI to indicate player can't end turn yet.
-          console.log("You must have 10 cards or less to continue!")
+          // Some UI to indicate player can't end turn yet.
+          const { width, height } = this.scene.sys.game.config;
+          new PopupText(this.scene, "You must have 10 cards or less to continue!", width / 4, 50);
         }
       });
     });
