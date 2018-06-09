@@ -67,7 +67,17 @@ export class GameBoard {
     return null;
   }
 
-  canAttack(enemy) {}
+  /**
+   * Returns true if the given location is a spot from which the player can be attacked.
+   *
+   * @param {number} x Column
+   * @param {number} y Row
+   * @returns {Boolean}
+   * @memberof GameBoard
+   */
+  canAttackPlayerFrom(x, y) {
+    return y === this.boardColumns - 1;
+  }
 
   /**
    * Get an array of game board locations where enemies can spawn.
