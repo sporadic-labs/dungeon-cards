@@ -1,5 +1,6 @@
 import Logger from "../../helpers/logger";
 import PlayerCard from "../player-card";
+import { EVENTS } from "../events";
 
 export default class PlayerManager {
   /**
@@ -16,6 +17,19 @@ export default class PlayerManager {
     this.playerHand = [];
 
     this.dealCards();
+
+    // Setup event listeners
+    this.scene.events.addListener(EVENTS.SELECT_PLAYER_CARD, card => {
+      console.log(`Player Manager: Card selected: `);
+      console.log(card);
+    });
+    this.scene.events.addListener(EVENTS.SELECT_ENEMY_CARD, card => {
+      console.log(`Play Scene: Enemy Card selected: `);
+      console.log(card);
+    });
+    this.scene.events.addListener(EVENTS.END_PLAYER_TURN, () => {
+      console.log(`Play Scene: End Player Turn`);
+    });
   }
 
   async update() {
