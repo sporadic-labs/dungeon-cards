@@ -33,12 +33,15 @@ module.exports = function(env, argv) {
           ]
         },
 
+        //   Ensure that urls in scss are loaded correctly
         {
-          test: /\.(eot|svg|ttf|woff|woff2|png|jpg)$/,
+          test: /\.(eot|ttf|woff|woff2|png|jpg)$/,
           use: {
             loader: "file-loader",
             options: {
-              name: "[path][name].[ext]"
+              // Default is node_modules -> _/node_modules, which doesn't work with gh-pages.
+              // Instead, don't use [path], just use a [hash] to make file paths unique.
+              name: "static/[name].[hash:8].[ext]"
             }
           }
         },

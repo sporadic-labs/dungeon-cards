@@ -59,5 +59,8 @@
   "bugs": {
     "url": "https://github.com/sporadic-labs/phaser-3-sandbox.git/issues"
   },
-  "dependencies": {}
+  "dependencies": {
+    "fontfaceobserver": "^2.0.13",
+    "typeface-chivo": "0.0.54"
+  }
 }

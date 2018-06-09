@@ -1,5 +1,6 @@
 import "babel-polyfill";
 import "../css/main.scss";
+
 import { AUTO, Game } from "phaser";
 import { Loading, Play, SCENE_NAME } from "./scenes";
 import logger, { LOG_LEVEL } from "./helpers/logger";
