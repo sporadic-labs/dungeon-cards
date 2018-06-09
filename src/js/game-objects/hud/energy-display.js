@@ -1,4 +1,4 @@
-import { getFontString } from "../../../font";
+import { getFontString } from "../../font";
 
 const style = {
   font: getFontString("Chivo", { size: "24px", weight: 600 }),

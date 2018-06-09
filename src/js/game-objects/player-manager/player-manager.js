@@ -1,9 +1,7 @@
 import PlayerHand from "./player-hand";
 import runCardAction from "./actions";
 import { emitter, EVENT_NAMES } from "./events";
-import EndTurnButton from "../hud/end-turn-button";
-import { EnergyDisplay } from "./hud";
-import DiscardPile from "../hud/discard";
+import { DiscardPile, EndTurnButton, EnergyDisplay } from "../hud";
 
 export default class PlayerManager {
   /**
