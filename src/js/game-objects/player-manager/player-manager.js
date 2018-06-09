@@ -1,5 +1,6 @@
 import Logger from "../../helpers/logger";
 import PlayerCard from "../player-card";
+import PlayerHand from "./player-hand";
 import { EVENTS } from "../events";
 
 export default class PlayerManager {
@@ -14,9 +15,8 @@ export default class PlayerManager {
     this.deck = playerDeck;
 
     this.energy = 0;
-    this.playerHand = [];
-
-    this.dealCards();
+    this.playerHand = new PlayerHand(scene, this.deck);
+    this.playerHand.drawCards(6);
 
     // Setup event listeners
     this.scene.events.addListener(EVENTS.SELECT_PLAYER_CARD, card => {
@@ -34,47 +34,19 @@ export default class PlayerManager {
 
   async update() {
     this.drawCard();
-    this.arrangeCards();
     await this.takeActions();
     if (this.playerHand.length > 10) await this.discardCard();
-  }
-
-  /**
-   * First draw.
-   */
-  dealCards(numToDeal = 6) {
-    for (let x = 0; x < numToDeal; x++) {
-      const cardId = this.deck.draw();
-      this.playerHand.push(new PlayerCard(this.scene, cardId, 0, 0));
-    }
-    this.arrangeCards();
-  }
-
-  arrangeCards() {
-    const x = 0;
-    const y = 550;
-    this.playerHand.forEach((card, i) =>
-      // 2D grid with 6 columns
-      card.setPosition(x + 74 * (i % 6), y + 100 * Math.floor(i / 6))
-    );
   }
 
   /**
    * Add a card to your hand.
    */
   drawCard() {
-    if (!this.deck.anyCardsRemaining()) return;
-    // Tell a card to animate from deck position to hand
-    const cardId = this.deck.draw();
-    this.playerHand.push(new PlayerCard(this.scene, cardId, 0, 0));
+    this.playerHand.drawCard();
   }
 
   discardCard() {
-    // TODO: this should wait for the player to choose a card to discard
-    const card = this.playerHand.shift();
-    card.destroy();
-    this.deck.discard(card.type);
-    this.arrangeCards();
+    this.playerHand.discardCard();
     return Promise.resolve();
   }
 
