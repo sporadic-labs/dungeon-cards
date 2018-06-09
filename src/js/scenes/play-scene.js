@@ -17,9 +17,9 @@ export default class PlayScene extends Scene {
       .tileSprite(0, 0, width, height, "assets", "subtle-pattern-ep-natural-black")
       .setOrigin(0, 0);
 
-    new DraggableCard(this, 600, 100, "cards/blank");
-    new DraggableCard(this, 700, 100, "cards/weak-enemy");
-    new DraggableCard(this, 800, 100, "cards/strong-enemy");
+    new DraggableCard(this, 540, 100, "cards/blank");
+    new DraggableCard(this, 620, 100, "cards/weak-enemy");
+    new DraggableCard(this, 700, 100, "cards/strong-enemy");
 
     this.board = new GameBoard(this, 5, 4);
 
