@@ -15,10 +15,6 @@ export default class PlayerManager {
     this.energy = 0;
     this.playerHand = new PlayerHand(scene, this.deck);
     this.playerHand.drawCards(6);
-
-    this.scene.events.addListener(EVENTS.END_PLAYER_TURN, () => {
-      console.log(`Player manager: End Player Turn`);
-    });
   }
 
   async update() {
@@ -40,8 +36,9 @@ export default class PlayerManager {
   }
 
   endTurn() {
-    // Tell the GameManager to start the next game loop
-    return new Promise(resolve => setTimeout(resolve, 5000));
+    return new Promise(resolve => {
+      this.scene.events.once(EVENTS.END_PLAYER_TURN, () => resolve());
+    });
   }
 
   async takeActions() {
@@ -51,6 +48,7 @@ export default class PlayerManager {
     // Branching logic based on card
     // Click on end turn button ends the turn
     await this.endTurn();
+
     this.playerHand.disableSelecting();
   }
 }
