@@ -14,9 +14,6 @@ export default class EndTurnButton {
   constructor(scene, x, y) {
     this.scene = scene;
 
-    // this.isActive = false;
-    this.isActive = true;
-
     this.sprite = scene.add
       .sprite(0, 0, "assets", `end-turn-button`)
       .setOrigin(0.5, 0.5)
@@ -28,9 +25,7 @@ export default class EndTurnButton {
     this.sprite.setPosition(x, y);
 
     this.sprite.on("pointerdown", () => {
-      if (this.isActive) {
-        this.select();
-      }
+      this.select();
     });
 
     this.sprite.on("pointerover", () => {
