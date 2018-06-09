@@ -16,17 +16,8 @@ export default class PlayerManager {
     this.playerHand = new PlayerHand(scene, this.deck);
     this.playerHand.drawCards(6);
 
-    // Setup event listeners
-    this.scene.events.addListener(EVENTS.SELECT_PLAYER_CARD, card => {
-      console.log(`Player Manager: Card selected: `);
-      console.log(card);
-    });
-    this.scene.events.addListener(EVENTS.SELECT_ENEMY_CARD, card => {
-      console.log(`Play Scene: Enemy Card selected: `);
-      console.log(card);
-    });
     this.scene.events.addListener(EVENTS.END_PLAYER_TURN, () => {
-      console.log(`Play Scene: End Player Turn`);
+      console.log(`Player manager: End Player Turn`);
     });
   }
 
