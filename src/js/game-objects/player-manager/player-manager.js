@@ -1,7 +1,7 @@
 import Logger from "../../helpers/logger";
 import PlayerCard from "../player-card";
 import PlayerHand from "./player-hand";
-import { EVENTS } from "../events";
+import EVENTS from "../events";
 
 export default class PlayerManager {
   /**

@@ -8,7 +8,7 @@ import Logger from "../helpers/logger";
 import { ENEMY_CARD_TYPES } from "../game-objects/enemy-card";
 import { PLAYER_CARD_TYPES } from "../game-objects/player-card";
 import EndTurnButton from "../game-objects/hud/end-turn-button";
-import { EVENTS } from "../game-objects/events";
+import EVENTS from "../game-objects/events";
 
 export default class PlayScene extends Scene {
   create() {

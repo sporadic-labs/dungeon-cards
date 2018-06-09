@@ -1,5 +1,5 @@
 import ENEMY_CARD_TYPES from "./enemy-card-types";
-import { EVENTS } from "../events";
+import EVENTS from "../events";
 
 export default class EnemyCard {
   /**

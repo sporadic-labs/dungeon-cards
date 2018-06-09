@@ -1,5 +1,5 @@
 import { PLAYER_CARD_INFO } from "./player-card-info";
-import { EVENTS } from "../events";
+import EVENTS from "../events";
 
 export default class PlayerCard {
   /**
