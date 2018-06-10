@@ -15,19 +15,25 @@ export default class PlayerHand {
 
     emitter.on(EVENT_NAMES.PLAYER_CARD_SELECT, card => {
       this.cards.forEach(c => c.deselect());
+      this.resetDepth();
+      card.setDepth(100);
       card.select();
     });
 
     emitter.on(EVENT_NAMES.PLAYER_CARD_DESELECT, card => {
+      this.resetDepth();
       card.deselect();
     });
 
     emitter.on(EVENT_NAMES.PLAYER_CARD_FOCUS, card => {
       this.cards.forEach(c => c.defocus());
+      this.resetDepth();
+      card.setDepth(100);
       card.focus();
     });
 
     emitter.on(EVENT_NAMES.PLAYER_CARD_DEFOCUS, card => {
+      this.resetDepth();
       card.defocus();
     });
   }
@@ -44,7 +50,7 @@ export default class PlayerHand {
   }
 
   getSelected() {
-    return this.cards.find(card => card.selected)
+    return this.cards.find(card => card.selected);
   }
 
   getNumCards() {
@@ -66,14 +72,38 @@ export default class PlayerHand {
     for (let i = 0; i < numCanDraw; i++) this.drawCard();
   }
 
+  resetDepth() {
+    this.cards.forEach((c, i) => c.setDepth(i));
+  }
+
   arrangeCards() {
-    const x = 200;
-    const y = 580;
-    const col = 6;
-    this.cards.forEach((card, i) =>
-      // 2D grid with 6 columns
-      card.setPosition(x + 68 * (i % col), y + 100 * Math.floor(i / col))
-    );
+    if (this.cards.length === 0) return;
+
+    const { width, height } = this.scene.sys.game.config;
+
+    // Where to place the center of the hand, e.g. the middle card if the num cards is odd
+    const cx = width / 2;
+    const cy = height - 150;
+
+    // Cards are placed along a circle. The bigger radius, the closer the cards are to a straight
+    // line.
+    const radius = 500;
+    const angularStep = 5 * (Math.PI / 180);
+    const circleX = cx;
+    const circleY = cy + radius;
+
+    const startingAngle = Math.PI / 2 - (this.cards.length / 2) * angularStep;
+    const startingRotation = (this.cards.length / 2) * angularStep;
+    const cardHalfWidth = this.cards[0].sprite.width / 2;
+    const cardHalfHeight = this.cards[0].sprite.height / 2;
+    this.cards.forEach((card, i) => {
+      const angle = startingAngle + i * angularStep;
+      const x = circleX + radius * Math.cos(angle);
+      const y = circleY - radius * Math.sin(angle);
+      // Set position is set to expect the position to be top left, not center...
+      card.setPosition(x - cardHalfWidth, y - cardHalfHeight);
+      card.setRotation(startingRotation - i * angularStep);
+    });
   }
 
   discardCard(card) {

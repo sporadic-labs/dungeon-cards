@@ -70,6 +70,16 @@ export default class PlayerCard extends LifecycleObject {
     emitter.emit(name, this);
   };
 
+  setDepth(depth) {
+    this.sprite.setDepth(depth);
+    this.outline.setDepth(depth);
+  }
+
+  setRotation(radians) {
+    this.sprite.setRotation(radians);
+    this.outline.setRotation(radians);
+  }
+
   focus() {
     if (this.focused) return;
     this.focused = true;
