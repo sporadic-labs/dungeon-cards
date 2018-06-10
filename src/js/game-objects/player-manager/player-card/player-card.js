@@ -98,7 +98,7 @@ export default class PlayerCard extends LifecycleObject {
     });
     this.scene.tweens.add({
       targets: this,
-      yOffset: -25,
+      yOffset: -20,
       duration: 200,
       ease: "Quad.easeOut"
     });
