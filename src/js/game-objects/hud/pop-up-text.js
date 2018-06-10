@@ -11,16 +11,14 @@ export default class PopupText {
    * @param {string} text
    * @param {number} x
    * @param {number} y
+   * @param {Phaser.GameObjects.Text.TextStyle} style
    */
   constructor(scene, text, x, y, style) {
-
     this.text = text;
     this.scene = scene;
-    this.style = style || defaultStyle
+    this.style = style || defaultStyle;
 
-    this.text = scene.add
-      .text(0, 0, text, this.style)
-      .setOrigin(0.5, 0.5);
+    this.text = scene.add.text(0, 0, text, this.style).setOrigin(0.5, 0.5);
 
     this.setPosition(x, y);
 
