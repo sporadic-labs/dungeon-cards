@@ -1,6 +1,7 @@
 import drawCardAction from "./draw-card-action";
 import getEnergyAction from "./get-energy-action";
 import attackAction from "./attack-action";
+import blockAction from "./block-action";
 import { PLAYER_CARD_TYPES } from "../player-card";
 import { emitter, EVENT_NAMES } from "../events";
 
@@ -19,5 +20,7 @@ export default function runCardAction(playerManager, card) {
     getEnergyAction(playerManager, card);
   } else if (attacks.includes(card.type)) {
     attackAction(playerManager, card);
+  } else if (card.type === PLAYER_CARD_TYPES.BLOCK) {
+    blockAction(playerManager, card);
   }
 }
