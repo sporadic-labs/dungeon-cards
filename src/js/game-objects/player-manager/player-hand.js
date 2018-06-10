@@ -13,28 +13,28 @@ export default class PlayerHand {
     this.cards = [];
     this.selectingEnabled = false;
 
+    this.highlightedCard = null;
+
     emitter.on(EVENT_NAMES.PLAYER_CARD_SELECT, card => {
       this.cards.forEach(c => c.deselect());
-      this.resetDepth();
-      card.setDepth(100);
       card.select();
     });
 
     emitter.on(EVENT_NAMES.PLAYER_CARD_DESELECT, card => {
-      this.resetDepth();
       card.deselect();
     });
 
     emitter.on(EVENT_NAMES.PLAYER_CARD_FOCUS, card => {
       this.cards.forEach(c => c.defocus());
-      this.resetDepth();
-      card.setDepth(100);
       card.focus();
+      this.highlightedCard = card;
+      this.depthSort();
     });
 
     emitter.on(EVENT_NAMES.PLAYER_CARD_DEFOCUS, card => {
-      this.resetDepth();
       card.defocus();
+      this.highlightedCard = null;
+      this.depthSort();
     });
   }
 
@@ -65,7 +65,7 @@ export default class PlayerHand {
     this.cards.push(card);
     if (this.selectingEnabled) card.enableSelecting();
     this.arrangeCards();
-    this.resetDepth();
+    this.depthSort();
   }
 
   drawCards(numCards) {
@@ -73,8 +73,9 @@ export default class PlayerHand {
     for (let i = 0; i < numCanDraw; i++) this.drawCard();
   }
 
-  resetDepth() {
+  depthSort() {
     this.cards.forEach((c, i) => c.setDepth(this.cards.length - 1 - i));
+    if (this.highlightedCard) this.highlightedCard.setDepth(this.cards.length);
   }
 
   arrangeCards() {
