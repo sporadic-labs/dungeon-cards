@@ -1,23 +1,38 @@
 const PLAYER_CARD_INFO = {
   ATTACK_ONE: {
     key: "player-attack-one",
-    energy: 0
+    energy: 0,
+    cells: [{ x: 0, y: 0 }]
   },
   ATTACK_THREE_HORIZONTAL: {
     key: "player-attack-three-horizontal",
-    energy: 1
+    energy: 1,
+    cells: [{ x: 0, y: 0 }, { x: 0, y: -1 }, { x: 0, y: 1 }]
   },
   ATTACK_THREE_VERTICAL: {
     key: "player-attack-three-vertical",
-    energy: 1
+    energy: 1,
+    cells: [{ x: 0, y: 0 }, { x: -1, y: 0 }, { x: 1, y: 0 }]
   },
   ATTACK_GRID: {
     key: "player-attack-grid",
-    energy: 3
+    energy: 3,
+    cells: [
+      { x: 0, y: -1 },
+      { x: -1, y: -1 },
+      { x: 1, y: -1 },
+      { x: 0, y: 0 },
+      { x: -1, y: 0 },
+      { x: 1, y: 0 },
+      { x: 0, y: 1 },
+      { x: -1, y: 1 },
+      { x: 1, y: 1 }
+    ]
   },
   BLOCK: {
     key: "player-block",
-    energy: 0
+    energy: 0,
+    cells: [{ x: 0, y: 0 }]
   },
   DRAW_THREE: {
     key: "player-draw",
@@ -29,11 +44,17 @@ const PLAYER_CARD_INFO = {
   },
   SHIFT_LEFT: {
     key: "player-shift-left",
-    energy: 1
+    energy: 1,
+    cells: [
+      { x: 0, y: 0 } // TODO(rex): Not sure how to represent this.
+    ]
   },
   SHIFT_RIGHT: {
     key: "player-shift-right",
-    energy: 1
+    energy: 1,
+    cells: [
+      { x: 0, y: 0 } // TODO(rex): Not sure how to represent this.
+    ]
   }
 };
 
