@@ -1,3 +1,3 @@
 import runCardAction from "./run-card-action";
-
-export default runCardAction;
+import cleanupAction from "./cleanup-action";
+export { cleanupAction, runCardAction };

@@ -1,5 +1,5 @@
 import PlayerHand from "./player-hand";
-import runCardAction from "./actions";
+import { cleanupAction, runCardAction } from "./actions";
 import { emitter, EVENT_NAMES } from "./events";
 import { DiscardPile, EndTurnButton, EnergyDisplay, PopupText } from "../hud";
 
@@ -88,13 +88,14 @@ export default class PlayerManager {
 
     const onSelect = card => runCardAction(this, card);
     const onComplete = card => this.discardCard(card);
-    const onCancel = () => {};
+    const onCancel = card => cleanupAction(card);
     const onDiscard = () => {
       const selectedCard = this.playerHand.getSelected();
       if (selectedCard) this.reclaimCard(selectedCard);
     };
 
     emitter.on(EVENT_NAMES.PLAYER_CARD_SELECT, onSelect);
+    emitter.on(EVENT_NAMES.PLAYER_CARD_DESELECT, onCancel);
     emitter.on(EVENT_NAMES.ACTION_COMPLETE, onComplete);
     emitter.on(EVENT_NAMES.ACTION_CANCEL, onCancel);
     emitter.on(EVENT_NAMES.PLAYER_CARD_DISCARD, onDiscard);
@@ -105,9 +106,10 @@ export default class PlayerManager {
     this.endTurnButton.deactivate();
 
     emitter.off(EVENT_NAMES.PLAYER_CARD_SELECT, onSelect);
+    emitter.off(EVENT_NAMES.PLAYER_CARD_DESELECT, onCancel);
     emitter.off(EVENT_NAMES.ACTION_COMPLETE, onComplete);
     emitter.off(EVENT_NAMES.ACTION_CANCEL, onCancel);
     emitter.off(EVENT_NAMES.PLAYER_CARD_DISCARD, onDiscard);
-    emitter.off(EVENT_NAMES.END_PLAYER_TURN); // TODO(rex): Is function needed here...?
+    emitter.off(EVENT_NAMES.END_PLAYER_TURN);
   }
 }
