@@ -59,7 +59,7 @@ export default class EnemyCard {
 
   onPointerOver = () => emitter.emit(EVENT_NAMES.ENEMY_CARD_FOCUS, this);
 
-  onPointerOut = () => emitter.emit(EVENT_NAMES.PLAYER_CARD_DEFOCUS, this);
+  onPointerOut = () => emitter.emit(EVENT_NAMES.ENEMY_CARD_DEFOCUS, this);
 
   onPointerDown = () => emitter.emit(EVENT_NAMES.ENEMY_CARD_SELECT, this);
 
@@ -73,8 +73,34 @@ export default class EnemyCard {
     this.focused = false;
   }
 
-  moveTo() {
-    // Animate and move to world pixel positions
+  fadeIn(delay) {
+    this.scene.tweens.killTweensOf(this.sprite);
+    this.sprite.setAlpha(0);
+    return new Promise(resolve => {
+      this.scene.tweens.add({
+        targets: this.sprite,
+        alpha: 1,
+        delay: delay,
+        duration: 200,
+        ease: "Quad.easeOut",
+        onComplete: resolve
+      });
+    });
+  }
+
+  moveTo(x, y, delay = 0) {
+    this.scene.tweens.killTweensOf(this.sprite);
+    return new Promise(resolve => {
+      this.scene.tweens.add({
+        targets: this.sprite,
+        x: x,
+        y: y,
+        delay: delay,
+        duration: 200,
+        ease: "Quad.easeOut",
+        onComplete: resolve
+      });
+    });
   }
 
   destroy() {

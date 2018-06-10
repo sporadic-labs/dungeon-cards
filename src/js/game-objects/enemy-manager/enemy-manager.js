@@ -13,7 +13,7 @@ export default class EnemyManager {
     this.gameBoard = gameBoard;
     this.deck = enemyDeck;
 
-    this.cards = [];
+    this.enemies = [];
     this.selectingEnabled = false;
 
     emitter.on(EVENT_NAMES.ENEMY_CARD_SELECT, card => {
@@ -21,12 +21,12 @@ export default class EnemyManager {
     });
 
     emitter.on(EVENT_NAMES.ENEMY_CARD_FOCUS, card => {
-      this.cards.forEach(c => c.defocus());
+      this.enemies.forEach(c => c.defocus());
       card.focus();
     });
 
     emitter.on(EVENT_NAMES.ENEMY_CARD_DEFOCUS, card => {
-      this.cards.forEach(c => c.defocus());
+      this.enemies.forEach(c => c.defocus());
     });
   }
 
@@ -41,18 +41,17 @@ export default class EnemyManager {
   }
 
   getNumCards() {
-    return this.cards.length;
+    return this.enemies.length;
   }
 
   enableSelecting() {
     this.selectingEnabled = true;
-    this.cards.forEach(c => c.enableSelecting());
+    this.enemies.forEach(c => c.enableSelecting());
   }
 
   disableSelecting() {
     this.selectingEnabled = false;
-    this.cards.forEach(c => c.deselect());
-    this.cards.forEach(c => c.disableSelecting());
+    this.enemies.forEach(c => c.disableSelecting());
   }
 
   /**
@@ -61,7 +60,7 @@ export default class EnemyManager {
    * @memberof EnemyManager
    */
   sortEnemies() {
-    this.cards.sort((enemy1, enemy2) => {
+    this.enemies.sort((enemy1, enemy2) => {
       const p1 = enemy1.getPosition();
       const p2 = enemy2.getPosition();
       if (p1.y > p2.y) return -1;
@@ -74,27 +73,25 @@ export default class EnemyManager {
     });
   }
 
-  moveEnemies() {
+  async moveEnemies() {
     this.sortEnemies();
-    this.cards.map(enemy => {
+    let delay = 0;
+    const movePromises = this.enemies.map(enemy => {
       const boardPosition = this.gameBoard.findPositionOf(enemy);
       if (!enemy.isBlocked() && this.gameBoard.isEmpty(boardPosition.x, boardPosition.y + 1)) {
         const { x, y } = this.gameBoard.getWorldPosition(boardPosition.x, boardPosition.y + 1);
-        enemy.setPosition(x, y);
+        const promise = enemy.moveTo(x, y, delay);
         this.gameBoard.removeAt(boardPosition.x, boardPosition.y);
         this.gameBoard.putAt(boardPosition.x, boardPosition.y + 1, enemy);
+        delay += 50;
+        return promise;
       }
     });
 
-    // Loop over all enemies from bottom left to top right
-    //  If enemy is not blocked
-    //    Ask enemy where it wants to move
-    //    Confirm with game board that the location is free
-    //    Tell enemy to move
-    //    Wait for animation to finish before moving next enemy
+    await Promise.all(movePromises);
   }
 
-  spawnEnemies() {
+  async spawnEnemies() {
     const cardsRemaining = this.deck.getNumCardsRemaining();
     if (cardsRemaining === 0) return;
 
@@ -102,24 +99,28 @@ export default class EnemyManager {
     const locations = this.gameBoard.getOpenSpawnLocations().slice(0, cardsRemaining);
     if (locations.length === 0) return;
 
-    locations.map(location => {
+    let delay = 0;
+
+    const spawnPromises = locations.map(location => {
       const enemyType = this.deck.draw();
       if (enemyType !== ENEMY_CARD_TYPES.BLANK) {
         const { x, y } = this.gameBoard.getWorldPosition(location.x, location.y);
         const enemy = new EnemyCard(this.scene, enemyType, x, y);
-        this.cards.push(enemy);
+        const fadePromise = enemy.fadeIn(delay);
+        this.enemies.push(enemy);
         this.gameBoard.putAt(location.x, location.y, enemy);
-        Logger.log(`Spawn enemy with card ${enemyType}`);
-        // Tell enemy to animate to location
+        delay += 100;
+        return fadePromise;
       }
     });
 
-    // Wait for last animation to finish before game advances
+    // TODO: Make room for these to spawn above the game board and animate into position
+    return Promise.all(spawnPromises);
   }
 
-  discardCard(card) {
-    if (this.cards.includes(card)) {
-      this.cards = this.cards.filter(c => c !== card);
+  discardEnemy(card) {
+    if (this.enemies.includes(card)) {
+      this.enemies = this.enemies.filter(c => c !== card);
       this.deck.discard(card.type);
       this.arrangeCards();
       card.destroy();
