@@ -63,6 +63,45 @@ export class GameBoard {
     return { x, y };
   }
 
+  /**
+   * Get the board coordinates of the given world (pixel) coordinates. This calculation includes
+   * cell padding as part of the board, so if you click on the space between two cells in the board,
+   * it will return a valid board location.
+   *
+   * @param {number} worldX
+   * @param {number} worldY
+   * @returns {Object|null} A point in the form {x, y}, or null
+   * @memberof GameBoard
+   */
+  getBoardPosition(worldX, worldY) {
+    if (
+      worldX < this.worldX &&
+      worldX > this.worldX + this.boardWidth &&
+      worldY < this.worldY &&
+      worldY > this.worldY + this.boardHeight
+    ) {
+      return null;
+    }
+
+    let relativeX = worldX - this.worldX;
+    let relativeY = worldY - this.worldY;
+
+    // There's no padding on the outside of the cards at the edges of the board:
+    //  | [ CARD ]     [ CARD ]     [ CARD ] |
+    // So there are uneven hitboxes. The first in the row above is (card width + padding / 2)
+    // wide, but the second is (padding / 2 + card width + padding / 2). We get around this by
+    // shifting the input worldX and worldY by (padding / 2), so that it's as if there weren't
+    // uneven hitboxes.
+    relativeX += this.cellPadding / 2;
+    relativeY += this.cellPadding / 2;
+
+    // Find the x, y (assuming each card has the same size hitbox)
+    const x = Math.floor(relativeX / (this.cellWidth + this.cellPadding));
+    const y = Math.floor(relativeY / (this.cellHeight + this.cellPadding));
+
+    return { x, y };
+  }
+
   findPositionOf(card) {
     for (let x = 0; x < this.boardColumns; x++) {
       for (let y = 0; y < this.boardRows; y++) {
