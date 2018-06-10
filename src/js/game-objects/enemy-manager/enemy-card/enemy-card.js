@@ -38,17 +38,9 @@ export default class EnemyCard {
       this.sprite.setTexture("assets", `cards/${key}`);
     }
 
-    // Unblock after one round of trying to move
+    // Unblock after the end of the next enemy turn
     if (this.blocked) {
-      let turnsLeft = 2;
-      const onRoundEnd = () => {
-        turnsLeft -= 0;
-        if (turnsLeft === 0) {
-          gameEmitter.off(GAME_EVENT_NAMES.ROUND_END, onRoundEnd);
-          this.setBlocked(false);
-        }
-      };
-      gameEmitter.on(GAME_EVENT_NAMES.ROUND_END, onRoundEnd);
+      gameEmitter.once(GAME_EVENT_NAMES.ENEMY_TURN_END, () => this.setBlocked(false));
     }
   }
 
