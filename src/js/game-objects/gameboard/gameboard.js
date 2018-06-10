@@ -8,9 +8,14 @@ export class GameBoard {
     this.cellWidth = w;
     this.cellHeight = h;
     this.cellPadding = 4;
-
     this.boardRows = rows;
     this.boardColumns = columns;
+    this.boardWidth = columns * this.cellWidth + (columns - 1) * this.cellPadding;
+    this.boardHeight = rows * this.cellHeight + (rows - 1) * this.cellPadding;
+
+    const width = scene.sys.game.config.width;
+    this.worldX = width / 2 - this.boardWidth / 2;
+    this.worldY = 50;
 
     this.board = [];
     for (let boardY = 0; boardY < rows; boardY++) {
@@ -53,10 +58,8 @@ export class GameBoard {
    * @memberof GameBoard
    */
   getWorldPosition(boardX, boardY) {
-    const xOffset = 268;
-    const yOffset = 50;
-    const x = (boardX * (this.cellWidth + this.cellPadding)) + xOffset;
-    const y = (boardY * (this.cellHeight + this.cellPadding)) + yOffset;
+    const x = this.worldX + boardX * (this.cellWidth + this.cellPadding);
+    const y = this.worldY + boardY * (this.cellHeight + this.cellPadding);
     return { x, y };
   }
 
