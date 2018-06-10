@@ -82,10 +82,12 @@ export default class PlayerCard extends LifecycleObject {
 
   focus() {
     if (this.focused) return;
+    this._originalY = this.sprite.y;
     this.focused = true;
     this.scene.tweens.killTweensOf(this.sprite);
     this.scene.tweens.add({
       targets: this.sprite,
+      y: this.sprite.y - 10,
       scaleY: 1.1,
       scaleX: 1.1,
       duration: 200,
@@ -99,6 +101,7 @@ export default class PlayerCard extends LifecycleObject {
     this.scene.tweens.killTweensOf(this.sprite);
     this.scene.tweens.add({
       targets: this.sprite,
+      y: this._originalY,
       scaleY: 1,
       scaleX: 1,
       duration: 200,
