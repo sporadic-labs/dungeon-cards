@@ -75,9 +75,9 @@ export class GameBoard {
    */
   getBoardPosition(worldX, worldY) {
     if (
-      worldX < this.worldX &&
-      worldX > this.worldX + this.boardWidth &&
-      worldY < this.worldY &&
+      worldX < this.worldX ||
+      worldX > this.worldX + this.boardWidth ||
+      worldY < this.worldY ||
       worldY > this.worldY + this.boardHeight
     ) {
       return null;
