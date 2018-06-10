@@ -1,6 +1,7 @@
 import Logger from "../../helpers/logger";
 import EnemyCard, { ENEMY_CARD_TYPES } from "./enemy-card";
 import { emitter, EVENT_NAMES } from "./events";
+import { DeckDisplay } from "../hud";
 
 export default class EnemyManager {
   /**
@@ -12,6 +13,9 @@ export default class EnemyManager {
     this.scene = scene;
     this.gameBoard = gameBoard;
     this.deck = enemyDeck;
+
+    const { width, height } = this.scene.sys.game.config;
+    this.deckDisplay = new DeckDisplay(scene, width - 50, 100, this.deck.getNumCardsRemaining());
 
     this.enemies = [];
     this.selectingEnabled = false;
@@ -103,6 +107,7 @@ export default class EnemyManager {
 
     const spawnPromises = locations.map(location => {
       const enemyType = this.deck.draw();
+      this.deckDisplay.setValue(this.deck.getNumCardsRemaining());
       if (enemyType !== ENEMY_CARD_TYPES.BLANK) {
         const { x, y } = this.gameBoard.getWorldPosition(location.x, location.y);
         const enemy = new EnemyCard(this.scene, enemyType, x, y);

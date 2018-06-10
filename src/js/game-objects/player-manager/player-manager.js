@@ -1,7 +1,14 @@
 import PlayerHand from "./player-hand";
 import { cleanupAction, runCardAction } from "./actions";
 import { emitter, EVENT_NAMES } from "./events";
-import { DiscardPile, EndTurnButton, EnergyDisplay, PopupText } from "../hud";
+import { DeckDisplay, DiscardPile, EndTurnButton, EnergyDisplay, PopupText } from "../hud";
+
+import { getFontString } from "../../font";
+
+const style = {
+  font: getFontString("Chivo", { size: "24px", weight: 600 }),
+  fill: "#FFF"
+};
 
 export default class PlayerManager {
   /**
@@ -19,8 +26,17 @@ export default class PlayerManager {
     this.playerHand.drawCards(6);
 
     const { width, height } = scene.sys.game.config;
-    this.endTurnButton = new EndTurnButton(scene, width - 80, height / 2);
-    this.discardPile = new DiscardPile(scene, width - 50, height - 170);
+    this.endTurnButton = new EndTurnButton(scene, width - 80, height / 2 - 65);
+    this.discardPile = new DiscardPile(scene, width - 120, height - 200);
+    this.playerHandCount = scene.add
+      .text(width - 120, height - 145, this.playerHand.getNumCards(), style)
+      .setOrigin(0.5, 0.5);
+    this.deckDisplay = new DeckDisplay(
+      scene,
+      width - 50,
+      height - 200,
+      this.deck.getNumCardsRemaining()
+    );
     this.energyDisplay = new EnergyDisplay(scene, width - 50, height - 50);
   }
 
@@ -34,6 +50,8 @@ export default class PlayerManager {
    */
   drawCard() {
     this.playerHand.drawCard();
+    this.playerHandCount.setText(this.playerHand.getNumCards());
+    this.deckDisplay.setValue(this.deck.getNumCardsRemaining());
   }
 
   addEnergy(amount) {
@@ -58,6 +76,7 @@ export default class PlayerManager {
 
   discardCard(card) {
     this.playerHand.discardCard(card);
+    this.playerHandCount.setText(this.playerHand.getNumCards());
     return Promise.resolve();
   }
 
