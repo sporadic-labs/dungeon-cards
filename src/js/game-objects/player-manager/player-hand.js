@@ -88,7 +88,7 @@ export default class PlayerHand {
 
     // Cards are placed along a circle. The bigger radius, the closer the cards are to a straight
     // line.
-    const radius = 500;
+    const radius = 400;
     const angularStep = 5 * (Math.PI / 180);
     const circleX = cx;
     const circleY = cy + radius;
