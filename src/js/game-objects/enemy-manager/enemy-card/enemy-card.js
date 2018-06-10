@@ -1,5 +1,6 @@
 import ENEMY_CARD_TYPES from "./enemy-card-types";
 import { emitter, EVENT_NAMES } from "../events";
+import { emitter as gameEmitter, EVENT_NAMES as GAME_EVENT_NAMES } from "../../game-runner";
 
 export default class EnemyCard {
   /**
@@ -20,7 +21,7 @@ export default class EnemyCard {
 
     this.selected = false;
     this.focused = false;
-    this.blocked = true;
+    this.blocked = false;
 
     // TODO: this should only be enabled after the card as tweened into position. It shouldn't start
     // enabled.
@@ -35,6 +36,19 @@ export default class EnemyCard {
       let key = this.type === ENEMY_CARD_TYPES.STRONG_ENEMY ? "strong-enemy" : "weak-enemy";
       if (this.blocked) key += "-blocked";
       this.sprite.setTexture("assets", `cards/${key}`);
+    }
+
+    // Unblock after one round of trying to move
+    if (this.blocked) {
+      let turnsLeft = 2;
+      const onRoundEnd = () => {
+        turnsLeft -= 0;
+        if (turnsLeft === 0) {
+          gameEmitter.off(GAME_EVENT_NAMES.ROUND_END, onRoundEnd);
+          this.setBlocked(false);
+        }
+      };
+      gameEmitter.on(GAME_EVENT_NAMES.ROUND_END, onRoundEnd);
     }
   }
 
