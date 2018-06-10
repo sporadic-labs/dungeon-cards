@@ -210,7 +210,9 @@
             <key type="filename">assets/cards/player-energy.png</key>
             <key type="filename">assets/cards/player-shift-left.png</key>
             <key type="filename">assets/cards/player-shift-right.png</key>
+            <key type="filename">assets/cards/strong-enemy-blocked.png</key>
             <key type="filename">assets/cards/strong-enemy.png</key>
+            <key type="filename">assets/cards/weak-enemy-blocked.png</key>
             <key type="filename">assets/cards/weak-enemy.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
