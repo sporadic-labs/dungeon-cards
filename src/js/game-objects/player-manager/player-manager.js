@@ -63,8 +63,8 @@ export default class PlayerManager {
   }
 
   async reclaimCard(card) {
-    this.addEnergy(card.getEnergy())
-    return await this.discardCard(card)
+    this.addEnergy(card.getEnergy());
+    return await this.discardCard(card);
   }
 
   endTurn() {
@@ -91,7 +91,7 @@ export default class PlayerManager {
     const onComplete = card => this.discardCard(card);
     const onCancel = () => {};
     const onDiscard = () => {
-      const selectedCard = this.playerHand.getSelected()
+      const selectedCard = this.playerHand.getSelected();
       if (selectedCard) this.reclaimCard(selectedCard);
     };
 
@@ -109,6 +109,6 @@ export default class PlayerManager {
     emitter.off(EVENT_NAMES.ACTION_COMPLETE, onComplete);
     emitter.off(EVENT_NAMES.ACTION_CANCEL, onCancel);
     emitter.off(EVENT_NAMES.PLAYER_CARD_DISCARD, onDiscard);
-    emitter.off(EVENT_NAMES.END_PLAYER_TURN);  // TODO(rex): Is function needed here...?
+    emitter.off(EVENT_NAMES.END_PLAYER_TURN); // TODO(rex): Is function needed here...?
   }
 }
