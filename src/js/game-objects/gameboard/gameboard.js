@@ -1,4 +1,6 @@
 import { GameBoardCell } from "./gameboard-cell";
+import { emitter, EVENT_NAMES } from "../player-manager/events";
+import { PLAYER_CARD_INFO } from "../player-manager/player-card";
 
 export class GameBoard {
   constructor(scene, rows, columns) {
@@ -25,6 +27,42 @@ export class GameBoard {
         this.board[boardY][boardX] = new GameBoardCell(scene, x, y);
       }
     }
+
+    emitter.on(EVENT_NAMES.ACTION_START, this.enableFocusing, this);
+    emitter.on(EVENT_NAMES.ACTION_COMPLETE, this.disableFocusing, this);
+    emitter.on(EVENT_NAMES.PLAYER_CARD_DESELECT, this.disableFocusing, this);
+  }
+
+  enableFocusing() {
+    emitter.on(EVENT_NAMES.GAMEBOARD_CARD_FOCUS, this.focusBoardForAction, this);
+  }
+
+  disableFocusing() {
+    this.defocusBoard();
+    emitter.off(EVENT_NAMES.GAMEBOARD_CARD_FOCUS, this.focusBoardForAction, this);
+  }
+
+  focusBoardForAction(card, x, y) {
+    this.defocusBoard();
+    const cardInfo = PLAYER_CARD_INFO[card.type];
+    cardInfo.cells.map(cell => {
+      const adjustX = x + cell.x;
+      const adjustY = y + cell.y;
+      const clampedX = adjustX >= 0 && adjustX <= this.boardRows ? adjustX : null;
+      const clampedY = adjustY >= 0 && adjustY <= this.boardColumns ? adjustY : null;
+      if (clampedX !== null && clampedY !== null) {
+        const cell = this.board[clampedY][clampedX];
+        cell.focus();
+      }
+    });
+  }
+
+  defocusBoard() {
+    this.board.map(column => {
+      column.map(cell => {
+        cell.defocus();
+      });
+    });
   }
 
   getAt(x, y) {

@@ -94,22 +94,22 @@ export default class PlayerManager {
       if (selectedCard) this.reclaimCard(selectedCard);
     };
 
-    emitter.on(EVENT_NAMES.PLAYER_CARD_SELECT, onSelect);
-    emitter.on(EVENT_NAMES.PLAYER_CARD_DESELECT, onCancel);
-    emitter.on(EVENT_NAMES.ACTION_COMPLETE, onComplete);
-    emitter.on(EVENT_NAMES.ACTION_CANCEL, onCancel);
-    emitter.on(EVENT_NAMES.PLAYER_CARD_DISCARD, onDiscard);
+    emitter.on(EVENT_NAMES.PLAYER_CARD_SELECT, onSelect, this);
+    emitter.on(EVENT_NAMES.PLAYER_CARD_DESELECT, onCancel, this);
+    emitter.on(EVENT_NAMES.ACTION_COMPLETE, onComplete, this);
+    emitter.on(EVENT_NAMES.ACTION_CANCEL, onCancel, this);
+    emitter.on(EVENT_NAMES.PLAYER_CARD_DISCARD, onDiscard, this);
 
     await this.endTurn();
 
     this.playerHand.disableSelecting();
     this.endTurnButton.deactivate();
 
-    emitter.off(EVENT_NAMES.PLAYER_CARD_SELECT, onSelect);
-    emitter.off(EVENT_NAMES.PLAYER_CARD_DESELECT, onCancel);
-    emitter.off(EVENT_NAMES.ACTION_COMPLETE, onComplete);
-    emitter.off(EVENT_NAMES.ACTION_CANCEL, onCancel);
-    emitter.off(EVENT_NAMES.PLAYER_CARD_DISCARD, onDiscard);
-    emitter.off(EVENT_NAMES.END_PLAYER_TURN);
+    emitter.off(EVENT_NAMES.PLAYER_CARD_SELECT, onSelect, this);
+    emitter.off(EVENT_NAMES.PLAYER_CARD_DESELECT, onCancel, this);
+    emitter.off(EVENT_NAMES.ACTION_COMPLETE, onComplete, this);
+    emitter.off(EVENT_NAMES.ACTION_CANCEL, onCancel, this);
+    emitter.off(EVENT_NAMES.PLAYER_CARD_DISCARD, onDiscard, this);
+    emitter.off(EVENT_NAMES.END_PLAYER_TURN, this);
   }
 }

@@ -6,10 +6,9 @@ export default function attackAction(playerManager, card) {
 
   const onPointerOver = pointer => {
     const boardPosition = gameBoard.getBoardPosition(pointer.x, pointer.y);
-    const cell = boardPosition ? gameBoard.getAt(boardPosition.x, boardPosition.y) : null;
-    if (cell) {
-      logger.log(`You are hovering over ${cell} on the board`);
-      emitter.emit(EVENT_NAMES.GAMEBOARD_CARD_FOCUS, cell, card);
+    if (boardPosition) {
+      logger.log(`You are hovering over (${boardPosition.x}, ${boardPosition.y}) on the board`);
+      emitter.emit(EVENT_NAMES.GAMEBOARD_CARD_FOCUS, card, boardPosition.x, boardPosition.y);
     }
   };
 
@@ -17,7 +16,7 @@ export default function attackAction(playerManager, card) {
     const boardPosition = gameBoard.getBoardPosition(pointer.x, pointer.y);
     if (boardPosition) {
       logger.log(`You attacked at (${boardPosition.x}, ${boardPosition.y}) on the board`);
-      emitter.emit(EVENT_NAMES.ACTION_COMPLETE, card);
+      emitter.emit(EVENT_NAMES.ACTION_COMPLETE, card, boardPosition.x, boardPosition.y);
       scene.input.off("pointerdown", onPointerDown);
       scene.input.off("pointerover", onPointerOver);
     } else {

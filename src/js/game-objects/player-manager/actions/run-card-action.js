@@ -2,6 +2,7 @@ import drawCardAction from "./draw-card-action";
 import getEnergyAction from "./get-energy-action";
 import attackAction from "./attack-action";
 import { PLAYER_CARD_TYPES } from "../player-card";
+import { emitter, EVENT_NAMES } from "../events";
 
 const attacks = [
   PLAYER_CARD_TYPES.ATTACK_ONE,
@@ -11,6 +12,7 @@ const attacks = [
 ];
 
 export default function runCardAction(playerManager, card) {
+  emitter.emit(EVENT_NAMES.ACTION_START);
   if (card.type === PLAYER_CARD_TYPES.DRAW_THREE) {
     drawCardAction(playerManager, card);
   } else if (card.type === PLAYER_CARD_TYPES.ENERGY) {
