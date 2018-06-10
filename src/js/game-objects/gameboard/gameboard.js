@@ -52,7 +52,7 @@ export class GameBoard {
       const clampedY = adjustY >= 0 && adjustY <= this.boardColumns ? adjustY : null;
       if (clampedX !== null && clampedY !== null) {
         const cell = this.board[clampedY][clampedX];
-        cell.focus();
+        if (cell) cell.focus();
       }
     });
   }
