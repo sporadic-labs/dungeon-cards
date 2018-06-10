@@ -2,7 +2,6 @@ import PlayerHand from "./player-hand";
 import runCardAction from "./actions";
 import { emitter, EVENT_NAMES } from "./events";
 import { DiscardPile, EndTurnButton, EnergyDisplay, PopupText } from "../hud";
-import logger from "../../helpers/logger";
 
 export default class PlayerManager {
   /**
@@ -23,16 +22,6 @@ export default class PlayerManager {
     this.endTurnButton = new EndTurnButton(scene, width - 80, height / 2);
     this.discardPile = new DiscardPile(scene, width - 50, height - 170);
     this.energyDisplay = new EnergyDisplay(scene, width - 50, height - 50);
-
-    // Testing, TODO: this should be done in actions
-    this.scene.input.on("pointerdown", pointer => {
-      const boardPosition = gameBoard.getBoardPosition(pointer.x, pointer.y);
-      let message = `You clicked at: (${pointer.x}px, ${pointer.y}px)\n`;
-      if (boardPosition)
-        message += `That corresponds to (${boardPosition.x}, ${boardPosition.y}) on the board`;
-      else message += `That is NOT on the board`;
-      logger.log(message);
-    });
   }
 
   async update() {
