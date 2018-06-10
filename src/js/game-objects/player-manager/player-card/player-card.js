@@ -138,12 +138,12 @@ export default class PlayerCard extends LifecycleObject {
     const cy = y + this.sprite.height / 2;
     this.sprite.x = cx;
     this.sprite.y = cy;
-    this.outline.x = this.sprite.x;
-    this.outline.y = this.sprite.y;
   }
 
   update() {
     this.outline.setScale(this.sprite.scaleX, this.sprite.scaleY);
+    this.outline.x = this.sprite.x;
+    this.outline.y = this.sprite.y;
   }
 
   moveTo() {
