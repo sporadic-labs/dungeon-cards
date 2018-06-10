@@ -13,6 +13,11 @@ export default class PlayerCard extends LifecycleObject {
     this.type = type;
     this.scene = scene;
 
+    this.x = x;
+    this.y = y;
+    this.yOffset = 0;
+    this.rotation = 0;
+
     // TODO: this is just a simple wrapper to get the assets in the game. We need different classes
     // or components for each type of card to handle the specialized logic
     const key = PLAYER_CARD_INFO[type].key;
@@ -76,20 +81,24 @@ export default class PlayerCard extends LifecycleObject {
   }
 
   setRotation(radians) {
-    this.sprite.setRotation(radians);
-    this.outline.setRotation(radians);
+    this.rotation = radians;
   }
 
   focus() {
     if (this.focused) return;
-    this._originalY = this.sprite.y;
     this.focused = true;
+    this.scene.tweens.killTweensOf(this);
     this.scene.tweens.killTweensOf(this.sprite);
     this.scene.tweens.add({
       targets: this.sprite,
-      y: this.sprite.y - 10,
-      scaleY: 1.1,
-      scaleX: 1.1,
+      scaleY: 1.05,
+      scaleX: 1.05,
+      duration: 200,
+      ease: "Quad.easeOut"
+    });
+    this.scene.tweens.add({
+      targets: this,
+      yOffset: -25,
       duration: 200,
       ease: "Quad.easeOut"
     });
@@ -98,12 +107,18 @@ export default class PlayerCard extends LifecycleObject {
   defocus() {
     if (!this.focused) return;
     this.focused = false;
+    this.scene.tweens.killTweensOf(this);
     this.scene.tweens.killTweensOf(this.sprite);
     this.scene.tweens.add({
       targets: this.sprite,
-      y: this._originalY,
       scaleY: 1,
       scaleX: 1,
+      duration: 200,
+      ease: "Quad.easeOut"
+    });
+    this.scene.tweens.add({
+      targets: this,
+      yOffset: 0,
       duration: 200,
       ease: "Quad.easeOut"
     });
@@ -134,16 +149,20 @@ export default class PlayerCard extends LifecycleObject {
   }
 
   setPosition(x, y) {
-    const cx = x + this.sprite.width / 2;
-    const cy = y + this.sprite.height / 2;
-    this.sprite.x = cx;
-    this.sprite.y = cy;
+    this.x = x;
+    this.y = y;
   }
 
   update() {
+    const cx = this.x + this.sprite.width / 2;
+    const cy = this.y + this.sprite.height / 2;
+    this.sprite.x = cx;
+    this.sprite.y = cy + this.yOffset;
     this.outline.setScale(this.sprite.scaleX, this.sprite.scaleY);
     this.outline.x = this.sprite.x;
     this.outline.y = this.sprite.y;
+    this.sprite.setRotation(this.rotation);
+    this.outline.setRotation(this.rotation);
   }
 
   moveTo() {
