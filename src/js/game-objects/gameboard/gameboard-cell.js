@@ -1,5 +1,3 @@
-import Logger from "../../helpers/logger";
-
 export class GameBoardCell {
   /**
    * @param {Phaser.Scene} scene
@@ -18,6 +16,16 @@ export class GameBoardCell {
       .setOrigin(0, 0)
       .setPosition(x, y)
       .setInteractive(); // Enables pointer events but not drag
+  }
+
+  focus() {
+    // TODO(rex): Do something better than this.
+    this.sprite.setAlpha(0.8);
+  }
+
+  defocus() {
+    // TODO(rex): Do something better than this.
+    this.sprite.setAlpha(1.0);
   }
 
   /**
