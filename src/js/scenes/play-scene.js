@@ -6,6 +6,7 @@ import PlayerManager from "../game-objects/player-manager";
 import Logger from "../helpers/logger";
 import { ENEMY_CARD_TYPES } from "../game-objects/enemy-manager";
 import { PLAYER_CARD_TYPES } from "../game-objects/player-manager";
+import run from "../game-objects/game-runner";
 
 export default class PlayScene extends Scene {
   create() {
@@ -40,20 +41,6 @@ export default class PlayScene extends Scene {
     const playerDeck = new Deck(playerDeckComposition);
     this.playerManager = new PlayerManager(this, this.board, playerDeck);
 
-    this.runGameStep();
+    run(this.playerManager, this.enemyManager);
   }
-
-  async runGameStep() {
-    Logger.log("Enemy starting turn");
-    await this.enemyManager.update();
-    Logger.log("Enemy ending turn");
-
-    Logger.log("Player starting turn");
-    await this.playerManager.update();
-    Logger.log("Player ending turn");
-
-    this.runGameStep();
-  }
-
-  update(time, delta) {}
 }
