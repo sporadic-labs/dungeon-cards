@@ -65,6 +65,7 @@ export default class PlayerHand {
     this.cards.push(card);
     if (this.selectingEnabled) card.enableSelecting();
     this.arrangeCards();
+    this.resetDepth();
   }
 
   drawCards(numCards) {
@@ -73,7 +74,7 @@ export default class PlayerHand {
   }
 
   resetDepth() {
-    this.cards.forEach((c, i) => c.setDepth(i));
+    this.cards.forEach((c, i) => c.setDepth(this.cards.length - 1 - i));
   }
 
   arrangeCards() {
