@@ -1,5 +1,6 @@
 import Logger from "../../helpers/logger";
 import EnemyCard, { ENEMY_CARD_TYPES } from "./enemy-card";
+import { emitter, EVENT_NAMES } from "./events";
 
 export default class EnemyManager {
   /**
@@ -12,13 +13,46 @@ export default class EnemyManager {
     this.gameBoard = gameBoard;
     this.deck = enemyDeck;
 
-    this.enemies = [];
+    this.cards = [];
+    this.selectingEnabled = false;
+
+    emitter.on(EVENT_NAMES.ENEMY_CARD_SELECT, card => {
+      // TODO(rex): Do something useful here.
+    });
+
+    emitter.on(EVENT_NAMES.ENEMY_CARD_FOCUS, card => {
+      this.cards.forEach(c => c.defocus());
+      card.focus();
+    });
+
+    emitter.on(EVENT_NAMES.ENEMY_CARD_DEFOCUS, card => {
+      this.cards.forEach(c => c.defocus());
+    });
   }
 
   update() {
+    this.disableSelecting();
     this.moveEnemies();
     this.spawnEnemies();
-    return new Promise(resolve => setTimeout(resolve, 1000));
+    return new Promise(resolve => {
+      this.enableSelecting();
+      setTimeout(resolve, 1000);
+    });
+  }
+
+  getNumCards() {
+    return this.cards.length;
+  }
+
+  enableSelecting() {
+    this.selectingEnabled = true;
+    this.cards.forEach(c => c.enableSelecting());
+  }
+
+  disableSelecting() {
+    this.selectingEnabled = false;
+    this.cards.forEach(c => c.deselect());
+    this.cards.forEach(c => c.disableSelecting());
   }
 
   /**
@@ -27,7 +61,7 @@ export default class EnemyManager {
    * @memberof EnemyManager
    */
   sortEnemies() {
-    this.enemies.sort((enemy1, enemy2) => {
+    this.cards.sort((enemy1, enemy2) => {
       const p1 = enemy1.getPosition();
       const p2 = enemy2.getPosition();
       if (p1.y > p2.y) return -1;
@@ -42,7 +76,7 @@ export default class EnemyManager {
 
   moveEnemies() {
     this.sortEnemies();
-    this.enemies.map(enemy => {
+    this.cards.map(enemy => {
       const boardPosition = this.gameBoard.findPositionOf(enemy);
       if (!enemy.isBlocked() && this.gameBoard.isEmpty(boardPosition.x, boardPosition.y + 1)) {
         const { x, y } = this.gameBoard.getWorldPosition(boardPosition.x, boardPosition.y + 1);
@@ -73,7 +107,7 @@ export default class EnemyManager {
       if (enemyType !== ENEMY_CARD_TYPES.BLANK) {
         const { x, y } = this.gameBoard.getWorldPosition(location.x, location.y);
         const enemy = new EnemyCard(this.scene, enemyType, x, y);
-        this.enemies.push(enemy);
+        this.cards.push(enemy);
         this.gameBoard.putAt(location.x, location.y, enemy);
         Logger.log(`Spawn enemy with card ${enemyType}`);
         // Tell enemy to animate to location
@@ -82,4 +116,15 @@ export default class EnemyManager {
 
     // Wait for last animation to finish before game advances
   }
+
+  discardCard(card) {
+    if (this.cards.includes(card)) {
+      this.cards = this.cards.filter(c => c !== card);
+      this.deck.discard(card.type);
+      this.arrangeCards();
+      card.destroy();
+    }
+  }
+
+
 }
