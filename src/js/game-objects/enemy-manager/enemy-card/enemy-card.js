@@ -8,6 +8,7 @@ export default class EnemyCard {
    */
   constructor(scene, type, x, y) {
     this.scene = scene;
+    this.type = type;
 
     const key = type === ENEMY_CARD_TYPES.STRONG_ENEMY ? "strong-enemy" : "weak-enemy";
     this.sprite = scene.add
@@ -19,15 +20,26 @@ export default class EnemyCard {
 
     this.selected = false;
     this.focused = false;
+    this.blocked = true;
 
     // TODO: this should only be enabled after the card as tweened into position. It shouldn't start
     // enabled.
     this.enableFocusing();
+  }
 
+  setBlocked(shouldBeBlocked = true) {
+    // TODO: this could be an animation, or cards could be built more modularly, so that we can have
+    // a blocked overlay.
+    if (this.blocked !== shouldBeBlocked) {
+      this.blocked = shouldBeBlocked;
+      let key = this.type === ENEMY_CARD_TYPES.STRONG_ENEMY ? "strong-enemy" : "weak-enemy";
+      if (this.blocked) key += "-blocked";
+      this.sprite.setTexture("assets", `cards/${key}`);
+    }
   }
 
   isBlocked() {
-    return false;
+    return this.blocked;
   }
 
   getPosition() {
@@ -106,5 +118,4 @@ export default class EnemyCard {
   destroy() {
     this.sprite.destroy();
   }
-
 }
