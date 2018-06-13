@@ -9,7 +9,7 @@ export class GameBoard {
     const { w, h } = assetsJson.frames["cards/empty"].sourceSize;
     this.cellWidth = w;
     this.cellHeight = h;
-    this.cellPadding = 4;
+    this.cellPadding = 10;
     this.boardRows = rows;
     this.boardColumns = columns;
     this.boardWidth = columns * this.cellWidth + (columns - 1) * this.cellPadding;
