@@ -226,6 +226,8 @@
                 <false/>
             </struct>
             <key type="filename">assets/cards/empty.png</key>
+            <key type="filename">assets/cards/glow.png</key>
+            <key type="filename">assets/cards/outline.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
