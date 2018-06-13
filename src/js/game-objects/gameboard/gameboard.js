@@ -6,7 +6,7 @@ export class GameBoard {
   constructor(scene, rows, columns) {
     // Look up cell size from a card in the atlas
     const assetsJson = scene.cache.json.get("assets");
-    const { w, h } = assetsJson.frames["cards/back"].sourceSize;
+    const { w, h } = assetsJson.frames["cards/empty"].sourceSize;
     this.cellWidth = w;
     this.cellHeight = h;
     this.cellPadding = 4;

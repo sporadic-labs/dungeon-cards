@@ -200,7 +200,6 @@
             <key type="filename">assets/cards/back.png</key>
             <key type="filename">assets/cards/blank.png</key>
             <key type="filename">assets/cards/discard.png</key>
-            <key type="filename">assets/cards/outline.png</key>
             <key type="filename">assets/cards/player-attack-grid.png</key>
             <key type="filename">assets/cards/player-attack-one.png</key>
             <key type="filename">assets/cards/player-attack-three-horizontal.png</key>
@@ -223,6 +222,19 @@
                 <rect>16,24,32,48</rect>
                 <key>scale9Paddings</key>
                 <rect>16,24,32,48</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/cards/empty.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,24,33,48</rect>
+                <key>scale9Paddings</key>
+                <rect>16,24,33,48</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

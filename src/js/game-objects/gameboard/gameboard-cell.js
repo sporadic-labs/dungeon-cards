@@ -10,7 +10,7 @@ export class GameBoardCell {
 
     this.card = null;
 
-    this.sprite = scene.add.sprite(0, 0, "assets", "cards/back");
+    this.sprite = scene.add.sprite(0, 0, "assets", "cards/empty");
 
     this.sprite
       .setOrigin(0, 0)
