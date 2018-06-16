@@ -87,7 +87,7 @@ export default class PlayerManager {
 
   endTurn() {
     return new Promise(resolve => {
-      emitter.on(EVENT_NAMES.END_PLAYER_TURN, () => {
+      emitter.on(EVENT_NAMES.PLAYER_TURN_END, () => {
         // If the player has more than 10 cards, they can't end their turn yet.
         if (this.playerHand.getNumCards() <= 10) {
           this.resetEnergy();
@@ -129,6 +129,6 @@ export default class PlayerManager {
     emitter.off(EVENT_NAMES.ACTION_COMPLETE, onComplete, this);
     emitter.off(EVENT_NAMES.ACTION_CANCEL, onCancel, this);
     emitter.off(EVENT_NAMES.PLAYER_CARD_DISCARD, onDiscard, this);
-    emitter.off(EVENT_NAMES.END_PLAYER_TURN, this);
+    emitter.off(EVENT_NAMES.PLAYER_TURN_END, this);
   }
 }
