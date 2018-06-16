@@ -1,5 +1,5 @@
 import PlayerCard from "./player-card";
-import { emitter, EVENT_NAMES } from "./events";
+import { emitter, EVENT_NAMES } from "../game-runner";
 
 export default class PlayerHand {
   /**

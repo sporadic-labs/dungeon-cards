@@ -1,5 +1,5 @@
 import ENEMY_CARD_TYPES from "./enemy-card-types";
-import { emitter, EVENT_NAMES } from "../events";
+import { emitter, EVENT_NAMES } from "../../game-runner";
 
 export default class EnemyCard {
   /**
@@ -37,6 +37,11 @@ export default class EnemyCard {
       let key = this.type === ENEMY_CARD_TYPES.STRONG_ENEMY ? "strong-enemy" : "weak-enemy";
       if (this.blocked) key += "-blocked";
       this.sprite.setTexture("assets", `cards/${key}`);
+    }
+
+    // Unblock after the end of the next enemy turn
+    if (this.blocked) {
+      emitter.once(EVENT_NAMES.ENEMY_TURN_END, () => this.setBlocked(false));
     }
   }
 

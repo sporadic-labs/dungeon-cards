@@ -1,5 +1,5 @@
 import { PLAYER_CARD_INFO } from "./player-card-info";
-import { emitter, EVENT_NAMES } from "../events";
+import { emitter, EVENT_NAMES } from "../../game-runner";
 import LifecycleObject from "../../lifecycle-object";
 
 export default class PlayerCard extends LifecycleObject {

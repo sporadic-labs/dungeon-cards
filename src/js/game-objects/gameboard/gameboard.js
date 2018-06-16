@@ -1,5 +1,5 @@
 import { GameBoardCell } from "./gameboard-cell";
-import { emitter, EVENT_NAMES } from "../player-manager/events";
+import { emitter, EVENT_NAMES } from "../game-runner/events";
 import { PLAYER_CARD_INFO } from "../player-manager/player-card";
 
 export class GameBoard {

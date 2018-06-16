@@ -1,4 +1,4 @@
-import { emitter, EVENT_NAMES } from "../player-manager";
+import { emitter, EVENT_NAMES } from "../game-runner";
 
 /**
  * @export

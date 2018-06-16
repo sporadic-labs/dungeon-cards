@@ -1,4 +1,4 @@
-import { emitter, EVENT_NAMES } from "../events";
+import { emitter, EVENT_NAMES } from "../../game-runner";
 
 export default function getEnergyAction(playerManager, card) {
   playerManager.addEnergy(card.getEnergy());
