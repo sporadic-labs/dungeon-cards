@@ -10,26 +10,31 @@ import { arrayEqual } from "../../helpers/array-utils";
  * @class EventEmitterProxy
  */
 export default class EventEmitterProxy {
-  events = [];
+  /**
+   * Array of subscriptions to EventEmitters, in the form [emitter, event, listener, context].
+   *
+   * @memberof EventEmitterProxy
+   */
+  subscriptions = [];
 
   on(eventEmitter, eventName, listener, context) {
-    this.events.push([eventEmitter, eventName, listener, context]);
+    this.subscriptions.push([eventEmitter, eventName, listener, context]);
     eventEmitter.on(eventName, listener, context);
   }
 
   once(eventEmitter, eventName, listener, context) {
-    this.events.push([eventEmitter, eventName, listener, context]);
+    this.subscriptions.push([eventEmitter, eventName, listener, context]);
     eventEmitter.once(eventName, listener, context);
   }
 
   off(eventEmitter, eventName, listener, context) {
     const args = [eventEmitter, eventName, listener, context];
-    this.events = this.events.filter(array => !arrayEqual(array, args));
+    this.subscriptions = this.subscriptions.filter(array => !arrayEqual(array, args));
     eventEmitter.off(eventName, listener, context);
   }
 
   debugDump() {
-    logger.log(`[${this.events.map(args => `\n\tEvent "${args[1]}"`).join(",")}\n]`);
+    logger.log(`[${this.subscriptions.map(args => `\n\tEvent "${args[1]}"`).join(",")}\n]`);
   }
 
   /**
@@ -38,7 +43,7 @@ export default class EventEmitterProxy {
    * @memberof EventEmitterProxy
    */
   removeAll() {
-    this.events.forEach(([eventEmitter, eventName, listener, context]) =>
+    this.subscriptions.forEach(([eventEmitter, eventName, listener, context]) =>
       eventEmitter.off(eventName, listener, context)
     );
   }
