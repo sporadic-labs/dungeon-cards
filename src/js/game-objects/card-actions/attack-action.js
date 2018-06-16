@@ -1,5 +1,5 @@
-import { emitter, EVENT_NAMES } from "../../game-runner";
-import logger from "../../../helpers/logger";
+import { emitter, EVENT_NAMES } from "../game-runner";
+import logger from "../../helpers/logger";
 
 export default function attackAction(playerManager, card) {
   const { gameBoard, scene } = playerManager;
