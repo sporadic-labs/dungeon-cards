@@ -34,15 +34,14 @@ export default class EnemyManager {
     });
   }
 
-  update() {
+  async update() {
     this.disableSelecting();
-    this.moveEnemies();
-    this.spawnEnemies();
-    return new Promise(resolve => {
-      this.enableSelecting();
-      setTimeout(resolve, 1000);
-    });
+
+    await this.moveEnemies();
+    await this.spawnEnemies();
+
     this.enemies.forEach(e => e.update());
+    this.enableSelecting();
   }
 
   getNumCards() {
