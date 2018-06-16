@@ -42,6 +42,7 @@ export default class EnemyManager {
       this.enableSelecting();
       setTimeout(resolve, 1000);
     });
+    this.enemies.forEach(e => e.update());
   }
 
   getNumCards() {

@@ -1,6 +1,5 @@
 import ENEMY_CARD_TYPES from "./enemy-card-types";
 import { emitter, EVENT_NAMES } from "../events";
-import { emitter as gameEmitter, EVENT_NAMES as GAME_EVENT_NAMES } from "../../game-runner";
 
 export default class EnemyCard {
   /**
@@ -22,6 +21,7 @@ export default class EnemyCard {
     this.selected = false;
     this.focused = false;
     this.blocked = false;
+    this.turnsBlocked = null;
 
     // TODO: this should only be enabled after the card as tweened into position. It shouldn't start
     // enabled.
@@ -33,14 +33,10 @@ export default class EnemyCard {
     // a blocked overlay.
     if (this.blocked !== shouldBeBlocked) {
       this.blocked = shouldBeBlocked;
+      this.turnsBlocked = 0;
       let key = this.type === ENEMY_CARD_TYPES.STRONG_ENEMY ? "strong-enemy" : "weak-enemy";
       if (this.blocked) key += "-blocked";
       this.sprite.setTexture("assets", `cards/${key}`);
-    }
-
-    // Unblock after the end of the next enemy turn
-    if (this.blocked) {
-      gameEmitter.once(GAME_EVENT_NAMES.ENEMY_TURN_END, () => this.setBlocked(false));
     }
   }
 
@@ -119,6 +115,13 @@ export default class EnemyCard {
         onComplete: resolve
       });
     });
+  }
+
+  update() {
+    if (this.blocked) {
+      this.turnsBlocked++;
+      if (this.turnsBlocked === 1) this.setBlocked(false);
+    }
   }
 
   destroy() {
