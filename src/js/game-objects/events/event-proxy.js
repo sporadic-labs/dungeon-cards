@@ -3,17 +3,17 @@ import { arrayEqual } from "../../helpers/array-utils";
 
 /**
  * A proxy that tracks subscriptions to EventEmitters, so that all listeners can be unsubscribed
- * using `EventEmitterProxy#removeAll`. Actions can use this to subscribe to events from different
+ * using `EventProxy#removeAll`. Actions can use this to subscribe to events from different
  * emitters and then clean up after themselves in an automated way.
  *
  * @export
- * @class EventEmitterProxy
+ * @class EventProxy
  */
-export default class EventEmitterProxy {
+export default class EventProxy {
   /**
    * Array of subscriptions to EventEmitters, in the form [emitter, event, listener, context].
    *
-   * @memberof EventEmitterProxy
+   * @memberof EventProxy
    */
   subscriptions = [];
 
@@ -38,9 +38,9 @@ export default class EventEmitterProxy {
   }
 
   /**
-   * Remove all listeners that the EventEmitterProxy is currently listening to.
+   * Remove all listeners that the EventProxy is currently listening to.
    *
-   * @memberof EventEmitterProxy
+   * @memberof EventProxy
    */
   removeAll() {
     this.subscriptions.forEach(([eventEmitter, eventName, listener, context]) =>

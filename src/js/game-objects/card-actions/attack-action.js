@@ -1,6 +1,6 @@
 import { emitter, EVENT_NAMES } from "../game-runner";
 import logger from "../../helpers/logger";
-import EventProxy from "./event-emitter-proxy";
+import { EventProxy } from "../events";
 
 export default function attackAction(playerManager, card) {
   const { gameBoard, scene } = playerManager;
