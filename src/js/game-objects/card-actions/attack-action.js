@@ -22,6 +22,8 @@ export default function attackAction(playerManager, card) {
   proxy.on(scene.input, "pointermove", pointer => {
     const positions = getAttackPositions(pointer, gameBoard, attackPattern);
     emitter.emit(EVENT_NAMES.GAMEBOARD_CARD_FOCUS, positions);
+    const enemies = gameBoard.getAtMultiple(positions);
+    logger.log(`You are over ${enemies.length} enemies`);
   });
 
   proxy.on(scene.input, "pointerdown", pointer => {
