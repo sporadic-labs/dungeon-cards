@@ -34,27 +34,18 @@ export class GameBoard {
   }
 
   enableFocusing() {
-    emitter.on(EVENT_NAMES.GAMEBOARD_CARD_FOCUS, this.focusBoardForAction, this);
+    emitter.on(EVENT_NAMES.GAMEBOARD_CARD_FOCUS, this.focusPositions, this);
   }
 
   disableFocusing() {
     this.defocusBoard();
-    emitter.off(EVENT_NAMES.GAMEBOARD_CARD_FOCUS, this.focusBoardForAction, this);
+    emitter.off(EVENT_NAMES.GAMEBOARD_CARD_FOCUS, this.focusPositions, this);
   }
 
-  focusBoardForAction(card, x, y) {
+  focusPositions(positions) {
     this.defocusBoard();
-    const cardInfo = PLAYER_CARD_INFO[card.type];
-    cardInfo.cells.map(cell => {
-      const adjustX = x + cell.x;
-      const adjustY = y + cell.y;
-      const clampedX = adjustX >= 0 && adjustX <= this.boardRows ? adjustX : null;
-      const clampedY = adjustY >= 0 && adjustY <= this.boardColumns ? adjustY : null;
-      if (clampedX !== null && clampedY !== null) {
-        const cell = this.board[clampedY][clampedX];
-        if (cell) cell.focus();
-      }
-    });
+    if (!Array.isArray(positions)) positions = [positions];
+    positions.map(({ x, y }) => this.board[y][x].focus());
   }
 
   defocusBoard() {

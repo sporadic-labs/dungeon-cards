@@ -26,6 +26,14 @@ const EVENT_NAMES = {
   ENEMY_CARD_DEFOCUS: "ENEMY_CARD_DEFOCUS"
 };
 
+/**
+ * This event is fired when locations in the game board should be focused.
+ *
+ * @event GAMEBOARD_CARD_FOCUS
+ * @param {object|object[]} cardLocation(s) - either a single location on the board that should be
+ * focused, or an array of locations that should be focused. Locations are in the form {x, y}.
+ */
+
 const emitter = new EmitterWithLogging("Game Manager");
 
 export { emitter, EVENT_NAMES };

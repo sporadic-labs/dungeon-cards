@@ -6,9 +6,7 @@ export default function blockAction(playerManager, card) {
 
   const onPointerOver = pointer => {
     const boardPosition = gameBoard.getBoardPosition(pointer.x, pointer.y);
-    if (boardPosition) {
-      emitter.emit(EVENT_NAMES.GAMEBOARD_CARD_FOCUS, card, boardPosition.x, boardPosition.y);
-    }
+    if (boardPosition) emitter.emit(EVENT_NAMES.GAMEBOARD_CARD_FOCUS, card);
   };
 
   const onPointerDown = pointer => {
