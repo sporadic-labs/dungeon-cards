@@ -240,6 +240,20 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">assets/cards/shadow-big.png</key>
+            <key type="filename">assets/cards/shadow-small.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>20,29,40,57</rect>
+                <key>scale9Paddings</key>
+                <rect>20,29,40,57</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">assets/end-turn-button.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
