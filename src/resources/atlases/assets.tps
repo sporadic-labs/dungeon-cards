@@ -266,7 +266,20 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">assets/subtle-pattern-ep-natural-black.png</key>
+            <key type="filename">assets/patterns/light_wool_@2X.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>95,96,190,191</rect>
+                <key>scale9Paddings</key>
+                <rect>95,96,190,191</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/patterns/subtle-pattern-ep-natural-black.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
