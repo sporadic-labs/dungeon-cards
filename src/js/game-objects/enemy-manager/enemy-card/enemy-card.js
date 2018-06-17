@@ -12,9 +12,10 @@ export default class EnemyCard {
 
     const key = type === ENEMY_CARD_TYPES.STRONG_ENEMY ? "strong-enemy" : "weak-enemy";
     this.sprite = scene.add
-      .sprite(x, y, "assets", `cards/${key}`)
-      .setOrigin(0, 0)
+      .sprite(0, 0, "assets", `cards/${key}`)
+      .setOrigin(0.5, 0.5)
       .setInteractive();
+    this.setPosition(x, y);
 
     this.health = type === ENEMY_CARD_TYPES.STRONG_ENEMY ? 2 : 1;
 
@@ -54,8 +55,8 @@ export default class EnemyCard {
   }
 
   setPosition(x, y) {
-    this.sprite.x = x;
-    this.sprite.y = y;
+    this.sprite.x = x + this.sprite.width / 2;
+    this.sprite.y = y + this.sprite.height / 2;
   }
 
   enableFocusing() {
@@ -85,11 +86,35 @@ export default class EnemyCard {
   focus() {
     if (this.focused) return;
     this.focused = true;
+
+    this.scene.tweens.killTweensOf(this.sprite);
+    return new Promise(resolve => {
+      this.scene.tweens.add({
+        targets: this.sprite,
+        scaleX: 1.05,
+        scaleY: 1.05,
+        duration: 200,
+        ease: "Quad.easeOut",
+        onComplete: resolve
+      });
+    });
   }
 
   defocus() {
     if (!this.focused) return;
     this.focused = false;
+
+    this.scene.tweens.killTweensOf(this.sprite);
+    return new Promise(resolve => {
+      this.scene.tweens.add({
+        targets: this.sprite,
+        scaleX: 1,
+        scaleY: 1,
+        duration: 200,
+        ease: "Quad.easeOut",
+        onComplete: resolve
+      });
+    });
   }
 
   fadeIn(delay) {
@@ -112,8 +137,8 @@ export default class EnemyCard {
     return new Promise(resolve => {
       this.scene.tweens.add({
         targets: this.sprite,
-        x: x,
-        y: y,
+        x: x - this.sprite.width / 2,
+        y: y - this.sprite.height / 2,
         delay: delay,
         duration: 200,
         ease: "Quad.easeOut",
