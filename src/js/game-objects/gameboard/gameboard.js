@@ -72,6 +72,23 @@ export class GameBoard {
     return this.isInBounds(x, y) ? this.board[y][x].getCard() : null;
   }
 
+  /**
+   * Get any enemy cards that are within the locations specified. If none are found, an empty array
+   * is returned.
+   *
+   * @param {object[]} positions Array of positions ({x, y}) in game board coordinates.
+   * @returns {object[]} Array of enemy cards
+   * @memberof GameBoard
+   */
+  getAtMultiple(positions) {
+    const cards = [];
+    positions.forEach(({ x, y }) => {
+      const result = this.getAt(x, y);
+      if (result) cards.push(result);
+    });
+    return cards;
+  }
+
   putAt(x, y, card) {
     if (this.isInBounds(x, y) && this.board[y][x].isEmpty()) {
       this.board[y][x].setCard(card);
