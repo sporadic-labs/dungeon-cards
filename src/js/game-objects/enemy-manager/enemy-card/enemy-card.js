@@ -137,8 +137,8 @@ export default class EnemyCard {
     return new Promise(resolve => {
       this.scene.tweens.add({
         targets: this.sprite,
-        x: x - this.sprite.width / 2,
-        y: y - this.sprite.height / 2,
+        x: x + this.sprite.width / 2,
+        y: y + this.sprite.height / 2,
         delay: delay,
         duration: 200,
         ease: "Quad.easeOut",
