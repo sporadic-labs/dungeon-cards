@@ -58,11 +58,23 @@ export class GameBoard {
   }
 
   defocusBoard() {
-    this.board.map(column => {
-      column.map(cell => {
-        cell.defocus();
-      });
-    });
+    this.forEachCell(cell => cell.defocus());
+  }
+
+  /**
+   * Runs the given callback for each cell in the board. If the callback returns false, then the
+   * loop will stop.
+   *
+   * @param {function} fn
+   * @memberof GameBoard
+   */
+  forEachCell(fn) {
+    for (let y = 0; y < this.boardRows; y++) {
+      for (let x = 0; x < this.boardColumns; x++) {
+        const response = fn(this.board[y][x], x, y);
+        if (response === false) return;
+      }
+    }
   }
 
   getAt(x, y) {
@@ -144,12 +156,14 @@ export class GameBoard {
   }
 
   findPositionOf(card) {
-    for (let x = 0; x < this.boardColumns; x++) {
-      for (let y = 0; y < this.boardRows; y++) {
-        if (this.board[y][x].getCard() === card) return { x, y };
+    let position = null;
+    this.forEachCell((cell, x, y) => {
+      if (cell.getCard() === card) {
+        position = { x, y };
+        return false;
       }
-    }
-    return null;
+    });
+    return position;
   }
 
   /**
