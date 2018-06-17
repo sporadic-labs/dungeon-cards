@@ -11,6 +11,7 @@ export default class PlayerCard extends LifecycleObject {
     super(scene);
 
     this.type = type;
+    this.cardInfo = PLAYER_CARD_INFO[type];
     this.scene = scene;
 
     this.x = x;
