@@ -1,6 +1,6 @@
 import PlayerHand from "./player-hand";
 import { cleanupAction, runCardAction } from "../card-actions";
-import { emitter, EVENT_NAMES } from "../game-runner";
+import { emitter, EVENT_NAMES } from "../events";
 import { DeckDisplay, DiscardPile, EndTurnButton, EnergyDisplay, PopupText } from "../hud";
 
 import { getFontString } from "../../font";

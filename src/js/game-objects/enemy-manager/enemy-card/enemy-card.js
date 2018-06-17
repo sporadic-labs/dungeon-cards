@@ -1,5 +1,5 @@
 import ENEMY_CARD_TYPES from "./enemy-card-types";
-import { emitter, EVENT_NAMES } from "../../game-runner";
+import { emitter, EVENT_NAMES } from "../../events";
 
 export default class EnemyCard {
   /**

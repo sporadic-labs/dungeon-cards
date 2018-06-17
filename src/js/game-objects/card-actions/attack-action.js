@@ -1,6 +1,5 @@
-import { emitter, EVENT_NAMES } from "../game-runner";
+import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import logger from "../../helpers/logger";
-import { EventProxy } from "../events";
 
 function getAttackPositions(pointer, gameBoard, attackPattern) {
   const positions = [];

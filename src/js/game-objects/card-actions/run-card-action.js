@@ -3,7 +3,7 @@ import getEnergyAction from "./get-energy-action";
 import attackAction from "./attack-action";
 import blockAction from "./block-action";
 import { PLAYER_CARD_TYPES } from "../player-manager/player-card";
-import { emitter, EVENT_NAMES } from "../game-runner";
+import { emitter, EVENT_NAMES } from "../events";
 
 const attacks = [
   PLAYER_CARD_TYPES.ATTACK_ONE,

@@ -1,6 +1,6 @@
 import Logger from "../../helpers/logger";
 import EnemyCard, { ENEMY_CARD_TYPES } from "./enemy-card";
-import { emitter, EVENT_NAMES } from "../game-runner";
+import { emitter, EVENT_NAMES } from "../events";
 import { DeckDisplay } from "../hud";
 
 export default class EnemyManager {

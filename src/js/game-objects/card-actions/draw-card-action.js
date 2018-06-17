@@ -1,4 +1,4 @@
-import { emitter, EVENT_NAMES } from "../game-runner";
+import { emitter, EVENT_NAMES } from "../events";
 
 export default function drawCardAction(playerManager, card) {
   playerManager.drawCard();

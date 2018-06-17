@@ -1,4 +1,4 @@
-import { emitter, EVENT_NAMES } from "../game-runner";
+import { emitter, EVENT_NAMES } from "../events";
 import logger from "../../helpers/logger";
 
 export default function blockAction(playerManager, card) {
