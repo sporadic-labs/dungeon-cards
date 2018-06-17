@@ -108,15 +108,18 @@ export class GameBoard {
    *
    * @param {number} worldX
    * @param {number} worldY
+   * @param {boolean} checkBounds If true, only XY locations that are within the bounds of the board
+   * will be returned. Locations outside of the board will return null.
    * @returns {Object|null} A point in the form {x, y}, or null
    * @memberof GameBoard
    */
-  getBoardPosition(worldX, worldY) {
+  getBoardPosition(worldX, worldY, checkBounds = true) {
     if (
-      worldX < this.worldX ||
-      worldX > this.worldX + this.boardWidth ||
-      worldY < this.worldY ||
-      worldY > this.worldY + this.boardHeight
+      checkBounds &&
+      (worldX < this.worldX ||
+        worldX > this.worldX + this.boardWidth ||
+        worldY < this.worldY ||
+        worldY > this.worldY + this.boardHeight)
     ) {
       return null;
     }
