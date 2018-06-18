@@ -6,6 +6,7 @@ import PlayerManager from "../game-objects/player-manager";
 import Logger from "../helpers/logger";
 import { ENEMY_CARD_TYPES } from "../game-objects/enemy-manager";
 import { PLAYER_CARD_TYPES } from "../game-objects/player-manager";
+import ActionRunner from "../game-objects/card-actions";
 import run from "../game-objects/game-runner";
 
 export default class PlayScene extends Scene {
@@ -13,7 +14,7 @@ export default class PlayScene extends Scene {
     const { width, height } = this.sys.game.config;
     this.add.tileSprite(0, 0, width, height, "assets", "patterns/light_wool_@2X").setOrigin(0, 0);
 
-    this.board = new GameBoard(this, 5, 4);
+    const gameBoard = new GameBoard(this, 5, 4);
 
     const enemyDeckComposition = [
       { id: ENEMY_CARD_TYPES.WEAK_ENEMY, quantity: 17 },
@@ -22,7 +23,7 @@ export default class PlayScene extends Scene {
     ];
 
     const enemyDeck = new Deck(enemyDeckComposition);
-    this.enemyManager = new EnemyManager(this, this.board, enemyDeck);
+    const enemyManager = new EnemyManager(this, gameBoard, enemyDeck);
 
     const playerDeckComposition = [
       { id: PLAYER_CARD_TYPES.ATTACK_ONE, quantity: 12 },
@@ -37,8 +38,10 @@ export default class PlayScene extends Scene {
     ];
 
     const playerDeck = new Deck(playerDeckComposition);
-    this.playerManager = new PlayerManager(this, this.board, playerDeck);
+    const playerManager = new PlayerManager(this, gameBoard, playerDeck);
 
-    run(this.playerManager, this.enemyManager);
+    const actionRunner = new ActionRunner(this, playerManager, enemyManager, gameBoard);
+
+    run(playerManager, enemyManager, actionRunner);
   }
 }
