@@ -74,6 +74,19 @@ export default class PlayerManager {
     this.energyDisplay.setEnergy(this.energy);
   }
 
+  enableSelecting() {
+    this.playerHand.enableSelecting();
+  }
+
+  disableSelecting() {
+    this.playerHand.disableSelecting();
+  }
+
+  discardSelectedCard() {
+    const selected = this.playerHand.getSelected();
+    if (selected) this.discardCard(selected);
+  }
+
   discardCard(card) {
     this.playerHand.discardCard(card);
     this.playerHandCount.setText(this.playerHand.getNumCards());
