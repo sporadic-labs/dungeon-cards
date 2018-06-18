@@ -32,6 +32,7 @@ export default class ActionRunner {
     this.endTurnButton.activate();
 
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_SELECT, this.onPlayerCardSelect, this);
+    this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DISCARD, this.onPlayerDiscard, this);
     this.proxy.on(emitter, EVENT_NAMES.ACTION_COMPLETE, this.onComplete, this);
 
     // Allow the player to take actions until they explicitly click the "end turn" button
@@ -40,6 +41,12 @@ export default class ActionRunner {
     this.playerManager.disableSelecting();
     this.endTurnButton.deactivate();
     this.proxy.removeAll();
+  }
+
+  onPlayerDiscard() {
+    // Player has discarded the card corresponding to the current action. Note: maybe we need to
+    // differentiate between "reclaim for energy" and "discard" events
+    if (this.currentAction) this.currentAction.destroy();
   }
 
   onPlayerCardSelect(card) {
