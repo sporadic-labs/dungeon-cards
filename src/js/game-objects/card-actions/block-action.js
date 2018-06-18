@@ -1,33 +1,55 @@
-import { emitter, EVENT_NAMES } from "../events";
+import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import logger from "../../helpers/logger";
+import Action from "./action";
 
-export default function blockAction(playerManager, card) {
-  const { gameBoard, scene } = playerManager;
+export default class BlockAction extends Action {
+  constructor(scene, card, gameManager, gameBoard, enemyManager) {
+    super();
 
-  const onPointerOver = pointer => {
-    const boardPosition = gameBoard.getBoardPosition(pointer.x, pointer.y);
-    if (boardPosition) emitter.emit(EVENT_NAMES.GAMEBOARD_CARD_FOCUS, card);
-  };
+    this.card = card;
+    this.attackPattern = card.cardInfo.cells;
+    this.gameBoard = gameBoard;
+    this.proxy = new EventProxy();
 
-  const onPointerDown = pointer => {
-    const boardPosition = gameBoard.getBoardPosition(pointer.x, pointer.y);
-    if (!boardPosition) {
-      logger.log("Trying to block a location not on the board");
-      return;
+    this.proxy.on(scene.input, "pointermove", this.onPointerMove, this);
+    this.proxy.on(scene.input, "pointerdown", this.onPointerDown, this);
+  }
+
+  onPointerMove(pointer) {
+    const positions = this.getAttackPositions(pointer);
+    emitter.emit(EVENT_NAMES.GAMEBOARD_CARD_FOCUS, positions);
+    const enemies = this.gameBoard.getAtMultiple(positions);
+    logger.log(`You are over ${enemies.length} enemies`);
+  }
+
+  onPointerDown(pointer) {
+    const positions = this.getAttackPositions(pointer);
+
+    if (positions.length) {
+      positions.forEach(({ x, y }) => {
+        const enemy = this.gameBoard.getAt(x, y);
+        if (enemy) {
+          enemy.setBlocked();
+          emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card, x, y);
+        }
+      });
     }
+  }
 
-    const enemy = gameBoard.getAt(boardPosition.x, boardPosition.y);
-    if (!enemy) {
-      logger.log("Trying to block an empty location");
-      return;
-    }
+  getAttackPositions(pointer) {
+    const positions = [];
+    const boardPosition = this.gameBoard.getBoardPosition(pointer.x, pointer.y, false);
 
-    enemy.setBlocked();
-    scene.input.off("pointerdown", onPointerDown);
-    scene.input.off("pointerover", onPointerOver);
-    emitter.emit(EVENT_NAMES.ACTION_COMPLETE, card, boardPosition.x, boardPosition.y);
-  };
+    this.attackPattern.forEach(({ x: dx, y: dy }) => {
+      const x = boardPosition.x + dx;
+      const y = boardPosition.y + dy;
+      if (this.gameBoard.isInBounds(x, y)) positions.push({ x, y });
+    });
 
-  scene.input.on("pointerdown", onPointerDown);
-  scene.input.on("pointerover", onPointerOver);
+    return positions;
+  }
+
+  destroy() {
+    this.proxy.removeAll();
+  }
 }

@@ -1,44 +1,55 @@
 import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import logger from "../../helpers/logger";
+import Action from "./action";
 
-function getAttackPositions(pointer, gameBoard, attackPattern) {
-  const positions = [];
-  const boardPosition = gameBoard.getBoardPosition(pointer.x, pointer.y, false);
+export default class AttackAction extends Action {
+  constructor(scene, card, gameManager, gameBoard, enemyManager) {
+    super();
 
-  attackPattern.forEach(({ x: dx, y: dy }) => {
-    const x = boardPosition.x + dx;
-    const y = boardPosition.y + dy;
-    if (gameBoard.isInBounds(x, y)) positions.push({ x, y });
-  });
+    this.card = card;
+    this.attackPattern = card.cardInfo.cells;
+    this.gameBoard = gameBoard;
+    this.proxy = new EventProxy();
 
-  return positions;
-}
+    this.proxy.on(scene.input, "pointermove", this.onPointerMove, this);
+    this.proxy.on(scene.input, "pointerdown", this.onPointerDown, this);
+  }
 
-export default function attackAction(playerManager, card) {
-  const { gameBoard, scene } = playerManager;
-  const proxy = new EventProxy();
-  const attackPattern = card.cardInfo.cells;
-
-  proxy.on(scene.input, "pointermove", pointer => {
-    const positions = getAttackPositions(pointer, gameBoard, attackPattern);
+  onPointerMove(pointer) {
+    const positions = this.getAttackPositions(pointer);
     emitter.emit(EVENT_NAMES.GAMEBOARD_CARD_FOCUS, positions);
-    const enemies = gameBoard.getAtMultiple(positions);
+    const enemies = this.gameBoard.getAtMultiple(positions);
     logger.log(`You are over ${enemies.length} enemies`);
-  });
+  }
 
-  proxy.on(scene.input, "pointerdown", pointer => {
-    const positions = getAttackPositions(pointer, gameBoard, attackPattern);
+  onPointerDown(pointer) {
+    const positions = this.getAttackPositions(pointer);
 
     if (positions.length) {
       positions.forEach(({ x, y }) => {
-        const enemy = gameBoard.getAt(x, y);
+        const enemy = this.gameBoard.getAt(x, y);
         if (enemy) {
           logger.log(`You attacked at (${x}, ${y}) on the board`);
-          emitter.emit(EVENT_NAMES.ACTION_COMPLETE, card, x, y);
+          emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card, x, y);
         }
       });
-
-      proxy.removeAll();
     }
-  });
+  }
+
+  getAttackPositions(pointer) {
+    const positions = [];
+    const boardPosition = this.gameBoard.getBoardPosition(pointer.x, pointer.y, false);
+
+    this.attackPattern.forEach(({ x: dx, y: dy }) => {
+      const x = boardPosition.x + dx;
+      const y = boardPosition.y + dy;
+      if (this.gameBoard.isInBounds(x, y)) positions.push({ x, y });
+    });
+
+    return positions;
+  }
+
+  destroy() {
+    this.proxy.removeAll();
+  }
 }
