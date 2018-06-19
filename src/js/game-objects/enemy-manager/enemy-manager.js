@@ -63,8 +63,8 @@ export default class EnemyManager {
    *
    * @memberof EnemyManager
    */
-  sortEnemies() {
-    this.enemies.sort((enemy1, enemy2) => {
+  sortEnemies(enemies) {
+    enemies.sort((enemy1, enemy2) => {
       const p1 = enemy1.getPosition();
       const p2 = enemy2.getPosition();
       if (p1.y > p2.y) return -1;
@@ -78,7 +78,7 @@ export default class EnemyManager {
   }
 
   async moveEnemies() {
-    this.sortEnemies();
+    this.sortEnemies(this.enemies);
     let delay = 0;
     const movePromises = this.enemies.map(enemy => {
       const boardPosition = this.gameBoard.findPositionOf(enemy);
