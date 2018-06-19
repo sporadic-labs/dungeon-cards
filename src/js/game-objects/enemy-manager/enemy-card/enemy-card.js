@@ -35,15 +35,19 @@ export default class EnemyCard {
     if (this.blocked !== shouldBeBlocked) {
       this.blocked = shouldBeBlocked;
       this.turnsBlocked = 0;
-      let key = this.type === ENEMY_CARD_TYPES.STRONG_ENEMY ? "strong-enemy" : "weak-enemy";
-      if (this.blocked) key += "-blocked";
-      this.sprite.setTexture("assets", `cards/${key}`);
+      this.updateTexture();
     }
 
     // Unblock after the end of the next enemy turn
     if (this.blocked) {
       emitter.once(EVENT_NAMES.ENEMY_TURN_END, () => this.setBlocked(false));
     }
+  }
+
+  updateTexture() {
+    let key = this.health === 2 ? "strong-enemy" : "weak-enemy";
+    if (this.blocked) key += "-blocked";
+    this.sprite.setTexture("assets", `cards/${key}`);
   }
 
   isBlocked() {
