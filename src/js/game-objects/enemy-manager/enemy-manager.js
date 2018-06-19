@@ -58,6 +58,12 @@ export default class EnemyManager {
     this.enemies.forEach(c => c.disableSelecting());
   }
 
+  removeEnemy(enemy) {
+    this.enemies = this.enemies.filter(e => e !== enemy);
+    const boardPosition = this.gameBoard.findPositionOf(enemy);
+    if (boardPosition) this.gameBoard.removeAt(boardPosition.x, boardPosition.y);
+  }
+
   /**
    * Sort enemies in the following order: top to bottom then left to right.
    *
