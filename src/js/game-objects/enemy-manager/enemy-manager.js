@@ -83,6 +83,23 @@ export default class EnemyManager {
     });
   }
 
+  async damageEnemies(enemies, damage) {
+    let delay = 0;
+
+    // TODO: damage from left -> right, top -> bottom
+    this.sortEnemies(enemies);
+
+    const deathPromises = enemies.map(enemy => {
+      enemy.takeDamage(damage);
+      if (enemy.health <= 0) {
+        delay += 500;
+        return enemy.die(delay).then(() => this.removeEnemy(enemy));
+      }
+    });
+
+    await Promise.all(deathPromises);
+  }
+
   async moveEnemies() {
     this.sortEnemies(this.enemies);
     let delay = 0;

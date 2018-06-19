@@ -54,6 +54,11 @@ export default class EnemyCard {
     return this.blocked;
   }
 
+  takeDamage(damage) {
+    this.health -= damage;
+    if (this.health > 0) this.updateTexture();
+  }
+
   getPosition() {
     return { x: this.sprite.x, y: this.sprite.y };
   }
@@ -134,6 +139,26 @@ export default class EnemyCard {
         onComplete: resolve
       });
     });
+  }
+
+  fadeOut(delay) {
+    this.scene.tweens.killTweensOf(this.sprite);
+    return new Promise(resolve => {
+      this.scene.tweens.add({
+        targets: this.sprite,
+        alpha: 0,
+        delay: delay,
+        duration: 200,
+        ease: "Quad.easeOut",
+        onComplete: resolve
+      });
+    });
+  }
+
+  die(delay) {
+    this.disableFocusing();
+    this.disableSelecting();
+    return this.fadeOut(delay);
   }
 
   moveTo(x, y, delay = 0) {
