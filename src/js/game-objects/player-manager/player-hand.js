@@ -13,29 +13,45 @@ export default class PlayerHand {
     this.cards = [];
     this.selectingEnabled = false;
 
-    this.highlightedCard = null;
+    this.focusedCard = null;
+    this.selectedCard = null;
 
     emitter.on(EVENT_NAMES.PLAYER_CARD_SELECT, card => {
-      this.cards.forEach(c => c.deselect());
-      card.select();
+      this.selectedCard = card;
+      this.updateCards();
     });
 
     emitter.on(EVENT_NAMES.PLAYER_CARD_DESELECT, card => {
-      card.deselect();
+      this.selectedCard = null;
+      this.updateCards();
     });
 
     emitter.on(EVENT_NAMES.PLAYER_CARD_FOCUS, card => {
-      this.cards.forEach(c => c.defocus());
-      card.focus();
-      this.highlightedCard = card;
-      this.depthSort();
+      this.focusedCard = card;
+      this.updateCards();
     });
 
     emitter.on(EVENT_NAMES.PLAYER_CARD_DEFOCUS, card => {
-      card.defocus();
-      this.highlightedCard = null;
-      this.depthSort();
+      this.focusedCard = null;
+      this.updateCards();
     });
+  }
+
+  updateCards() {
+    this.cards.forEach(card => {
+      // Force card to the correct state - selected cards should stay focused
+      if (card === this.selectedCard) {
+        card.focus();
+        card.select();
+      } else if (card === this.focusedCard) {
+        card.focus();
+        card.deselect();
+      } else {
+        card.defocus();
+        card.deselect();
+      }
+    });
+    this.depthSort();
   }
 
   enableSelecting() {
@@ -75,7 +91,11 @@ export default class PlayerHand {
 
   depthSort() {
     this.cards.forEach((c, i) => c.setDepth(this.cards.length - 1 - i));
-    if (this.highlightedCard) this.highlightedCard.setDepth(this.cards.length);
+
+    // Place focused card on top of the selected card, so that the player can still see other cards
+    // while one is selected
+    if (this.selectedCard) this.selectedCard.setDepth(this.cards.length);
+    if (this.focusedCard) this.focusedCard.setDepth(this.cards.length + 1);
   }
 
   arrangeCards() {
@@ -114,6 +134,9 @@ export default class PlayerHand {
       this.deck.discard(card.type);
       this.arrangeCards();
       card.destroy();
+
+      if (this.selectedCard === card) this.selectedCard = null;
+      if (this.focusedCard === card) this.focusedCard = null;
     }
   }
 }
