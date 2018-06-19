@@ -9,7 +9,7 @@ export class GameBoard {
     const { w, h } = assetsJson.frames["cards/empty"].sourceSize;
     this.cellWidth = w;
     this.cellHeight = h;
-    this.cellPadding = 10;
+    this.cellPadding = 8;
     this.boardRows = rows;
     this.boardColumns = columns;
     this.boardWidth = columns * this.cellWidth + (columns - 1) * this.cellPadding;
@@ -17,7 +17,7 @@ export class GameBoard {
 
     const width = scene.sys.game.config.width;
     this.worldX = width / 2 - this.boardWidth / 2;
-    this.worldY = 50;
+    this.worldY = 116;
 
     this.board = [];
     for (let boardY = 0; boardY < rows; boardY++) {
