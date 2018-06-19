@@ -1,6 +1,6 @@
 import { EventProxy, emitter, EVENT_NAMES } from "../events";
-import logger from "../../helpers/logger";
 import Action from "./action";
+import logger from "../../helpers/logger";
 
 export default class AttackAction extends Action {
   constructor(scene, card, gameManager, gameBoard, enemyManager) {
@@ -8,7 +8,7 @@ export default class AttackAction extends Action {
 
     this.card = card;
     this.attackPattern = card.cardInfo.cells;
-    this.gameBoard = gameBoard;
+    this.board = gameBoard;
     this.proxy = new EventProxy();
 
     this.proxy.on(scene.input, "pointermove", this.onPointerMove, this);
@@ -16,37 +16,20 @@ export default class AttackAction extends Action {
   }
 
   onPointerMove(pointer) {
-    const positions = this.getAttackPositions(pointer);
+    const positions = this.getBoardPositionsWithinRange(this.board, pointer, this.attackPattern);
     emitter.emit(EVENT_NAMES.GAMEBOARD_CARD_FOCUS, positions);
-    const enemies = this.gameBoard.getAtMultiple(positions);
-    logger.log(`You are over ${enemies.length} enemies`);
   }
 
   onPointerDown(pointer) {
-    const positions = this.getAttackPositions(pointer);
+    const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
 
-    if (positions.length) {
-      positions.forEach(({ x, y }) => {
-        const enemy = this.gameBoard.getAt(x, y);
-        if (enemy) {
-          logger.log(`You attacked at (${x}, ${y}) on the board`);
-          emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card, x, y);
-        }
+    if (enemies.length) {
+      enemies.forEach(enemy => {
+        // Do attack...
+        logger.log("Attacking enemy");
       });
+      emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
     }
-  }
-
-  getAttackPositions(pointer) {
-    const positions = [];
-    const boardPosition = this.gameBoard.getBoardPosition(pointer.x, pointer.y, false);
-
-    this.attackPattern.forEach(({ x: dx, y: dy }) => {
-      const x = boardPosition.x + dx;
-      const y = boardPosition.y + dy;
-      if (this.gameBoard.isInBounds(x, y)) positions.push({ x, y });
-    });
-
-    return positions;
   }
 
   destroy() {
