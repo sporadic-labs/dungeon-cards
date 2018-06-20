@@ -1,33 +1,34 @@
-import { emitter, EVENT_NAMES } from "../events";
-import logger from "../../helpers/logger";
+import { EventProxy, emitter, EVENT_NAMES } from "../events";
+import Action from "./action";
 
-export default function blockAction(playerManager, card) {
-  const { gameBoard, scene } = playerManager;
+export default class BlockAction extends Action {
+  constructor(scene, card, gameManager, gameBoard, enemyManager) {
+    super();
 
-  const onPointerOver = pointer => {
-    const boardPosition = gameBoard.getBoardPosition(pointer.x, pointer.y);
-    if (boardPosition) emitter.emit(EVENT_NAMES.GAMEBOARD_CARD_FOCUS, card);
-  };
+    this.card = card;
+    this.attackPattern = card.cardInfo.cells;
+    this.board = gameBoard;
+    this.proxy = new EventProxy();
 
-  const onPointerDown = pointer => {
-    const boardPosition = gameBoard.getBoardPosition(pointer.x, pointer.y);
-    if (!boardPosition) {
-      logger.log("Trying to block a location not on the board");
-      return;
+    this.proxy.on(scene.input, "pointermove", this.onPointerMove, this);
+    this.proxy.on(scene.input, "pointerdown", this.onPointerDown, this);
+  }
+
+  onPointerMove(pointer) {
+    const positions = this.getBoardPositionsWithinRange(this.board, pointer, this.attackPattern);
+    emitter.emit(EVENT_NAMES.GAMEBOARD_CARD_FOCUS, positions);
+  }
+
+  onPointerDown(pointer) {
+    const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
+
+    if (enemies.length) {
+      enemies.forEach(enemy => enemy.setBlocked());
+      emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
     }
+  }
 
-    const enemy = gameBoard.getAt(boardPosition.x, boardPosition.y);
-    if (!enemy) {
-      logger.log("Trying to block an empty location");
-      return;
-    }
-
-    enemy.setBlocked();
-    scene.input.off("pointerdown", onPointerDown);
-    scene.input.off("pointerover", onPointerOver);
-    emitter.emit(EVENT_NAMES.ACTION_COMPLETE, card, boardPosition.x, boardPosition.y);
-  };
-
-  scene.input.on("pointerdown", onPointerDown);
-  scene.input.on("pointerover", onPointerOver);
+  destroy() {
+    this.proxy.removeAll();
+  }
 }

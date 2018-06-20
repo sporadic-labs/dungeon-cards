@@ -58,13 +58,19 @@ export default class EnemyManager {
     this.enemies.forEach(c => c.disableSelecting());
   }
 
+  removeEnemy(enemy) {
+    this.enemies = this.enemies.filter(e => e !== enemy);
+    const boardPosition = this.gameBoard.findPositionOf(enemy);
+    if (boardPosition) this.gameBoard.removeAt(boardPosition.x, boardPosition.y);
+  }
+
   /**
    * Sort enemies in the following order: top to bottom then left to right.
    *
    * @memberof EnemyManager
    */
-  sortEnemies() {
-    this.enemies.sort((enemy1, enemy2) => {
+  sortEnemies(enemies) {
+    enemies.sort((enemy1, enemy2) => {
       const p1 = enemy1.getPosition();
       const p2 = enemy2.getPosition();
       if (p1.y > p2.y) return -1;
@@ -77,8 +83,25 @@ export default class EnemyManager {
     });
   }
 
+  async damageEnemies(enemies, damage) {
+    let delay = 0;
+
+    // TODO: damage from left -> right, top -> bottom
+    this.sortEnemies(enemies);
+
+    const deathPromises = enemies.map(enemy => {
+      enemy.takeDamage(damage);
+      if (enemy.health <= 0) {
+        delay += 500;
+        return enemy.die(delay).then(() => this.removeEnemy(enemy));
+      }
+    });
+
+    await Promise.all(deathPromises);
+  }
+
   async moveEnemies() {
-    this.sortEnemies();
+    this.sortEnemies(this.enemies);
     let delay = 0;
     const movePromises = this.enemies.map(enemy => {
       const boardPosition = this.gameBoard.findPositionOf(enemy);

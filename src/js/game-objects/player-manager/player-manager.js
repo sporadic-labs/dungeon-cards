@@ -1,6 +1,5 @@
 import PlayerHand from "./player-hand";
-import { cleanupAction, runCardAction } from "../card-actions";
-import { emitter, EVENT_NAMES } from "../events";
+import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import { DeckDisplay, DiscardPile, EndTurnButton, EnergyDisplay, PopupText } from "../hud";
 
 import { getFontString } from "../../font";
@@ -20,6 +19,7 @@ export default class PlayerManager {
     this.scene = scene;
     this.gameBoard = gameBoard;
     this.deck = playerDeck;
+    this.proxy = new EventProxy();
 
     this.energy = 0;
     this.playerHand = new PlayerHand(scene, this.deck);
@@ -28,8 +28,10 @@ export default class PlayerManager {
     this.showTooManyCardsMessage = true; // Any better ideas?
 
     const { width, height } = scene.sys.game.config;
-    this.endTurnButton = new EndTurnButton(scene, width - 90, height / 2 - 6);
     this.discardPile = new DiscardPile(scene, width - 136, height - 160);
+    this.playerHandCount = scene.add
+      .text(width / 2, height - 24, this.playerHand.getNumCards(), style)
+      .setOrigin(0.5, 0.5);
     this.deckDisplay = new DeckDisplay(
       scene,
       width - 64,
@@ -37,20 +39,15 @@ export default class PlayerManager {
       this.deck.getNumCardsRemaining()
     );
     this.energyDisplay = new EnergyDisplay(scene, width - 60, height - 56);
-    this.playerHandCount = scene.add
-      .text(width / 2, height - 24, this.playerHand.getNumCards(), style)
-      .setOrigin(0.5, 0.5);
-  }
 
-  async update() {
-    this.drawCard();
-    await this.takeActions();
+    this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DISCARD, this.discardSelectedCard, this);
   }
 
   /**
    * Add a card to your hand.
    */
-  drawCard() {
+  async drawCard() {
+    // TODO: animate the card and wait for the animation to stop before resolving the async promise
     this.playerHand.drawCard();
     this.playerHandCount.setText(this.playerHand.getNumCards());
     this.deckDisplay.setValue(this.deck.getNumCardsRemaining());
@@ -76,6 +73,19 @@ export default class PlayerManager {
     this.energyDisplay.setEnergy(this.energy);
   }
 
+  enableSelecting() {
+    this.playerHand.enableSelecting();
+  }
+
+  disableSelecting() {
+    this.playerHand.disableSelecting();
+  }
+
+  discardSelectedCard() {
+    const selected = this.playerHand.getSelected();
+    if (selected) this.discardCard(selected);
+  }
+
   discardCard(card) {
     this.playerHand.discardCard(card);
     this.playerHandCount.setText(this.playerHand.getNumCards());
@@ -87,50 +97,17 @@ export default class PlayerManager {
     return await this.discardCard(card);
   }
 
-  endTurn() {
+  async discardStep() {
     return new Promise(resolve => {
-      emitter.on(EVENT_NAMES.PLAYER_TURN_END, () => {
-        // If the player has more than 10 cards, they can't end their turn yet.
-        if (this.playerHand.getNumCards() <= 10) {
-          this.resetEnergy();
-          resolve();
-        } else {
-          // Some UI to indicate player can't end turn yet.
-          const { width, height } = this.scene.sys.game.config;
-          new PopupText(this.scene, "You must have 10 cards or less to continue!", width / 4, 20);
-        }
-      });
+      if (this.playerHand.getNumCards() <= 10) {
+        this.resetEnergy();
+        resolve();
+      } else {
+        // Some UI to indicate player can't end turn yet.
+        const { width, height } = this.scene.sys.game.config;
+        new PopupText(this.scene, "You must have 10 cards or less to continue!", width / 4, 20);
+        this.enableSelecting();
+      }
     });
-  }
-
-  async takeActions() {
-    this.endTurnButton.activate();
-    this.playerHand.enableSelecting();
-
-    const onSelect = card => runCardAction(this, card);
-    const onComplete = card => this.discardCard(card);
-    const onCancel = card => cleanupAction(card);
-    const onDiscard = () => {
-      const selectedCard = this.playerHand.getSelected();
-      if (selectedCard) this.reclaimCard(selectedCard);
-    };
-
-    emitter.on(EVENT_NAMES.PLAYER_CARD_SELECT, onSelect, this);
-    emitter.on(EVENT_NAMES.PLAYER_CARD_DESELECT, onCancel, this);
-    emitter.on(EVENT_NAMES.ACTION_COMPLETE, onComplete, this);
-    emitter.on(EVENT_NAMES.ACTION_CANCEL, onCancel, this);
-    emitter.on(EVENT_NAMES.PLAYER_CARD_DISCARD, onDiscard, this);
-
-    await this.endTurn();
-
-    this.playerHand.disableSelecting();
-    this.endTurnButton.deactivate();
-
-    emitter.off(EVENT_NAMES.PLAYER_CARD_SELECT, onSelect, this);
-    emitter.off(EVENT_NAMES.PLAYER_CARD_DESELECT, onCancel, this);
-    emitter.off(EVENT_NAMES.ACTION_COMPLETE, onComplete, this);
-    emitter.off(EVENT_NAMES.ACTION_CANCEL, onCancel, this);
-    emitter.off(EVENT_NAMES.PLAYER_CARD_DISCARD, onDiscard, this);
-    emitter.off(EVENT_NAMES.PLAYER_TURN_END, this);
   }
 }

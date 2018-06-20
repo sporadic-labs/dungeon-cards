@@ -1,6 +1,7 @@
 import { GameBoardCell } from "./gameboard-cell";
 import { emitter, EVENT_NAMES } from "../events";
 import { PLAYER_CARD_INFO } from "../player-manager/player-card";
+import logger from "../../helpers/logger";
 
 export class GameBoard {
   constructor(scene, rows, columns) {
@@ -50,6 +51,17 @@ export class GameBoard {
 
   defocusBoard() {
     this.forEachCell(cell => cell.defocus());
+  }
+
+  debugDump() {
+    let message = "Game Board:\n";
+    for (let y = 0; y < this.boardRows; y++) {
+      for (let x = 0; x < this.boardColumns; x++) {
+        message += this.getAt(x, y) ? " E " : " _ ";
+      }
+      message += "\n";
+    }
+    logger.log(message);
   }
 
   /**

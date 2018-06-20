@@ -35,9 +35,7 @@ export default class EnemyCard {
     if (this.blocked !== shouldBeBlocked) {
       this.blocked = shouldBeBlocked;
       this.turnsBlocked = 0;
-      let key = this.type === ENEMY_CARD_TYPES.STRONG_ENEMY ? "strong-enemy" : "weak-enemy";
-      if (this.blocked) key += "-blocked";
-      this.sprite.setTexture("assets", `cards/${key}`);
+      this.updateTexture();
     }
 
     // Unblock after the end of the next enemy turn
@@ -46,8 +44,19 @@ export default class EnemyCard {
     }
   }
 
+  updateTexture() {
+    let key = this.health === 2 ? "strong-enemy" : "weak-enemy";
+    if (this.blocked) key += "-blocked";
+    this.sprite.setTexture("assets", `cards/${key}`);
+  }
+
   isBlocked() {
     return this.blocked;
+  }
+
+  takeDamage(damage) {
+    this.health -= damage;
+    if (this.health > 0) this.updateTexture();
   }
 
   getPosition() {
@@ -130,6 +139,26 @@ export default class EnemyCard {
         onComplete: resolve
       });
     });
+  }
+
+  fadeOut(delay) {
+    this.scene.tweens.killTweensOf(this.sprite);
+    return new Promise(resolve => {
+      this.scene.tweens.add({
+        targets: this.sprite,
+        alpha: 0,
+        delay: delay,
+        duration: 200,
+        ease: "Quad.easeOut",
+        onComplete: resolve
+      });
+    });
+  }
+
+  die(delay) {
+    this.disableFocusing();
+    this.disableSelecting();
+    return this.fadeOut(delay);
   }
 
   moveTo(x, y, delay = 0) {
