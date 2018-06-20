@@ -25,18 +25,20 @@ export default class PlayerManager {
     this.playerHand = new PlayerHand(scene, this.deck);
     this.playerHand.drawCards(6);
 
+    this.showTooManyCardsMessage = true; // Any better ideas?
+
     const { width, height } = scene.sys.game.config;
-    this.discardPile = new DiscardPile(scene, width - 120, height - 200);
+    this.discardPile = new DiscardPile(scene, width - 136, height - 160);
     this.playerHandCount = scene.add
-      .text(width - 120, height - 145, this.playerHand.getNumCards(), style)
+      .text(width / 2, height - 24, this.playerHand.getNumCards(), style)
       .setOrigin(0.5, 0.5);
     this.deckDisplay = new DeckDisplay(
       scene,
-      width - 50,
-      height - 200,
+      width - 64,
+      height - 160,
       this.deck.getNumCardsRemaining()
     );
-    this.energyDisplay = new EnergyDisplay(scene, width - 50, height - 50);
+    this.energyDisplay = new EnergyDisplay(scene, width - 60, height - 56);
 
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DISCARD, this.discardSelectedCard, this);
   }
