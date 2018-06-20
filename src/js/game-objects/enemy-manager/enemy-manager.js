@@ -92,7 +92,7 @@ export default class EnemyManager {
     const deathPromises = enemies.map(enemy => {
       enemy.takeDamage(damage);
       if (enemy.health <= 0) {
-        delay += 500;
+        delay += 50;
         return enemy.die(delay).then(() => this.removeEnemy(enemy));
       }
     });
