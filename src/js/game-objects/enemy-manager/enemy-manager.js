@@ -65,7 +65,8 @@ export default class EnemyManager {
   }
 
   /**
-   * Sort enemies in the following order: top to bottom then left to right.
+   * Sort enemies in the following order: bottom of the screen to top of the screen, then left side
+   * of the screen to the right side of the screen.
    *
    * @memberof EnemyManager
    */
@@ -73,20 +74,15 @@ export default class EnemyManager {
     enemies.sort((enemy1, enemy2) => {
       const p1 = enemy1.getPosition();
       const p2 = enemy2.getPosition();
-      if (p1.y > p2.y) return -1;
-      else if (p1.y < p2.y) return 1;
-      else {
-        if (p1.x < p2.x) return -1;
-        if (p1.x > p2.x) return 1;
-        else return 0;
-      }
+      // y2 - y1 = bigger Y sorts earlier in array
+      // x1 - x2 = smaller X sorts earlier in array
+      return p2.y - p1.y || p1.x - p2.x;
     });
   }
 
   async damageEnemies(enemies, damage) {
     let delay = 0;
 
-    // TODO: damage from left -> right, top -> bottom
     this.sortEnemies(enemies);
 
     const deathPromises = enemies.map(enemy => {
