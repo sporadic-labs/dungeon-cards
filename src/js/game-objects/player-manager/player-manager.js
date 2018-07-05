@@ -68,6 +68,10 @@ export default class PlayerManager {
     return this.energy;
   }
 
+  canUseCard(card) {
+    return this.getEnergy() - card.getEnergy() >= 0;
+  }
+
   resetEnergy() {
     this.energy = 0;
     this.energyDisplay.setEnergy(this.energy);
