@@ -12,11 +12,13 @@ export default class PopupText {
    * @param {number} x
    * @param {number} y
    * @param {Phaser.GameObjects.Text.TextStyle} style
+   * @param {Function} onCompleteCb
    */
-  constructor(scene, text, x, y, style) {
+  constructor(scene, text, x, y, style, onCompleteCb) {
     this.text = text;
     this.scene = scene;
     this.style = style || defaultStyle;
+    this.onCompleteCb = onCompleteCb;
 
     this.text = scene.add.text(0, 0, text, this.style).setOrigin(0.5, 0.5);
 
@@ -41,6 +43,9 @@ export default class PopupText {
   }
 
   destroy() {
+    if (this.onCompleteCb) {
+      this.onCompleteCb();
+    }
     this.scene.tweens.killTweensOf(this.text);
     this.text.destroy();
   }
