@@ -1,6 +1,6 @@
 import PlayerHand from "./player-hand";
 import { EventProxy, emitter, EVENT_NAMES } from "../events";
-import { DeckDisplay, DiscardPile, EndTurnButton, EnergyDisplay, PopupText } from "../hud";
+import { DeckDisplay, DiscardPile, EnergyDisplay, PopupText } from "../hud";
 
 import { getFontString } from "../../font";
 
