@@ -93,7 +93,7 @@ export default class PlayerManager {
 
   discardSelectedCard() {
     const selected = this.playerHand.getSelected();
-    if (selected) this.discardCard(selected);
+    if (selected) this.reclaimCard(selected);
   }
 
   discardCard(card) {
