@@ -41,6 +41,12 @@ export default class PlayerManager {
     this.energyDisplay = new EnergyDisplay(scene, width - 60, height - 56);
 
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DISCARD, this.discardSelectedCard, this);
+    this.proxy.on(
+      emitter,
+      EVENT_NAMES.PLAYER_TURN_ATTEMPT_COMPLETE,
+      this.attemptCompleteTurn,
+      this
+    );
   }
 
   /**
@@ -96,6 +102,11 @@ export default class PlayerManager {
     return Promise.resolve();
   }
 
+  async attemptCompleteTurn() {
+    await this.discardStep();
+    emitter.emit(EVENT_NAMES.PLAYER_TURN_COMPLETE);
+  }
+
   async reclaimCard(card) {
     this.addEnergy(card.getEnergy());
     return await this.discardCard(card);
@@ -106,11 +117,21 @@ export default class PlayerManager {
       if (this.playerHand.getNumCards() <= 10) {
         this.resetEnergy();
         resolve();
-      } else {
+      } else if (this.showTooManyCardsMessage) {
+        this.showTooManyCardsMessage = false;
+        this.enableSelecting();
         // Some UI to indicate player can't end turn yet.
         const { width, height } = this.scene.sys.game.config;
-        new PopupText(this.scene, "You must have 10 cards or less to continue!", width / 4, 20);
-        this.enableSelecting();
+        new PopupText(
+          this.scene,
+          "You must have 10 cards or less to continue!",
+          width / 4,
+          20,
+          null,
+          () => {
+            this.showTooManyCardsMessage = true;
+          }
+        );
       }
     });
   }

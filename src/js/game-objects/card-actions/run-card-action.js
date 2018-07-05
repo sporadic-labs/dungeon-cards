@@ -60,7 +60,7 @@ export default class ActionRunner {
   }
 
   endActions() {
-    return new Promise(resolve => emitter.once(EVENT_NAMES.PLAYER_TURN_END, resolve));
+    return new Promise(resolve => emitter.once(EVENT_NAMES.PLAYER_TURN_COMPLETE, resolve));
   }
 
   runAction(card) {

@@ -40,7 +40,8 @@ export default class EndTurnButton {
   }
 
   select() {
-    emitter.emit(EVENT_NAMES.PLAYER_TURN_END);
+    // emitter.emit(EVENT_NAMES.PLAYER_TURN_END);
+    emitter.emit(EVENT_NAMES.PLAYER_TURN_ATTEMPT_COMPLETE);
   }
 
   activate() {
