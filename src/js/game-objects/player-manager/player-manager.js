@@ -6,7 +6,7 @@ import { getFontString } from "../../font";
 
 const style = {
   font: getFontString("Chivo", { size: "24px", weight: 600 }),
-  fill: "#FFF"
+  fill: "#FFC936"
 };
 
 export default class PlayerManager {
