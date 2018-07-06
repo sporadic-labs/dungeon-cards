@@ -160,13 +160,4 @@ export default class EnemyManager {
     // TODO: Make room for these to spawn above the game board and animate into position
     return Promise.all(spawnPromises);
   }
-
-  discardEnemy(card) {
-    if (this.enemies.includes(card)) {
-      this.enemies = this.enemies.filter(c => c !== card);
-      this.deck.discard(card.type);
-      this.arrangeCards();
-      card.destroy();
-    }
-  }
 }
