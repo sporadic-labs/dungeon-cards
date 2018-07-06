@@ -46,14 +46,28 @@ const PLAYER_CARD_INFO = {
     key: "player-shift-left",
     energy: 1,
     cells: [
-      { x: 0, y: 0 } // TODO(rex): Not sure how to represent this.
+      // TODO(rex): Not sure how to represent this.
+      { x: -3, y: 0 },
+      { x: -2, y: 0 },
+      { x: -1, y: 0 },
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: 2, y: 0 },
+      { x: 3, y: 0 }
     ]
   },
   SHIFT_RIGHT: {
     key: "player-shift-right",
     energy: 1,
     cells: [
-      { x: 0, y: 0 } // TODO(rex): Not sure how to represent this.
+      // TODO(rex): Not sure how to represent this.
+      { x: -3, y: 0 },
+      { x: -2, y: 0 },
+      { x: -1, y: 0 },
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: 2, y: 0 },
+      { x: 3, y: 0 }
     ]
   }
 };

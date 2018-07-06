@@ -6,6 +6,7 @@ import AttackAction from "./attack-action";
 import BlockAction from "./block-action";
 import DrawCardAction from "./draw-card-action";
 import GetEnergyAction from "./get-energy-action";
+import ShiftAction from "./shift-action";
 
 const attacks = [
   PLAYER_CARD_TYPES.ATTACK_ONE,
@@ -75,6 +76,11 @@ export default class ActionRunner {
       Constructor = AttackAction;
     } else if (card.type === PLAYER_CARD_TYPES.BLOCK) {
       Constructor = BlockAction;
+    } else if (
+      card.type === PLAYER_CARD_TYPES.SHIFT_LEFT ||
+      card.type === PLAYER_CARD_TYPES.SHIFT_RIGHT
+    ) {
+      Constructor = ShiftAction;
     }
 
     if (Constructor) {
