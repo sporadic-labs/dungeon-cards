@@ -36,7 +36,6 @@ export default class ShiftAction extends Action {
   onPointerDown(pointer) {
     const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
     if (enemies.length) {
-      console.log(enemies);
       const enoughEnergyForAttack = this.playerManager.canUseCard(this.card);
       if (enoughEnergyForAttack) {
         this.enemyManager.shiftEnemies(enemies, this.direction);

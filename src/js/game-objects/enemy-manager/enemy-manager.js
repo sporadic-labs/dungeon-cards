@@ -59,6 +59,19 @@ export default class EnemyManager {
     this.enemies.forEach(c => c.disableSelecting());
   }
 
+  async defocusEnemies() {
+    const promises = this.enemies.filter(e => e.focused).map(e => e.defocus());
+    await Promise.all(promises);
+  }
+
+  disableFocusing() {
+    this.enemies.map(e => e.disableFocusing());
+  }
+
+  enableFocusing() {
+    this.enemies.map(e => e.enableFocusing());
+  }
+
   removeEnemy(enemy) {
     this.enemies = this.enemies.filter(e => e !== enemy);
     const boardPosition = this.gameBoard.findPositionOf(enemy);
@@ -163,7 +176,14 @@ export default class EnemyManager {
    * @param {*} direction
    */
   async shiftEnemies(enemies, direction) {
+    // Disable focusing to prevent killing the movement tween at the wrong time.
+    this.disableFocusing();
+    await this.defocusEnemies();
+
+    // Sort the enemy group based on the direction you are shifting.
     this.sortRow(enemies, direction === SHIFT_DIRECTIONS.RIGHT);
+
+    // Move the enemy cards!
     let delay = 0;
     const movePromises = enemies.map(enemy => {
       const boardPosition = this.gameBoard.findPositionOf(enemy);
@@ -178,14 +198,10 @@ export default class EnemyManager {
         !enemy.isBlocked() &&
         this.gameBoard.isEmpty(boardPosition.x + direction, boardPosition.y)
       ) {
-        console.log(direction);
         const { x, y } = this.gameBoard.getWorldPosition(
           boardPosition.x + direction,
           boardPosition.y
         );
-        console.log(`x: ${x}, y: ${y}`);
-        console.log(`board position x: ${boardPosition.x}, y: ${boardPosition.y}`);
-        console.log(`board position x: ${boardPosition.x + direction}, y: ${boardPosition.y}`);
         const promise = enemy.moveTo(x, y, delay);
         this.gameBoard.removeAt(boardPosition.x, boardPosition.y);
         this.gameBoard.putAt(boardPosition.x + direction, boardPosition.y, enemy);
@@ -195,8 +211,12 @@ export default class EnemyManager {
     });
 
     await Promise.all(movePromises);
+    this.enableFocusing();
   }
 
+  /**
+   * Draw and place new cards from the enemy deck.
+   */
   async spawnEnemies() {
     const cardsRemaining = this.deck.getNumCardsRemaining();
     if (cardsRemaining === 0) return;
