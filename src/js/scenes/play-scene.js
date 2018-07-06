@@ -39,8 +39,9 @@ export default class PlayScene extends Scene {
 
     const playerDeck = new Deck(playerDeckComposition);
     const playerManager = new PlayerManager(this, gameBoard, playerDeck);
-
     const actionRunner = new ActionRunner(this, playerManager, enemyManager, gameBoard);
+
+    emitter.emit(EVENT_NAMES.GAME_START);
 
     run(playerManager, enemyManager, actionRunner);
   }

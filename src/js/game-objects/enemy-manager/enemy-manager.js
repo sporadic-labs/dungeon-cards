@@ -94,6 +94,11 @@ export default class EnemyManager {
     });
 
     await Promise.all(deathPromises);
+
+    if (this.enemies.length === 0) {
+      console.log("game over!");
+      emitter.emit(EVENT_NAMES.GAME_OVER);
+    }
   }
 
   async moveEnemies() {

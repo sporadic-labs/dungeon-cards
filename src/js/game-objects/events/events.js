@@ -1,6 +1,9 @@
 import EmitterWithLogging from "../../helpers/emitter-with-logging";
 
 const EVENT_NAMES = {
+  GAME_START: "GAME_START",
+  GAME_OVER: "GAME_OVER",
+
   ROUND_START: "ROUND_START",
   ROUND_END: "ROUND_END",
   PLAYER_TURN_START: "PLAYER_TURN_START",
