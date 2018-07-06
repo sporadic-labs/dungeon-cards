@@ -80,6 +80,12 @@ export default class EnemyManager {
     });
   }
 
+  /**
+   * Apply damage to any enemy within range of the players attack.
+   *
+   * @param {*} enemies
+   * @param {*} damage
+   */
   async damageEnemies(enemies, damage) {
     let delay = 0;
 
@@ -96,7 +102,7 @@ export default class EnemyManager {
     await Promise.all(deathPromises);
 
     if (this.enemies.length === 0) {
-      console.log("game over!");
+      console.log("Game Over!  You Win!");
       emitter.emit(EVENT_NAMES.GAME_OVER);
     }
   }
@@ -106,6 +112,14 @@ export default class EnemyManager {
     let delay = 0;
     const movePromises = this.enemies.map(enemy => {
       const boardPosition = this.gameBoard.findPositionOf(enemy);
+
+      // Is the enemy about to go off the board?
+      if (!this.gameBoard.isInBounds(boardPosition.x, boardPosition.y + 1)) {
+        console.log(`You have been attacked by an enemy!  You lose!`);
+        emitter.emit(EVENT_NAMES.GAME_OVER);
+      }
+
+      // Is the next spot open for the enemy?
       if (!enemy.isBlocked() && this.gameBoard.isEmpty(boardPosition.x, boardPosition.y + 1)) {
         const { x, y } = this.gameBoard.getWorldPosition(boardPosition.x, boardPosition.y + 1);
         const promise = enemy.moveTo(x, y, delay);
