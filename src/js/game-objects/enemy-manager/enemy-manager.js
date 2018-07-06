@@ -143,6 +143,10 @@ export default class EnemyManager {
    * Move enemies in their natural movement pattern (probably down).
    */
   async moveEnemies() {
+    // Disable focusing to prevent killing the movement tween at the wrong time.
+    this.disableFocusing();
+    await this.defocusEnemies();
+
     this.sortEnemies(this.enemies);
     let delay = 0;
     const movePromises = this.enemies.map(enemy => {
@@ -166,6 +170,7 @@ export default class EnemyManager {
     });
 
     await Promise.all(movePromises);
+    this.enableFocusing();
   }
 
   /**
@@ -229,6 +234,7 @@ export default class EnemyManager {
 
     const spawnPromises = locations.map(location => {
       const enemyType = this.deck.draw();
+      this.disableFocusing();
       this.deckDisplay.setValue(this.deck.getNumCardsRemaining());
       if (enemyType !== ENEMY_CARD_TYPES.BLANK) {
         const { x, y } = this.gameBoard.getWorldPosition(location.x, location.y);
@@ -242,6 +248,7 @@ export default class EnemyManager {
     });
 
     // TODO: Make room for these to spawn above the game board and animate into position
-    return Promise.all(spawnPromises);
+    await Promise.all(spawnPromises);
+    this.enableFocusing();
   }
 }
