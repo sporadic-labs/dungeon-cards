@@ -1,13 +1,12 @@
 import { Scene } from "phaser";
-import Deck from "../game-objects/deck/deck";
+import Deck from "../game-objects/deck";
 import { GameBoard } from "../game-objects/gameboard/gameboard";
-import EnemyManager from "../game-objects/enemy-manager";
-import PlayerManager from "../game-objects/player-manager";
-import Logger from "../helpers/logger";
-import { ENEMY_CARD_TYPES } from "../game-objects/enemy-manager";
-import { PLAYER_CARD_TYPES } from "../game-objects/player-manager";
+import EnemyManager, { ENEMY_CARD_TYPES } from "../game-objects/enemy-manager";
+import PlayerManager, { PLAYER_CARD_TYPES } from "../game-objects/player-manager";
 import ActionRunner from "../game-objects/card-actions";
+import { emitter, EVENT_NAMES } from "../game-objects/events";
 import run from "../game-objects/game-runner";
+import Logger from "../helpers/logger";
 
 export default class PlayScene extends Scene {
   create() {
