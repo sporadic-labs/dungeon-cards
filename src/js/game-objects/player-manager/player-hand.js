@@ -35,6 +35,12 @@ export default class PlayerHand {
       this.focusedCard = null;
       this.updateCards();
     });
+
+    emitter.on(EVENT_NAMES.PLAYER_TURN_COMPLETE, () => {
+      this.selectedCard = null;
+      this.focusedCard = null;
+      this.updateCards();
+    });
   }
 
   updateCards() {
