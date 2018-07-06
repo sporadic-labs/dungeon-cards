@@ -119,7 +119,6 @@ export default class PlayerManager {
         resolve();
       } else if (this.showTooManyCardsMessage) {
         this.showTooManyCardsMessage = false;
-        this.enableSelecting();
         // Some UI to indicate player can't end turn yet.
         const { width, height } = this.scene.sys.game.config;
         new PopupText(
