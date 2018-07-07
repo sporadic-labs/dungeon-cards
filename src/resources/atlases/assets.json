@@ -2,7 +2,7 @@
 
 "cards/back":
 {
-	"frame": {"x":457,"y":385,"w":64,"h":96},
+	"frame": {"x":548,"y":385,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -10,7 +10,7 @@
 },
 "cards/blank":
 {
-	"frame": {"x":523,"y":385,"w":64,"h":96},
+	"frame": {"x":614,"y":385,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -18,7 +18,7 @@
 },
 "cards/discard":
 {
-	"frame": {"x":917,"y":197,"w":64,"h":94},
+	"frame": {"x":161,"y":403,"w":64,"h":94},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":0,"y":1,"w":64,"h":94},
@@ -26,7 +26,7 @@
 },
 "cards/empty":
 {
-	"frame": {"x":589,"y":385,"w":64,"h":96},
+	"frame": {"x":680,"y":385,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -34,7 +34,7 @@
 },
 "cards/glow":
 {
-	"frame": {"x":241,"y":403,"w":76,"h":108},
+	"frame": {"x":403,"y":385,"w":76,"h":108},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":76,"h":108},
@@ -42,7 +42,7 @@
 },
 "cards/outline":
 {
-	"frame": {"x":390,"y":403,"w":65,"h":96},
+	"frame": {"x":481,"y":385,"w":65,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":65,"h":96},
@@ -50,7 +50,7 @@
 },
 "cards/player-attack-grid":
 {
-	"frame": {"x":655,"y":385,"w":64,"h":96},
+	"frame": {"x":746,"y":385,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -58,7 +58,7 @@
 },
 "cards/player-attack-one":
 {
-	"frame": {"x":721,"y":385,"w":64,"h":96},
+	"frame": {"x":785,"y":1,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -66,7 +66,7 @@
 },
 "cards/player-attack-three-horizontal":
 {
-	"frame": {"x":785,"y":1,"w":64,"h":96},
+	"frame": {"x":785,"y":99,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -74,7 +74,7 @@
 },
 "cards/player-attack-three-vertical":
 {
-	"frame": {"x":785,"y":99,"w":64,"h":96},
+	"frame": {"x":785,"y":197,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -82,7 +82,7 @@
 },
 "cards/player-block":
 {
-	"frame": {"x":785,"y":197,"w":64,"h":96},
+	"frame": {"x":812,"y":295,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -90,7 +90,7 @@
 },
 "cards/player-draw":
 {
-	"frame": {"x":787,"y":347,"w":64,"h":96},
+	"frame": {"x":812,"y":393,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -122,23 +122,23 @@
 },
 "cards/shadow-big":
 {
-	"frame": {"x":161,"y":403,"w":78,"h":107},
+	"frame": {"x":227,"y":403,"w":64,"h":94},
 	"rotated": false,
 	"trimmed": true,
-	"spriteSourceSize": {"x":1,"y":7,"w":78,"h":107},
+	"spriteSourceSize": {"x":10,"y":12,"w":64,"h":94},
 	"sourceSize": {"w":80,"h":114}
 },
 "cards/shadow-small":
 {
-	"frame": {"x":319,"y":403,"w":69,"h":101},
+	"frame": {"x":917,"y":197,"w":64,"h":95},
 	"rotated": false,
 	"trimmed": true,
-	"spriteSourceSize": {"x":6,"y":7,"w":69,"h":101},
+	"spriteSourceSize": {"x":11,"y":11,"w":64,"h":95},
 	"sourceSize": {"w":81,"h":114}
 },
 "cards/strong-enemy-blocked":
 {
-	"frame": {"x":853,"y":295,"w":64,"h":96},
+	"frame": {"x":878,"y":295,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -146,7 +146,7 @@
 },
 "cards/strong-enemy":
 {
-	"frame": {"x":853,"y":393,"w":64,"h":96},
+	"frame": {"x":878,"y":393,"w":64,"h":96},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":96},
@@ -178,7 +178,7 @@
 },
 "energy-background":
 {
-	"frame": {"x":785,"y":295,"w":50,"h":50},
+	"frame": {"x":293,"y":403,"w":50,"h":50},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
@@ -205,8 +205,8 @@
 	"version": "1.0",
 	"image": "assets.png",
 	"format": "RGBA8888",
-	"size": {"w":982,"h":512},
+	"size": {"w":982,"h":498},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:d7bc0d3e8b7820ea6f9014a1c34af37c:4cd02f601998a2dd7ccebcb6da38d58f:a759b6bbc8381ac9c472b28f589ad0d6$"
+	"smartupdate": "$TexturePacker:SmartUpdate:21e968acb0047c3ef294e3b235b69f73:d5113cd65a716eb4933d7c477f4c465c:a759b6bbc8381ac9c472b28f589ad0d6$"
 }
 }
