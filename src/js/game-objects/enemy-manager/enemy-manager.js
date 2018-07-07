@@ -41,7 +41,7 @@ export default class EnemyManager {
     await this.moveEnemies();
     await this.spawnEnemies();
 
-    this.enemies.forEach(e => e.update());
+    this.enemies.forEach(e => e.beforeTurnEnd());
     this.enableSelecting();
   }
 

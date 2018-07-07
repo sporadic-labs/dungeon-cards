@@ -176,7 +176,7 @@ export default class EnemyCard {
     });
   }
 
-  update() {
+  beforeTurnEnd() {
     if (this.blocked) {
       this.turnsBlocked++;
       if (this.turnsBlocked === 1) this.setBlocked(false);
