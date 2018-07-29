@@ -197,112 +197,156 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">assets/cards/back.png</key>
-            <key type="filename">assets/cards/blank.png</key>
-            <key type="filename">assets/cards/discard.png</key>
-            <key type="filename">assets/cards/player-attack-grid.png</key>
-            <key type="filename">assets/cards/player-attack-one.png</key>
-            <key type="filename">assets/cards/player-attack-three-horizontal.png</key>
-            <key type="filename">assets/cards/player-attack-three-vertical.png</key>
-            <key type="filename">assets/cards/player-block.png</key>
-            <key type="filename">assets/cards/player-draw.png</key>
-            <key type="filename">assets/cards/player-energy.png</key>
-            <key type="filename">assets/cards/player-shift-left.png</key>
-            <key type="filename">assets/cards/player-shift-right.png</key>
-            <key type="filename">assets/cards/strong-enemy-blocked.png</key>
-            <key type="filename">assets/cards/strong-enemy.png</key>
-            <key type="filename">assets/cards/weak-enemy-blocked.png</key>
-            <key type="filename">assets/cards/weak-enemy.png</key>
+            <key type="filename">assets/attacks/arrow-left.png</key>
+            <key type="filename">assets/attacks/arrow-right.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>16,24,32,48</rect>
+                <rect>12,9,23,18</rect>
                 <key>scale9Paddings</key>
-                <rect>16,24,32,48</rect>
+                <rect>12,9,23,18</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">assets/cards/empty.png</key>
-            <key type="filename">assets/cards/glow.png</key>
-            <key type="filename">assets/cards/outline.png</key>
+            <key type="filename">assets/attacks/block.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>16,24,33,48</rect>
+                <rect>11,11,23,23</rect>
                 <key>scale9Paddings</key>
-                <rect>16,24,33,48</rect>
+                <rect>11,11,23,23</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">assets/cards/shadow-big.png</key>
-            <key type="filename">assets/cards/shadow-small.png</key>
+            <key type="filename">assets/attacks/enemy-attack.png</key>
+            <key type="filename">assets/attacks/player-attack.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>20,29,40,57</rect>
+                <rect>13,13,26,26</rect>
                 <key>scale9Paddings</key>
-                <rect>20,29,40,57</rect>
+                <rect>13,13,26,26</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">assets/end-turn-button.png</key>
+            <key type="filename">assets/attacks/player-slash.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>40,20,80,40</rect>
+                <rect>15,15,29,29</rect>
                 <key>scale9Paddings</key>
-                <rect>40,20,80,40</rect>
+                <rect>15,15,29,29</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">assets/energy-background.png</key>
+            <key type="filename">assets/attacks/x.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>20,20,40,40</rect>
+                <rect>10,10,20,20</rect>
                 <key>scale9Paddings</key>
-                <rect>20,20,40,40</rect>
+                <rect>10,10,20,20</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">assets/patterns/light_wool_@2X.png</key>
+            <key type="filename">assets/background.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>95,96,190,191</rect>
+                <rect>375,375,750,750</rect>
                 <key>scale9Paddings</key>
-                <rect>95,96,190,191</rect>
+                <rect>375,375,750,750</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">assets/patterns/subtle-pattern-ep-natural-black.png</key>
+            <key type="filename">assets/cards/card-back.png</key>
+            <key type="filename">assets/cards/card-contents-attack-1.png</key>
+            <key type="filename">assets/cards/card-contents-attack-3 horizontal.png</key>
+            <key type="filename">assets/cards/card-contents-attack-3-vertical.png</key>
+            <key type="filename">assets/cards/card-contents-attack-9.png</key>
+            <key type="filename">assets/cards/card-contents-block.png</key>
+            <key type="filename">assets/cards/card-contents-draw.png</key>
+            <key type="filename">assets/cards/card-contents-enemy-big.png</key>
+            <key type="filename">assets/cards/card-contents-enemy-health.png</key>
+            <key type="filename">assets/cards/card-contents-enemy-small.png</key>
+            <key type="filename">assets/cards/card-contents-energy.png</key>
+            <key type="filename">assets/cards/card-contents-reclaim copy.png</key>
+            <key type="filename">assets/cards/card-contents-reclaim.png</key>
+            <key type="filename">assets/cards/card-contents-shift-left.png</key>
+            <key type="filename">assets/cards/card-contents-shift-right.png</key>
+            <key type="filename">assets/cards/card-empty.png</key>
+            <key type="filename">assets/cards/card-shadow.png</key>
+            <key type="filename">assets/cards/card.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>100,100,200,200</rect>
+                <rect>18,23,35,46</rect>
                 <key>scale9Paddings</key>
-                <rect>100,100,200,200</rect>
+                <rect>18,23,35,46</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/ui/deck-0-cards.png</key>
+            <key type="filename">assets/ui/deck-1-card.png</key>
+            <key type="filename">assets/ui/deck-2-cards.png</key>
+            <key type="filename">assets/ui/deck-3-cards.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>23,28,46,56</rect>
+                <key>scale9Paddings</key>
+                <rect>23,28,46,56</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/ui/end-turn-normal.png</key>
+            <key type="filename">assets/ui/end-turn-pressed.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>41,16,82,32</rect>
+                <key>scale9Paddings</key>
+                <rect>41,16,82,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/ui/energy-background.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>15,15,29,30</rect>
+                <key>scale9Paddings</key>
+                <rect>15,15,29,30</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
