@@ -279,7 +279,7 @@
             </struct>
             <key type="filename">assets/cards/card-back.png</key>
             <key type="filename">assets/cards/card-contents-attack-1.png</key>
-            <key type="filename">assets/cards/card-contents-attack-3 horizontal.png</key>
+            <key type="filename">assets/cards/card-contents-attack-3-horizontal.png</key>
             <key type="filename">assets/cards/card-contents-attack-3-vertical.png</key>
             <key type="filename">assets/cards/card-contents-attack-9.png</key>
             <key type="filename">assets/cards/card-contents-block.png</key>
@@ -293,6 +293,7 @@
             <key type="filename">assets/cards/card-contents-shift-left.png</key>
             <key type="filename">assets/cards/card-contents-shift-right.png</key>
             <key type="filename">assets/cards/card-empty.png</key>
+            <key type="filename">assets/cards/card-outline.png</key>
             <key type="filename">assets/cards/card-shadow.png</key>
             <key type="filename">assets/cards/card.png</key>
             <struct type="IndividualSpriteSettings">
