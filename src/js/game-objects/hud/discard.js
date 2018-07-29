@@ -17,8 +17,9 @@ export default class DiscardPile {
     // this.isActive = false;
     this.isActive = true;
 
+    // TODO: add card bg
     this.sprite = scene.add
-      .sprite(0, 0, "assets", `cards/discard`)
+      .sprite(0, 0, "assets", `cards/card-contents-reclaim`)
       .setOrigin(0.5, 0.5)
       .setAlpha(0.9)
       .setScale(0.8, 0.8)

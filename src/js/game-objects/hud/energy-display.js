@@ -15,7 +15,7 @@ export default class EnergyDisplay {
   constructor(scene, x, y) {
     this.scene = scene;
 
-    this.sprite = scene.add.sprite(x, y, "assets", "energy-background").setOrigin(0.5, 0.5);
+    this.sprite = scene.add.sprite(x, y, "assets", "ui/energy-background").setOrigin(0.5, 0.5);
     this.text = scene.add.text(x, y, "0", style).setOrigin(0.5, 0.5);
   }
 

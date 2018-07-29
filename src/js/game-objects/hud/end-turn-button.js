@@ -15,7 +15,7 @@ export default class EndTurnButton {
     this.scene = scene;
 
     this.sprite = scene.add
-      .sprite(0, 0, "assets", `end-turn-button`)
+      .sprite(0, 0, "assets", "ui/end-turn-normal")
       .setOrigin(0.5, 0.5)
       .setAlpha(0.9)
       .setScale(0.8, 0.8)

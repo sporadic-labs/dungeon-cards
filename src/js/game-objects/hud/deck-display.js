@@ -14,7 +14,7 @@ export default class DeckDisplay {
     this.scene = scene;
 
     this.sprite = scene.add
-      .sprite(x, y, "assets", `cards/back`)
+      .sprite(x, y, "assets", `ui/deck-3-cards`)
       .setOrigin(0.5, 0.5)
       .setInteractive();
 
