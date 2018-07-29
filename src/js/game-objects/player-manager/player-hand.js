@@ -96,7 +96,7 @@ export default class PlayerHand {
   }
 
   depthSort() {
-    this.cards.forEach((c, i) => c.setDepth(this.cards.length - 1 - i));
+    this.cards.forEach((c, i) => c.setDepth(i));
 
     // Place focused card on top of the selected card, so that the player can still see other cards
     // while one is selected

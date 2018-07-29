@@ -1,6 +1,7 @@
 import { PLAYER_CARD_INFO } from "./player-card-info";
 import { emitter, EVENT_NAMES } from "../../events";
 import LifecycleObject from "../../lifecycle-object";
+import Phaser from "phaser";
 
 export default class PlayerCard extends LifecycleObject {
   /**
@@ -18,19 +19,27 @@ export default class PlayerCard extends LifecycleObject {
     this.y = y;
     this.yOffset = 0;
     this.rotation = 0;
+    this.scale = 1;
+
+    this.cardShadow = scene.add.sprite(0, 0, "assets", "cards/card-shadow");
+    this.card = scene.add.sprite(0, 0, "assets", "cards/card");
 
     // TODO: this is just a simple wrapper to get the assets in the game. We need different classes
     // or components for each type of card to handle the specialized logic
     const key = PLAYER_CARD_INFO[type].key;
     this.sprite = scene.add
-      .sprite(0, 0, "assets", `cards/${key}`)
+      .sprite(0, 0, "assets", key)
       .setOrigin(0.5, 0.5)
       .setInteractive();
 
-    this.outline = scene.add.sprite(0, 0, "assets", `cards/outline`).setOrigin(0.5, 0.5);
+    this.outline = scene.add.sprite(0, 0, "assets", `cards/card-outline`).setOrigin(0.5, 0.5);
     this.outline.setAlpha(0);
 
-    this.setPosition(x, y);
+    this.group = scene.add.group();
+    this.group.add(this.outline);
+    this.group.add(this.card);
+    this.group.add(this.sprite);
+    this.group.add(this.cardShadow);
 
     this.selected = false;
     this.focused = false;
@@ -45,7 +54,7 @@ export default class PlayerCard extends LifecycleObject {
   }
 
   getPosition() {
-    return { x: this.sprite.x, y: this.sprite.y };
+    return { x: this.x, y: this.y };
   }
 
   enableFocusing() {
@@ -77,8 +86,7 @@ export default class PlayerCard extends LifecycleObject {
   };
 
   setDepth(depth) {
-    this.sprite.setDepth(depth);
-    this.outline.setDepth(depth);
+    Phaser.Actions.SetDepth(this.group.getChildren(), depth);
   }
 
   setRotation(radians) {
@@ -89,16 +97,9 @@ export default class PlayerCard extends LifecycleObject {
     if (this.focused) return;
     this.focused = true;
     this.scene.tweens.killTweensOf(this);
-    this.scene.tweens.killTweensOf(this.sprite);
-    this.scene.tweens.add({
-      targets: this.sprite,
-      scaleY: 1.05,
-      scaleX: 1.05,
-      duration: 200,
-      ease: "Quad.easeOut"
-    });
     this.scene.tweens.add({
       targets: this,
+      scale: 1,
       yOffset: -20,
       duration: 200,
       ease: "Quad.easeOut"
@@ -109,16 +110,9 @@ export default class PlayerCard extends LifecycleObject {
     if (!this.focused) return;
     this.focused = false;
     this.scene.tweens.killTweensOf(this);
-    this.scene.tweens.killTweensOf(this.sprite);
-    this.scene.tweens.add({
-      targets: this.sprite,
-      scaleY: 1,
-      scaleX: 1,
-      duration: 200,
-      ease: "Quad.easeOut"
-    });
     this.scene.tweens.add({
       targets: this,
+      scale: 1,
       yOffset: 0,
       duration: 200,
       ease: "Quad.easeOut"
@@ -157,13 +151,9 @@ export default class PlayerCard extends LifecycleObject {
   update() {
     const cx = this.x + this.sprite.width / 2;
     const cy = this.y + this.sprite.height / 2;
-    this.sprite.x = cx;
-    this.sprite.y = cy + this.yOffset;
-    this.outline.setScale(this.sprite.scaleX, this.sprite.scaleY);
-    this.outline.x = this.sprite.x;
-    this.outline.y = this.sprite.y;
-    this.sprite.setRotation(this.rotation);
-    this.outline.setRotation(this.rotation);
+    Phaser.Actions.SetXY(this.group.getChildren(), cx, cy + this.yOffset);
+    Phaser.Actions.SetRotation(this.group.getChildren(), this.rotation);
+    Phaser.Actions.SetScale(this.group.getChildren(), this.scale);
   }
 
   moveTo() {
@@ -171,7 +161,12 @@ export default class PlayerCard extends LifecycleObject {
   }
 
   destroy() {
+    // TODO destroy group here, currently breaks because of the the lifecycle update-after-destroyed
+    // problem
+    // this.group.destroy(true);
     this.outline.destroy();
+    this.card.destroy();
+    this.cardShadow.destroy();
     this.sprite.destroy();
   }
 }

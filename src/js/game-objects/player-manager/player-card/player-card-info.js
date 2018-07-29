@@ -1,24 +1,24 @@
 const PLAYER_CARD_INFO = {
   ATTACK_ONE: {
-    key: "player-attack-one",
+    key: "cards/card-contents-attack-1",
     description: "Attack a single enemy.",
     energy: 0,
     cells: [{ x: 0, y: 0 }]
   },
   ATTACK_THREE_HORIZONTAL: {
-    key: "player-attack-three-horizontal",
+    key: "cards/card-contents-attack-3-horizontal",
     description: "Attack up to 3 enemies in any row.",
     energy: 1,
     cells: [{ x: 0, y: 0 }, { x: 0, y: -1 }, { x: 0, y: 1 }]
   },
   ATTACK_THREE_VERTICAL: {
-    key: "player-attack-three-vertical",
+    key: "cards/card-contents-attack-3-vertical",
     description: "Attack up to 3 enemies in any column.",
     energy: 1,
     cells: [{ x: 0, y: 0 }, { x: -1, y: 0 }, { x: 1, y: 0 }]
   },
   ATTACK_GRID: {
-    key: "player-attack-grid",
+    key: "cards/card-contents-attack-9",
     description: "Attack up to 9 enemies in a grid.",
     energy: 3,
     cells: [
@@ -34,24 +34,26 @@ const PLAYER_CARD_INFO = {
     ]
   },
   BLOCK: {
-    key: "player-block",
-    description: "Block an enemy from moving for 1 turn. Any enemies behind the block will also be unable to move.",
+    key: "cards/card-contents-block",
+    description:
+      "Block an enemy from moving for 1 turn. Any enemies behind the block will also be unable to move.",
     energy: 0,
     cells: [{ x: 0, y: 0 }]
   },
   DRAW_THREE: {
-    key: "player-draw",
+    key: "cards/card-contents-draw",
     description: "Add 3 additional cards to your hand.",
     energy: 0
   },
   ENERGY: {
-    key: "player-energy",
+    key: "cards/card-contents-energy",
     description: "Add 1 to your energy pool.",
     energy: 1
   },
   SHIFT_LEFT: {
-    key: "player-shift-left",
-    description: "Shift the selected row to the left by 1 position. Enemies that are moved off the board will be destroyed!",
+    key: "cards/card-contents-shift-left",
+    description:
+      "Shift the selected row to the left by 1 position. Enemies that are moved off the board will be destroyed!",
     energy: 0,
     cells: [
       // TODO(rex): Not sure how to represent this.
@@ -65,8 +67,9 @@ const PLAYER_CARD_INFO = {
     ]
   },
   SHIFT_RIGHT: {
-    key: "player-shift-right",
-    description: "Shift the selected row to the right by 1 position. Enemies that are moved off the board will be destroyed!",
+    key: "cards/card-contents-shift-right",
+    description:
+      "Shift the selected row to the right by 1 position. Enemies that are moved off the board will be destroyed!",
     energy: 0,
     cells: [
       // TODO(rex): Not sure how to represent this.
