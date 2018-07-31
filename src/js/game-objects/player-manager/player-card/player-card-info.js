@@ -9,13 +9,13 @@ const PLAYER_CARD_INFO = {
     key: "cards/card-contents-attack-3-horizontal",
     description: "Attack up to 3 enemies in any row.",
     energy: 1,
-    cells: [{ x: 0, y: 0 }, { x: 0, y: -1 }, { x: 0, y: 1 }]
+    cells: [{ x: 0, y: 0 }, { x: -1, y: 0 }, { x: 1, y: 0 }]
   },
   ATTACK_THREE_VERTICAL: {
     key: "cards/card-contents-attack-3-vertical",
     description: "Attack up to 3 enemies in any column.",
     energy: 1,
-    cells: [{ x: 0, y: 0 }, { x: -1, y: 0 }, { x: 1, y: 0 }]
+    cells: [{ x: 0, y: 0 }, { x: 0, y: -1 }, { x: 0, y: 1 }]
   },
   ATTACK_GRID: {
     key: "cards/card-contents-attack-9",
