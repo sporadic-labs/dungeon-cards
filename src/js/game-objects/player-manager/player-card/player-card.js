@@ -1,15 +1,14 @@
 import { PLAYER_CARD_INFO } from "./player-card-info";
 import { emitter, EVENT_NAMES } from "../../events";
-import LifecycleObject from "../../lifecycle-object";
 import Phaser from "phaser";
 
-export default class PlayerCard extends LifecycleObject {
+export default class PlayerCard {
   /**
    * @param {Phaser.Scene} scene
    * @param {PLAYER_CARD_TYPES} type
    */
   constructor(scene, type, x, y) {
-    super(scene);
+    scene.lifecycle.add(this);
 
     this.type = type;
     this.cardInfo = PLAYER_CARD_INFO[type];
@@ -161,12 +160,7 @@ export default class PlayerCard extends LifecycleObject {
   }
 
   destroy() {
-    // TODO destroy group here, currently breaks because of the the lifecycle update-after-destroyed
-    // problem
-    // this.group.destroy(true);
-    this.outline.destroy();
-    this.card.destroy();
-    this.cardShadow.destroy();
-    this.cardContents.destroy();
+    this.group.destroy(true);
+    this.scene.lifecycle.remove(this);
   }
 }

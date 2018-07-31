@@ -1,14 +1,13 @@
 import ENEMY_CARD_TYPES from "./enemy-card-types";
 import { emitter, EVENT_NAMES } from "../../events";
-import LifecycleObject from "../../lifecycle-object";
 
-export default class EnemyCard extends LifecycleObject {
+export default class EnemyCard {
   /**
    * @param {Phaser.Scene} scene
    * @param {*} type
    */
   constructor(scene, type, x, y) {
-    super(scene);
+    scene.lifecycle.add(this);
 
     this.scene = scene;
     this.type = type;
@@ -207,8 +206,7 @@ export default class EnemyCard extends LifecycleObject {
   }
 
   destroy() {
-    this.cardContents.destroy();
-    this.card.destroy();
-    this.cardShadow.destroy();
+    this.scene.lifecycle.remove(this);
+    this.group.destroy(true);
   }
 }
