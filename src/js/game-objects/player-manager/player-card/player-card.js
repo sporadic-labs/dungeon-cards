@@ -27,7 +27,7 @@ export default class PlayerCard extends LifecycleObject {
     // TODO: this is just a simple wrapper to get the assets in the game. We need different classes
     // or components for each type of card to handle the specialized logic
     const key = PLAYER_CARD_INFO[type].key;
-    this.sprite = scene.add
+    this.cardContents = scene.add
       .sprite(0, 0, "assets", key)
       .setOrigin(0.5, 0.5)
       .setInteractive();
@@ -38,7 +38,7 @@ export default class PlayerCard extends LifecycleObject {
     this.group = scene.add.group();
     this.group.add(this.outline);
     this.group.add(this.card);
-    this.group.add(this.sprite);
+    this.group.add(this.cardContents);
     this.group.add(this.cardShadow);
 
     this.selected = false;
@@ -58,21 +58,21 @@ export default class PlayerCard extends LifecycleObject {
   }
 
   enableFocusing() {
-    this.sprite.on("pointerover", this.onPointerOver);
-    this.sprite.on("pointerout", this.onPointerOut);
+    this.cardContents.on("pointerover", this.onPointerOver);
+    this.cardContents.on("pointerout", this.onPointerOut);
   }
 
   disableFocusing() {
-    this.sprite.off("pointerover", this.onPointerOver);
-    this.sprite.off("pointerout", this.onPointerOut);
+    this.cardContents.off("pointerover", this.onPointerOver);
+    this.cardContents.off("pointerout", this.onPointerOut);
   }
 
   enableSelecting() {
-    this.sprite.on("pointerdown", this.onPointerDown);
+    this.cardContents.on("pointerdown", this.onPointerDown);
   }
 
   disableSelecting() {
-    this.sprite.off("pointerdown", this.onPointerDown);
+    this.cardContents.off("pointerdown", this.onPointerDown);
   }
 
   onPointerOver = () => emitter.emit(EVENT_NAMES.PLAYER_CARD_FOCUS, this);
@@ -149,8 +149,8 @@ export default class PlayerCard extends LifecycleObject {
   }
 
   update() {
-    const cx = this.x + this.sprite.width / 2;
-    const cy = this.y + this.sprite.height / 2;
+    const cx = this.x + this.card.width / 2;
+    const cy = this.y + this.card.height / 2;
     Phaser.Actions.SetXY(this.group.getChildren(), cx, cy + this.yOffset);
     Phaser.Actions.SetRotation(this.group.getChildren(), this.rotation);
     Phaser.Actions.SetScale(this.group.getChildren(), this.scale);
@@ -167,6 +167,6 @@ export default class PlayerCard extends LifecycleObject {
     this.outline.destroy();
     this.card.destroy();
     this.cardShadow.destroy();
-    this.sprite.destroy();
+    this.cardContents.destroy();
   }
 }

@@ -122,8 +122,8 @@ export default class PlayerHand {
 
     const startingAngularPosition = Math.PI / 2 - ((this.cards.length - 1) / 2) * angularStep;
     const startingRotation = (this.cards.length / 2) * angularStep;
-    const cardHalfWidth = this.cards[0].sprite.width / 2;
-    const cardHalfHeight = this.cards[0].sprite.height / 2;
+    const cardHalfWidth = this.cards[0].card.width / 2;
+    const cardHalfHeight = this.cards[0].card.height / 2;
     this.cards.forEach((card, i) => {
       const angle = startingAngularPosition + i * angularStep;
       const x = circleX + radius * Math.cos(angle);
