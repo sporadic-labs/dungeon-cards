@@ -1,21 +1,36 @@
 import ENEMY_CARD_TYPES from "./enemy-card-types";
 import { emitter, EVENT_NAMES } from "../../events";
+import LifecycleObject from "../../lifecycle-object";
 
-export default class EnemyCard {
+export default class EnemyCard extends LifecycleObject {
   /**
    * @param {Phaser.Scene} scene
    * @param {*} type
    */
   constructor(scene, type, x, y) {
+    super(scene);
+
     this.scene = scene;
     this.type = type;
 
-    const key = type === ENEMY_CARD_TYPES.STRONG_ENEMY ? "strong-enemy" : "weak-enemy";
-    this.sprite = scene.add
-      .sprite(0, 0, "assets", `cards/${key}`)
+    this.x = x;
+    this.y = y;
+    this.alpha = 1;
+
+    this.cardShadow = scene.add.sprite(0, 0, "assets", "cards/card-shadow");
+    this.card = scene.add.sprite(0, 0, "assets", "cards/card");
+
+    const key = type === ENEMY_CARD_TYPES.STRONG_ENEMY ? "big" : "small";
+    this.cardContents = scene.add
+      .sprite(0, 0, "assets", `cards/card-contents-enemy-${key}`)
       .setOrigin(0.5, 0.5)
       .setInteractive();
     this.setPosition(x, y);
+
+    this.group = scene.add.group();
+    this.group.add(this.card);
+    this.group.add(this.cardShadow);
+    this.group.add(this.cardContents);
 
     this.health = type === ENEMY_CARD_TYPES.STRONG_ENEMY ? 2 : 1;
 
@@ -45,9 +60,10 @@ export default class EnemyCard {
   }
 
   updateTexture() {
-    let key = this.health === 2 ? "strong-enemy" : "weak-enemy";
+    let key = this.health === 2 ? "big" : "small";
     if (this.blocked) key += "-blocked";
-    this.sprite.setTexture("assets", `cards/${key}`);
+    // TODO: add block overlay
+    this.cardContents.setTexture("assets", `cards/card-contents-enemy-${key}`);
   }
 
   isBlocked() {
@@ -60,30 +76,31 @@ export default class EnemyCard {
   }
 
   getPosition() {
-    return { x: this.sprite.x, y: this.sprite.y };
+    return { x: this.cardContents.x, y: this.cardContents.y };
   }
 
+  // Set via top left
   setPosition(x, y) {
-    this.sprite.x = x + this.sprite.width / 2;
-    this.sprite.y = y + this.sprite.height / 2;
+    this.x = x + this.cardContents.width / 2;
+    this.y = y + this.cardContents.height / 2;
   }
 
   enableFocusing() {
-    this.sprite.on("pointerover", this.onPointerOver);
-    this.sprite.on("pointerout", this.onPointerOut);
+    this.cardContents.on("pointerover", this.onPointerOver);
+    this.cardContents.on("pointerout", this.onPointerOut);
   }
 
   disableFocusing() {
-    this.sprite.off("pointerover", this.onPointerOver);
-    this.sprite.off("pointerout", this.onPointerOut);
+    this.cardContents.off("pointerover", this.onPointerOver);
+    this.cardContents.off("pointerout", this.onPointerOut);
   }
 
   enableSelecting() {
-    this.sprite.on("pointerdown", this.onPointerDown);
+    this.cardContents.on("pointerdown", this.onPointerDown);
   }
 
   disableSelecting() {
-    this.sprite.off("pointerdown", this.onPointerDown);
+    this.cardContents.off("pointerdown", this.onPointerDown);
   }
 
   onPointerOver = () => emitter.emit(EVENT_NAMES.ENEMY_CARD_FOCUS, this);
@@ -96,12 +113,12 @@ export default class EnemyCard {
     if (this.focused) return;
     this.focused = true;
 
-    this.scene.tweens.killTweensOf(this.sprite);
+    this.scene.tweens.killTweensOf(this.cardContents);
     return new Promise(resolve => {
       this.scene.tweens.add({
-        targets: this.sprite,
-        scaleX: 1.05,
-        scaleY: 1.05,
+        targets: this.cardContents,
+        scaleX: 1.1,
+        scaleY: 1.1,
         duration: 200,
         ease: "Quad.easeOut",
         onComplete: resolve
@@ -113,10 +130,10 @@ export default class EnemyCard {
     if (!this.focused) return;
     this.focused = false;
 
-    this.scene.tweens.killTweensOf(this.sprite);
+    this.scene.tweens.killTweensOf(this.cardContents);
     return new Promise(resolve => {
       this.scene.tweens.add({
-        targets: this.sprite,
+        targets: this.cardContents,
         scaleX: 1,
         scaleY: 1,
         duration: 200,
@@ -127,11 +144,11 @@ export default class EnemyCard {
   }
 
   fadeIn(delay) {
-    this.scene.tweens.killTweensOf(this.sprite);
-    this.sprite.setAlpha(0);
+    this.scene.tweens.killTweensOf(this);
+    this.alpha = 0;
     return new Promise(resolve => {
       this.scene.tweens.add({
-        targets: this.sprite,
+        targets: this,
         alpha: 1,
         delay: delay,
         duration: 200,
@@ -142,10 +159,10 @@ export default class EnemyCard {
   }
 
   fadeOut(delay) {
-    this.scene.tweens.killTweensOf(this.sprite);
+    this.scene.tweens.killTweensOf(this);
     return new Promise(resolve => {
       this.scene.tweens.add({
-        targets: this.sprite,
+        targets: this,
         alpha: 0,
         delay: delay,
         duration: 200,
@@ -161,13 +178,14 @@ export default class EnemyCard {
     return this.fadeOut(delay);
   }
 
+  // Move via top left
   moveTo(x, y, delay = 0) {
-    this.scene.tweens.killTweensOf(this.sprite);
+    this.scene.tweens.killTweensOf(this);
     return new Promise(resolve => {
       this.scene.tweens.add({
-        targets: this.sprite,
-        x: x + this.sprite.width / 2,
-        y: y + this.sprite.height / 2,
+        targets: this,
+        x: x + this.cardContents.width / 2,
+        y: y + this.cardContents.height / 2,
         delay: delay,
         duration: 200,
         ease: "Quad.easeOut",
@@ -183,7 +201,14 @@ export default class EnemyCard {
     }
   }
 
+  update() {
+    Phaser.Actions.SetXY(this.group.getChildren(), this.x, this.y);
+    Phaser.Actions.SetAlpha(this.group.getChildren(), this.alpha);
+  }
+
   destroy() {
-    this.sprite.destroy();
+    this.cardContents.destroy();
+    this.card.destroy();
+    this.cardShadow.destroy();
   }
 }
