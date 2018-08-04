@@ -2,7 +2,7 @@ import { getFontString } from "../../font";
 
 const style = {
   font: getFontString("Chivo", { size: "24px", weight: 600 }),
-  fill: "#FFF"
+  fill: "#E5E0D6"
 };
 
 export default class DeckDisplay {
