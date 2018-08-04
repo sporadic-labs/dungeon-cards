@@ -35,10 +35,6 @@ export default class EnemyCard {
     this.focused = false;
     this.blocked = false;
     this.turnsBlocked = null;
-
-    // TODO: this should only be enabled after the card as tweened into position. It shouldn't start
-    // enabled.
-    this.enableFocusing();
   }
 
   setBlocked(shouldBeBlocked = true) {
@@ -82,16 +78,6 @@ export default class EnemyCard {
   setPosition(x, y) {
     this.x = x + this.cardContents.width / 2;
     this.y = y + this.cardContents.height / 2;
-  }
-
-  enableFocusing() {
-    // this.cardContents.on("pointerover", this.onPointerOver);
-    // this.cardContents.on("pointerout", this.onPointerOut);
-  }
-
-  disableFocusing() {
-    // this.cardContents.off("pointerover", this.onPointerOver);
-    // this.cardContents.off("pointerout", this.onPointerOut);
   }
 
   enableSelecting() {
@@ -172,7 +158,6 @@ export default class EnemyCard {
   }
 
   die(delay) {
-    this.disableFocusing();
     this.disableSelecting();
     return this.fadeOut(delay);
   }

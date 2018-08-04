@@ -79,14 +79,6 @@ export default class EnemyManager {
     await Promise.all(promises);
   }
 
-  disableFocusing() {
-    this.enemies.map(e => e.disableFocusing());
-  }
-
-  enableFocusing() {
-    this.enemies.map(e => e.enableFocusing());
-  }
-
   removeEnemy(enemy) {
     this.enemies = this.enemies.filter(e => e !== enemy);
     const boardPosition = this.gameBoard.findPositionOf(enemy);
@@ -158,8 +150,6 @@ export default class EnemyManager {
    * Move enemies in their natural movement pattern (probably down).
    */
   async moveEnemies() {
-    // Disable focusing to prevent killing the movement tween at the wrong time.
-    this.disableFocusing();
     await this.defocusAllEnemies();
 
     this.sortEnemies(this.enemies);
@@ -185,7 +175,6 @@ export default class EnemyManager {
     });
 
     await Promise.all(movePromises);
-    this.enableFocusing();
   }
 
   /**
@@ -196,8 +185,6 @@ export default class EnemyManager {
    * @param {*} direction
    */
   async shiftEnemies(enemies, direction) {
-    // Disable focusing to prevent killing the movement tween at the wrong time.
-    this.disableFocusing();
     await this.defocusAllEnemies();
 
     // Sort the enemy group based on the direction you are shifting.
@@ -231,7 +218,6 @@ export default class EnemyManager {
     });
 
     await Promise.all(movePromises);
-    this.enableFocusing();
   }
 
   /**
@@ -249,7 +235,6 @@ export default class EnemyManager {
 
     const spawnPromises = locations.map(location => {
       const enemyType = this.deck.draw();
-      this.disableFocusing();
       this.deckDisplay.setValue(this.deck.getNumCardsRemaining());
       if (enemyType !== ENEMY_CARD_TYPES.BLANK) {
         const { x, y } = this.gameBoard.getWorldPosition(location.x, location.y);
@@ -264,6 +249,5 @@ export default class EnemyManager {
 
     // TODO: Make room for these to spawn above the game board and animate into position
     await Promise.all(spawnPromises);
-    this.enableFocusing();
   }
 }
