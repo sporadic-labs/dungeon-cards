@@ -26,13 +26,66 @@ export default class ShiftAction extends Action {
 
     this.proxy.on(scene.input, "pointermove", this.onPointerMove, this);
     this.proxy.on(scene.input, "pointerdown", this.onPointerDown, this);
+
+    const frame = this.direction === SHIFT_DIRECTIONS.LEFT ? "arrow-left" : "arrow-right";
+    this.shiftPreviews = this.attackPattern.map(() => {
+      return scene.add
+        .sprite(0, 0, "assets", `attacks/${frame}`)
+        .setAlpha(0.9)
+        .setVisible(false);
+    });
+    this.xPreview = scene.add
+      .sprite(0, 0, "assets", "attacks/x")
+      .setAlpha(0.9)
+      .setVisible(false);
   }
 
   onPointerMove(pointer) {
+    if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) return;
+
     this.focusWithinRange(this.board, this.enemyManager, pointer, this.attackPattern);
+
+    // Preview attack
+    const positions = this.getBoardPositionsWithinRange(this.board, pointer, this.attackPattern);
+    const offsetX = (this.direction === SHIFT_DIRECTIONS.LEFT ? -0.5 : 0.5) * this.board.cellWidth;
+    this.shiftPreviews.map(preview => preview.setVisible(false));
+    this.xPreview.setVisible(false);
+    positions.map((position, i) => {
+      const enemy = this.board.getAt(position.x, position.y);
+      if (enemy) {
+        this.shiftPreviews[i]
+          .setPosition(enemy.container.x + offsetX, enemy.container.y)
+          .setVisible(true);
+        if (this.direction === SHIFT_DIRECTIONS.LEFT && i === 0) {
+          this.xPreview
+            .setPosition(
+              this.shiftPreviews[i].x - this.shiftPreviews[i].width,
+              this.shiftPreviews[i].y
+            )
+            .setVisible(true);
+        } else if (this.direction === SHIFT_DIRECTIONS.RIGHT && i === positions.length - 1) {
+          this.xPreview
+            .setPosition(
+              this.shiftPreviews[i].x + this.shiftPreviews[i].width,
+              this.shiftPreviews[i].y
+            )
+            .setVisible(true);
+        }
+      } else {
+        const worldPos = this.board.getWorldPosition(position.x, position.y);
+        this.shiftPreviews[i]
+          .setPosition(
+            worldPos.x + this.board.cellWidth / 2 + offsetX,
+            worldPos.y + this.board.cellHeight / 2
+          )
+          .setVisible(true);
+      }
+    });
   }
 
   onPointerDown(pointer) {
+    if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) return;
+
     const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
     if (enemies.length) {
       const enoughEnergyForAttack = this.playerManager.canUseCard(this.card);
@@ -64,6 +117,8 @@ export default class ShiftAction extends Action {
   }
 
   destroy() {
+    this.shiftPreviews.map(sprite => sprite.destroy());
+    this.xPreview.destroy();
     this.proxy.removeAll();
   }
 }

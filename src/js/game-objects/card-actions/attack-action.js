@@ -30,10 +30,13 @@ export default class AttackAction extends Action {
   }
 
   onPointerMove(pointer) {
+    if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) return;
+
     this.focusWithinRange(this.board, this.enemyManager, pointer, this.attackPattern);
 
     // Preview attack
     const positions = this.getBoardPositionsWithinRange(this.board, pointer, this.attackPattern);
+    this.previews.map(preview => preview.setVisible(false));
     positions.map((position, i) => {
       const enemy = this.board.getAt(position.x, position.y);
       if (enemy) {
@@ -51,6 +54,8 @@ export default class AttackAction extends Action {
   }
 
   onPointerDown(pointer) {
+    if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) return;
+
     const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
     if (enemies.length) {
       const enoughEnergyForAttack = this.playerManager.canUseCard(this.card);

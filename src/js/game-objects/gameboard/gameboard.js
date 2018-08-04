@@ -162,6 +162,10 @@ export class GameBoard {
     return { x, y };
   }
 
+  isWorldPointInBoard(worldX, worldY) {
+    return this.getBoardPosition(worldX, worldY, true) !== null;
+  }
+
   findPositionOf(card) {
     let position = null;
     this.forEachCell((cell, x, y) => {
