@@ -3,6 +3,7 @@ import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import { DeckDisplay, DiscardPile, EnergyDisplay, PopupText } from "../hud";
 
 import { getFontString } from "../../font";
+import Scroll from "../hud/scroll";
 
 const style = {
   font: getFontString("Chivo", { size: "24px", weight: 600 }),
@@ -34,11 +35,12 @@ export default class PlayerManager {
       .setOrigin(0.5, 0.5);
     this.deckDisplay = new DeckDisplay(
       scene,
-      width - 64,
-      height - 178,
+      width - 60,
+      height * 0.75,
       this.deck.getNumCardsRemaining()
     );
     this.energyDisplay = new EnergyDisplay(scene, 45, height - 45);
+    this.scroll = new Scroll(scene, width - 105, height / 2);
 
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DISCARD, this.discardSelectedCard, this);
     this.proxy.on(
