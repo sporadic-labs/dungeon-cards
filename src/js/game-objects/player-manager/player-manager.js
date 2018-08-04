@@ -28,14 +28,14 @@ export default class PlayerManager {
     this.showTooManyCardsMessage = true; // Any better ideas?
 
     const { width, height } = scene.sys.game.config;
-    this.discardPile = new DiscardPile(scene, 80, height * 0.75);
+    this.discardPile = new DiscardPile(scene, 80, height - 202);
     this.playerHandCount = scene.add
       .text(width / 2, height - 24, this.playerHand.getNumCards(), style)
       .setOrigin(0.5, 0.5);
     this.deckDisplay = new DeckDisplay(
       scene,
       width - 64,
-      height - 160,
+      height - 178,
       this.deck.getNumCardsRemaining()
     );
     this.energyDisplay = new EnergyDisplay(scene, 45, height - 45);
