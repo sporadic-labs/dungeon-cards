@@ -15,6 +15,7 @@ export default class EnemyCard {
     this.x = x;
     this.y = y;
     this.alpha = 1;
+    this.health = type === ENEMY_CARD_TYPES.STRONG_ENEMY ? 2 : 1;
 
     this.cardShadow = scene.add.sprite(0, 0, "assets", "cards/card-shadow");
     this.card = scene.add.sprite(0, 0, "assets", "cards/card");
@@ -24,12 +25,15 @@ export default class EnemyCard {
       .sprite(0, 0, "assets", `cards/card-contents-enemy-${key}`)
       .setInteractive();
 
+    const healthFrame = `cards/card-contents-enemy-health-${this.health}`;
+    this.healthDisplay = scene.add.sprite(0, 0, "assets", healthFrame);
+
     this.container = scene.add.container(x + this.card.width / 2, y + this.card.height / 2, [
       this.cardShadow,
       this.card,
-      this.cardContents
+      this.cardContents,
+      this.healthDisplay
     ]);
-    this.health = type === ENEMY_CARD_TYPES.STRONG_ENEMY ? 2 : 1;
 
     this.selected = false;
     this.focused = false;
@@ -69,6 +73,8 @@ export default class EnemyCard {
     if (this.health > 0) {
       const key = this.health >= 2 ? "big" : "small";
       this.cardContents.setTexture("assets", `cards/card-contents-enemy-${key}`);
+      const healthFrame = `cards/card-contents-enemy-health-${this.health}`;
+      this.healthDisplay.setTexture("assets", healthFrame);
     }
   }
 
