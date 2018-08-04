@@ -18,7 +18,7 @@ export class GameBoard {
 
     const width = scene.sys.game.config.width;
     this.worldX = width / 2 - this.boardWidth / 2;
-    this.worldY = 116;
+    this.worldY = 65;
 
     this.board = [];
     for (let boardY = 0; boardY < rows; boardY++) {
