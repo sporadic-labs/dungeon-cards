@@ -66,7 +66,10 @@ export default class EnemyCard {
 
   takeDamage(damage) {
     this.health -= damage;
-    if (this.health > 0) this.updateTexture();
+    if (this.health > 0) {
+      const key = this.health >= 2 ? "big" : "small";
+      this.cardContents.setTexture("assets", `cards/card-contents-enemy-${key}`);
+    }
   }
 
   getPosition() {
