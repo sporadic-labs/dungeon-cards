@@ -26,11 +26,11 @@ export default class EnemyCard {
       .setInteractive();
     this.setPosition(x, y);
 
-    this.group = scene.add.group();
-    this.group.add(this.card);
-    this.group.add(this.cardShadow);
-    this.group.add(this.cardContents);
-
+    this.container = scene.add.container(x + this.card.width / 2, y + this.card.height / 2, [
+      this.cardShadow,
+      this.card,
+      this.cardContents
+    ]);
     this.health = type === ENEMY_CARD_TYPES.STRONG_ENEMY ? 2 : 1;
 
     this.selected = false;
@@ -44,25 +44,22 @@ export default class EnemyCard {
   }
 
   setBlocked(shouldBeBlocked = true) {
-    // TODO: this could be an animation, or cards could be built more modularly, so that we can have
-    // a blocked overlay.
-    if (this.blocked !== shouldBeBlocked) {
-      this.blocked = shouldBeBlocked;
-      this.turnsBlocked = 0;
-      this.updateTexture();
-    }
+    if (this.blocked === shouldBeBlocked) return;
+
+    this.blocked = shouldBeBlocked;
+    this.turnsBlocked = 0;
 
     // Unblock after the end of the next enemy turn
     if (this.blocked) {
+      if (!this.blockedOverlay) {
+        this.blockedOverlay = this.scene.add.sprite(0, 0, "assets", "attacks/block");
+        this.container.add(this.blockedOverlay);
+      }
+      this.blockedOverlay.visible = true;
       emitter.once(EVENT_NAMES.ENEMY_TURN_END, () => this.setBlocked(false));
+    } else {
+      if (this.blockedOverlay) this.blockedOverlay.visible = false;
     }
-  }
-
-  updateTexture() {
-    let key = this.health === 2 ? "big" : "small";
-    if (this.blocked) key += "-blocked";
-    // TODO: add block overlay
-    this.cardContents.setTexture("assets", `cards/card-contents-enemy-${key}`);
   }
 
   isBlocked() {
@@ -112,10 +109,10 @@ export default class EnemyCard {
     if (this.focused) return;
     this.focused = true;
 
-    this.scene.tweens.killTweensOf(this.cardContents);
+    this.scene.tweens.killTweensOf(this.container);
     return new Promise(resolve => {
       this.scene.tweens.add({
-        targets: this.cardContents,
+        targets: this.container,
         scaleX: 1.1,
         scaleY: 1.1,
         duration: 200,
@@ -129,10 +126,10 @@ export default class EnemyCard {
     if (!this.focused) return;
     this.focused = false;
 
-    this.scene.tweens.killTweensOf(this.cardContents);
+    this.scene.tweens.killTweensOf(this.container);
     return new Promise(resolve => {
       this.scene.tweens.add({
-        targets: this.cardContents,
+        targets: this.container,
         scaleX: 1,
         scaleY: 1,
         duration: 200,
@@ -143,11 +140,11 @@ export default class EnemyCard {
   }
 
   fadeIn(delay) {
-    this.scene.tweens.killTweensOf(this);
+    this.scene.tweens.killTweensOf(this.container);
     this.alpha = 0;
     return new Promise(resolve => {
       this.scene.tweens.add({
-        targets: this,
+        targets: this.container,
         alpha: 1,
         delay: delay,
         duration: 200,
@@ -158,10 +155,10 @@ export default class EnemyCard {
   }
 
   fadeOut(delay) {
-    this.scene.tweens.killTweensOf(this);
+    this.scene.tweens.killTweensOf(this.container);
     return new Promise(resolve => {
       this.scene.tweens.add({
-        targets: this,
+        targets: this.container,
         alpha: 0,
         delay: delay,
         duration: 200,
@@ -179,12 +176,12 @@ export default class EnemyCard {
 
   // Move via top left
   moveTo(x, y, delay = 0) {
-    this.scene.tweens.killTweensOf(this);
+    this.scene.tweens.killTweensOf(this.container);
     return new Promise(resolve => {
       this.scene.tweens.add({
-        targets: this,
-        x: x + this.cardContents.width / 2,
-        y: y + this.cardContents.height / 2,
+        targets: this.container,
+        x: x + this.card.width / 2,
+        y: y + this.card.height / 2,
         delay: delay,
         duration: 200,
         ease: "Quad.easeOut",
@@ -200,13 +197,8 @@ export default class EnemyCard {
     }
   }
 
-  update() {
-    Phaser.Actions.SetXY(this.group.getChildren(), this.x, this.y);
-    Phaser.Actions.SetAlpha(this.group.getChildren(), this.alpha);
-  }
-
   destroy() {
     this.scene.lifecycle.remove(this);
-    this.group.destroy(true);
+    this.container.destroy();
   }
 }
