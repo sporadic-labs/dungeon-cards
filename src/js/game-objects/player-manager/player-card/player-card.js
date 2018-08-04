@@ -29,7 +29,7 @@ export default class PlayerCard {
     this.outline = scene.add.sprite(1, 1, "assets", `cards/card-outline`);
     this.outline.setAlpha(0);
 
-    const cost = PLAYER_CARD_INFO[type].energy;
+    const cost = this.getCost();
     this.costDisplay = scene.add.sprite(0, 0, "assets", `cards/card-contents-cost-${cost}`);
 
     this.container = scene.add.container(x + this.card.width / 2, y + this.card.height / 2, [
@@ -49,6 +49,10 @@ export default class PlayerCard {
 
   getEnergy() {
     return PLAYER_CARD_INFO[this.type].energy;
+  }
+
+  getCost() {
+    return PLAYER_CARD_INFO[this.type].cost;
   }
 
   setPosition(x, y) {
