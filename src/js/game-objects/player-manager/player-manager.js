@@ -38,7 +38,7 @@ export default class PlayerManager {
       height - 160,
       this.deck.getNumCardsRemaining()
     );
-    this.energyDisplay = new EnergyDisplay(scene, width - 60, height - 56);
+    this.energyDisplay = new EnergyDisplay(scene, 45, height - 45);
 
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DISCARD, this.discardSelectedCard, this);
     this.proxy.on(
