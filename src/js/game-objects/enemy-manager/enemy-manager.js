@@ -64,8 +64,18 @@ export default class EnemyManager {
     this.enemies.forEach(c => c.disableSelecting());
   }
 
-  async defocusEnemies() {
+  // Reset all enemies by defocusing
+  async defocusAllEnemies() {
     const promises = this.enemies.filter(e => e.focused).map(e => e.defocus());
+    await Promise.all(promises);
+  }
+
+  // Change the focus state of the enemies on the board - only the given enemies will be focused
+  async focusEnemies(enemies) {
+    const promises = this.enemies.map(e => {
+      if (enemies.includes(e)) return e.focus();
+      else e.defocus();
+    });
     await Promise.all(promises);
   }
 
@@ -150,7 +160,7 @@ export default class EnemyManager {
   async moveEnemies() {
     // Disable focusing to prevent killing the movement tween at the wrong time.
     this.disableFocusing();
-    await this.defocusEnemies();
+    await this.defocusAllEnemies();
 
     this.sortEnemies(this.enemies);
     let delay = 0;
@@ -188,7 +198,7 @@ export default class EnemyManager {
   async shiftEnemies(enemies, direction) {
     // Disable focusing to prevent killing the movement tween at the wrong time.
     this.disableFocusing();
-    await this.defocusEnemies();
+    await this.defocusAllEnemies();
 
     // Sort the enemy group based on the direction you are shifting.
     this.sortRow(enemies, direction === SHIFT_DIRECTIONS.RIGHT);

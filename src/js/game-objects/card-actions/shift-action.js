@@ -31,6 +31,8 @@ export default class ShiftAction extends Action {
   onPointerMove(pointer) {
     const positions = this.getBoardPositionsWithinRange(this.board, pointer, this.attackPattern);
     emitter.emit(EVENT_NAMES.GAMEBOARD_CARD_FOCUS, positions);
+    const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
+    this.enemyManager.focusEnemies(enemies);
   }
 
   onPointerDown(pointer) {

@@ -85,13 +85,13 @@ export default class EnemyCard {
   }
 
   enableFocusing() {
-    this.cardContents.on("pointerover", this.onPointerOver);
-    this.cardContents.on("pointerout", this.onPointerOut);
+    // this.cardContents.on("pointerover", this.onPointerOver);
+    // this.cardContents.on("pointerout", this.onPointerOut);
   }
 
   disableFocusing() {
-    this.cardContents.off("pointerover", this.onPointerOver);
-    this.cardContents.off("pointerout", this.onPointerOut);
+    // this.cardContents.off("pointerover", this.onPointerOver);
+    // this.cardContents.off("pointerout", this.onPointerOut);
   }
 
   enableSelecting() {

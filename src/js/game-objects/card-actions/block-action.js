@@ -9,6 +9,7 @@ export default class BlockAction extends Action {
     this.attackPattern = card.cardInfo.cells;
     this.board = gameBoard;
     this.proxy = new EventProxy();
+    this.enemyManager = enemyManager;
 
     this.proxy.on(scene.input, "pointermove", this.onPointerMove, this);
     this.proxy.on(scene.input, "pointerdown", this.onPointerDown, this);
@@ -17,6 +18,8 @@ export default class BlockAction extends Action {
   onPointerMove(pointer) {
     const positions = this.getBoardPositionsWithinRange(this.board, pointer, this.attackPattern);
     emitter.emit(EVENT_NAMES.GAMEBOARD_CARD_FOCUS, positions);
+    const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
+    this.enemyManager.focusEnemies(enemies);
   }
 
   onPointerDown(pointer) {
