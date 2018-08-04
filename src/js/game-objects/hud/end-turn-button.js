@@ -17,8 +17,6 @@ export default class EndTurnButton {
     this.sprite = scene.add
       .sprite(0, 0, "assets", "ui/end-turn-normal")
       .setOrigin(0.5, 0.5)
-      .setAlpha(0.9)
-      .setScale(0.8, 0.8)
       .setVisible(false)
       .setInteractive();
 
@@ -29,13 +27,11 @@ export default class EndTurnButton {
     });
 
     this.sprite.on("pointerover", () => {
-      this.sprite.setAlpha(1);
-      this.sprite.setScale(0.85);
+      this.sprite.setTexture("assets", "ui/end-turn-pressed");
     });
 
     this.sprite.on("pointerout", () => {
-      this.sprite.setAlpha(0.9);
-      this.sprite.setScale(0.8);
+      this.sprite.setTexture("assets", "ui/end-turn-normal");
     });
   }
 
