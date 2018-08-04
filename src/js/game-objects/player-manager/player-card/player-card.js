@@ -160,7 +160,7 @@ export default class PlayerCard {
     });
   }
 
-  update() {
+  postUpdate() {
     this.container.x = this.x;
     this.container.y = this.y + this.yOffset;
   }
