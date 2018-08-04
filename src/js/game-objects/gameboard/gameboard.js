@@ -28,19 +28,6 @@ export class GameBoard {
         this.board[boardY][boardX] = new GameBoardCell(scene, x, y);
       }
     }
-
-    emitter.on(EVENT_NAMES.ACTION_START, this.enableFocusing, this);
-    emitter.on(EVENT_NAMES.ACTION_COMPLETE, this.disableFocusing, this);
-    emitter.on(EVENT_NAMES.PLAYER_CARD_DESELECT, this.disableFocusing, this);
-  }
-
-  enableFocusing() {
-    emitter.on(EVENT_NAMES.GAMEBOARD_CARD_FOCUS, this.focusPositions, this);
-  }
-
-  disableFocusing() {
-    this.defocusBoard();
-    emitter.off(EVENT_NAMES.GAMEBOARD_CARD_FOCUS, this.focusPositions, this);
   }
 
   focusPositions(positions) {

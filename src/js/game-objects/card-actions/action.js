@@ -50,6 +50,13 @@ export default class Action {
     return positions;
   }
 
+  focusWithinRange(gameBoard, enemyManager, targetCenter, relativePositions = zeroPoint) {
+    const positions = this.getBoardPositionsWithinRange(gameBoard, targetCenter, relativePositions);
+    const enemies = gameBoard.getAtMultiple(positions);
+    enemyManager.focusEnemies(enemies);
+    gameBoard.focusPositions(positions);
+  }
+
   /**
    * Noop - child classes should implement their own logic
    *
