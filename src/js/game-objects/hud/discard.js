@@ -14,30 +14,25 @@ export default class DiscardPile {
   constructor(scene, x, y) {
     this.scene = scene;
 
-    this.cardShadow = scene.add.sprite(0, 0, "assets", "cards/card-shadow");
-    this.card = scene.add.sprite(0, 0, "assets", "cards/card");
+    this.cardShadow = scene.add.sprite(0, 0, "assets", "cards/card-reclaim-shadow");
+    this.card = scene.add.sprite(0, 0, "assets", `cards/card-reclaim`).setInteractive();
 
-    // TODO: add card bg
-    this.cardContents = scene.add
-      .sprite(0, 0, "assets", `cards/card-contents-reclaim`)
-      .setInteractive();
+    this.container = scene.add.container(x, y, [this.cardShadow, this.card]);
 
-    this.container = scene.add.container(x, y, [this.cardShadow, this.card, this.cardContents]);
+    this.card.on("pointerdown", () => this.select());
 
-    this.cardContents.on("pointerdown", () => this.select());
-
-    this.cardContents.on("pointerover", () => {
+    this.card.on("pointerover", () => {
       this.scene.tweens.killTweensOf(this.container);
       this.scene.tweens.add({
         targets: this.container,
-        scaleX: 1.1,
-        scaleY: 1.1,
+        scaleX: 1.05,
+        scaleY: 1.05,
         duration: 200,
         ease: "Quad.easeOut"
       });
     });
 
-    this.cardContents.on("pointerout", () => {
+    this.card.on("pointerout", () => {
       this.scene.tweens.killTweensOf(this.container);
       this.scene.tweens.add({
         targets: this.container,
@@ -54,11 +49,13 @@ export default class DiscardPile {
   }
 
   activate() {
-    this.cardContents.setVisible(true);
+    this.card.setVisible(true);
+    this.cardShadow.setVisible(true);
   }
 
   deactivate() {
-    this.cardContents.setVisible(false);
+    this.card.setVisible(false);
+    this.cardShadow.setVisible(false);
   }
 
   destroy() {
