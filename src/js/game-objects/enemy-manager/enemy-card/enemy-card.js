@@ -11,10 +11,6 @@ export default class EnemyCard {
 
     this.scene = scene;
     this.type = type;
-
-    this.x = x;
-    this.y = y;
-    this.alpha = 1;
     this.health = type === ENEMY_CARD_TYPES.STRONG_ENEMY ? 2 : 1;
 
     this.cardShadow = scene.add.sprite(0, 0, "assets", "cards/card-shadow");
