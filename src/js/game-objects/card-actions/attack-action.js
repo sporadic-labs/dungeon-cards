@@ -21,9 +21,9 @@ export default class AttackAction extends Action {
     this.proxy.on(scene.input, "pointermove", this.onPointerMove, this);
     this.proxy.on(scene.input, "pointerdown", this.onPointerDown, this);
 
-    this.attackPreviews = this.attackPattern.map(() => {
+    this.previews = this.attackPattern.map(() => {
       return scene.add
-        .sprite(100, 100, "assets", "attacks/player-attack")
+        .sprite(0, 0, "assets", "attacks/player-attack")
         .setAlpha(0.9)
         .setVisible(false);
     });
@@ -31,14 +31,16 @@ export default class AttackAction extends Action {
 
   onPointerMove(pointer) {
     this.focusWithinRange(this.board, this.enemyManager, pointer, this.attackPattern);
+
+    // Preview attack
     const positions = this.getBoardPositionsWithinRange(this.board, pointer, this.attackPattern);
     positions.map((position, i) => {
       const enemy = this.board.getAt(position.x, position.y);
       if (enemy) {
-        this.attackPreviews[i].setPosition(enemy.container.x, enemy.container.y).setVisible(true);
+        this.previews[i].setPosition(enemy.container.x, enemy.container.y).setVisible(true);
       } else {
         const worldPos = this.board.getWorldPosition(position.x, position.y);
-        this.attackPreviews[i]
+        this.previews[i]
           .setPosition(
             worldPos.x + this.board.cellWidth / 2,
             worldPos.y + this.board.cellHeight / 2
@@ -70,7 +72,7 @@ export default class AttackAction extends Action {
   }
 
   destroy() {
-    this.attackPreviews.map(sprite => sprite.destroy());
+    this.previews.map(sprite => sprite.destroy());
     this.proxy.removeAll();
   }
 }
