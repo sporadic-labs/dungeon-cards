@@ -4,9 +4,9 @@
         <key>fileFormatVersion</key>
         <int>4</int>
         <key>texturePackerVersion</key>
-        <string>4.5.0</string>
+        <string>4.3.3</string>
         <key>fileName</key>
-        <string>C:/Users/rex/Documents/GitHub/dungeon-cards/src/resources/atlases/assets.tps</string>
+        <string>C:/Users/mikewesthad/Documents/GitHub/dungeon-cards/src/resources/atlases/assets.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -172,8 +172,6 @@
         <true/>
         <key>prependSmartFolderName</key>
         <false/>
-        <key>autodetectAnimations</key>
-        <true/>
         <key>globalSpriteSettings</key>
         <struct type="SpriteSettings">
             <key>scale</key>
@@ -339,6 +337,19 @@
                 <rect>32,41,64,82</rect>
                 <key>scale9Paddings</key>
                 <rect>32,41,64,82</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/scroll/scroll.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>44,44,88,88</rect>
+                <key>scale9Paddings</key>
+                <rect>44,44,88,88</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
