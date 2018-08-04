@@ -25,7 +25,7 @@ export default class ActionRunner {
     this.proxy = new EventProxy();
 
     const { width, height } = scene.sys.game.config;
-    this.endTurnButton = new EndTurnButton(scene, width - 90, height / 2 - 6);
+    this.endTurnButton = new EndTurnButton(scene, 80, height / 2);
   }
 
   async runActions() {
