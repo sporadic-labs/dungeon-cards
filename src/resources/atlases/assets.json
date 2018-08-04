@@ -80,6 +80,14 @@
 	"spriteSourceSize": {"x":25,"y":35,"w":21,"h":22},
 	"sourceSize": {"w":70,"h":91}
 },
+"cards/card-contents-attack-3 horizontal":
+{
+	"frame": {"x":641,"y":1578,"w":50,"h":21},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":10,"y":35,"w":50,"h":21},
+	"sourceSize": {"w":70,"h":91}
+},
 "cards/card-contents-attack-3-horizontal":
 {
 	"frame": {"x":641,"y":1578,"w":50,"h":21},
@@ -112,6 +120,46 @@
 	"spriteSourceSize": {"x":13,"y":24,"w":45,"h":44},
 	"sourceSize": {"w":70,"h":91}
 },
+"cards/card-contents-cost-0":
+{
+	"frame": {"x":409,"y":1590,"w":18,"h":18},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":46,"y":6,"w":18,"h":18},
+	"sourceSize": {"w":70,"h":91}
+},
+"cards/card-contents-cost-1":
+{
+	"frame": {"x":429,"y":1590,"w":18,"h":18},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":46,"y":6,"w":18,"h":18},
+	"sourceSize": {"w":70,"h":91}
+},
+"cards/card-contents-cost-2":
+{
+	"frame": {"x":449,"y":1590,"w":18,"h":18},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":46,"y":6,"w":18,"h":18},
+	"sourceSize": {"w":70,"h":91}
+},
+"cards/card-contents-cost-3":
+{
+	"frame": {"x":469,"y":1590,"w":18,"h":18},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":46,"y":6,"w":18,"h":18},
+	"sourceSize": {"w":70,"h":91}
+},
+"cards/card-contents-cost-background":
+{
+	"frame": {"x":489,"y":1590,"w":18,"h":18},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":46,"y":6,"w":18,"h":18},
+	"sourceSize": {"w":70,"h":91}
+},
 "cards/card-contents-draw":
 {
 	"frame": {"x":916,"y":1564,"w":48,"h":38},
@@ -128,12 +176,28 @@
 	"spriteSourceSize": {"x":13,"y":23,"w":44,"h":45},
 	"sourceSize": {"w":70,"h":91}
 },
-"cards/card-contents-enemy-health":
+"cards/card-contents-enemy-health-1":
 {
-	"frame": {"x":339,"y":1592,"w":16,"h":16},
+	"frame": {"x":509,"y":1590,"w":18,"h":18},
 	"rotated": false,
 	"trimmed": true,
-	"spriteSourceSize": {"x":48,"y":6,"w":16,"h":16},
+	"spriteSourceSize": {"x":46,"y":6,"w":18,"h":18},
+	"sourceSize": {"w":70,"h":91}
+},
+"cards/card-contents-enemy-health-2":
+{
+	"frame": {"x":529,"y":1590,"w":18,"h":18},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":46,"y":6,"w":18,"h":18},
+	"sourceSize": {"w":70,"h":91}
+},
+"cards/card-contents-enemy-health":
+{
+	"frame": {"x":549,"y":1589,"w":18,"h":18},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":46,"y":6,"w":18,"h":18},
 	"sourceSize": {"w":70,"h":91}
 },
 "cards/card-contents-enemy-small":
@@ -154,7 +218,7 @@
 },
 "cards/card-contents-reclaim copy":
 {
-	"frame": {"x":357,"y":1592,"w":16,"h":16},
+	"frame": {"x":339,"y":1592,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":48,"y":6,"w":16,"h":16},
@@ -279,6 +343,6 @@
 	"format": "RGBA8888",
 	"size": {"w":1502,"h":1610},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:711bf88e95cb98189ed2554522dcdff5:a214f8a35f7df2b87df47c99c363eab6:a759b6bbc8381ac9c472b28f589ad0d6$"
+	"smartupdate": "$TexturePacker:SmartUpdate:f9e7f16f8ae56cc53cb6b0a4669ef00d:6f53a4318b873abbc5a429dfdbea6815:a759b6bbc8381ac9c472b28f589ad0d6$"
 }
 }

@@ -279,12 +279,20 @@
             </struct>
             <key type="filename">assets/cards/card-back.png</key>
             <key type="filename">assets/cards/card-contents-attack-1.png</key>
+            <key type="filename">assets/cards/card-contents-attack-3 horizontal.png</key>
             <key type="filename">assets/cards/card-contents-attack-3-horizontal.png</key>
             <key type="filename">assets/cards/card-contents-attack-3-vertical.png</key>
             <key type="filename">assets/cards/card-contents-attack-9.png</key>
             <key type="filename">assets/cards/card-contents-block.png</key>
+            <key type="filename">assets/cards/card-contents-cost-0.png</key>
+            <key type="filename">assets/cards/card-contents-cost-1.png</key>
+            <key type="filename">assets/cards/card-contents-cost-2.png</key>
+            <key type="filename">assets/cards/card-contents-cost-3.png</key>
+            <key type="filename">assets/cards/card-contents-cost-background.png</key>
             <key type="filename">assets/cards/card-contents-draw.png</key>
             <key type="filename">assets/cards/card-contents-enemy-big.png</key>
+            <key type="filename">assets/cards/card-contents-enemy-health-1.png</key>
+            <key type="filename">assets/cards/card-contents-enemy-health-2.png</key>
             <key type="filename">assets/cards/card-contents-enemy-health.png</key>
             <key type="filename">assets/cards/card-contents-enemy-small.png</key>
             <key type="filename">assets/cards/card-contents-energy.png</key>
