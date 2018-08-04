@@ -11,7 +11,7 @@ import Logger from "../helpers/logger";
 export default class PlayScene extends Scene {
   create() {
     const { width, height } = this.sys.game.config;
-    this.add.tileSprite(0, 0, width, height, "assets", "background").setOrigin(0, 0);
+    this.add.tileSprite(0, 0, 10 * width, 10 * height, "assets", "background");
 
     const gameBoard = new GameBoard(this, 5, 4);
 
