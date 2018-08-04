@@ -22,9 +22,7 @@ export default class EnemyCard {
     const key = type === ENEMY_CARD_TYPES.STRONG_ENEMY ? "big" : "small";
     this.cardContents = scene.add
       .sprite(0, 0, "assets", `cards/card-contents-enemy-${key}`)
-      .setOrigin(0.5, 0.5)
       .setInteractive();
-    this.setPosition(x, y);
 
     this.container = scene.add.container(x + this.card.width / 2, y + this.card.height / 2, [
       this.cardShadow,
