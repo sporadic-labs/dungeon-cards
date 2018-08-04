@@ -48,7 +48,7 @@ const PLAYER_CARD_INFO = {
   ENERGY: {
     key: "cards/card-contents-energy",
     description: "Add 1 to your energy pool.",
-    energy: 1
+    energy: 0
   },
   SHIFT_LEFT: {
     key: "cards/card-contents-shift-left",
