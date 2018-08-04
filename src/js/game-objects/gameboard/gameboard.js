@@ -10,11 +10,11 @@ export class GameBoard {
     const { w, h } = assetsJson.frames["cards/card-empty"].sourceSize;
     this.cellWidth = w;
     this.cellHeight = h;
-    this.cellPadding = 5;
+    this.cellPadding = { x: 5, y: 0 };
     this.boardRows = rows;
     this.boardColumns = columns;
-    this.boardWidth = columns * this.cellWidth + (columns - 1) * this.cellPadding;
-    this.boardHeight = rows * this.cellHeight + (rows - 1) * this.cellPadding;
+    this.boardWidth = columns * this.cellWidth + (columns - 1) * this.cellPadding.x;
+    this.boardHeight = rows * this.cellHeight + (rows - 1) * this.cellPadding.y;
 
     const width = scene.sys.game.config.width;
     this.worldX = width / 2 - this.boardWidth / 2;
@@ -128,8 +128,8 @@ export class GameBoard {
    * @memberof GameBoard
    */
   getWorldPosition(boardX, boardY) {
-    const x = this.worldX + boardX * (this.cellWidth + this.cellPadding);
-    const y = this.worldY + boardY * (this.cellHeight + this.cellPadding);
+    const x = this.worldX + boardX * (this.cellWidth + this.cellPadding.x);
+    const y = this.worldY + boardY * (this.cellHeight + this.cellPadding.y);
     return { x, y };
   }
 
@@ -165,12 +165,12 @@ export class GameBoard {
     // wide, but the second is (padding / 2 + card width + padding / 2). We get around this by
     // shifting the input worldX and worldY by (padding / 2), so that it's as if there weren't
     // uneven hitboxes.
-    relativeX += this.cellPadding / 2;
-    relativeY += this.cellPadding / 2;
+    relativeX += this.cellPadding.x / 2;
+    relativeY += this.cellPadding.y / 2;
 
     // Find the x, y (assuming each card has the same size hitbox)
-    const x = Math.floor(relativeX / (this.cellWidth + this.cellPadding));
-    const y = Math.floor(relativeY / (this.cellHeight + this.cellPadding));
+    const x = Math.floor(relativeX / (this.cellWidth + this.cellPadding.x));
+    const y = Math.floor(relativeY / (this.cellHeight + this.cellPadding.y));
 
     return { x, y };
   }
