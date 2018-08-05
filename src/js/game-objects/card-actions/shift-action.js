@@ -96,7 +96,7 @@ export default class ShiftAction extends Action {
         if (this.showMessage) {
           this.showMessage = false;
           // Some UI to indicate player can't play this card.
-          const { width, _ } = this.scene.sys.game.config;
+          const { width } = this.scene.sys.game.config;
           new PopupText(this.scene, "You don't have enough energy!", width / 4, 20, null, () => {
             this.showMessage = true;
           });
