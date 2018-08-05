@@ -42,6 +42,7 @@ export default class ActionRunner {
     // Allow the player to take actions until they explicitly click the "end turn" button
     await promisifyEvent(emitter, EVENT_NAMES.PLAYER_TURN_COMPLETE);
 
+    if (this.currentAction) this.currentAction.destroy();
     this.playerManager.disableSelecting();
     this.endTurnButton.deactivate();
     this.proxy.removeAll();
