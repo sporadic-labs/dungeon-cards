@@ -15,6 +15,9 @@ const attacks = [
   PLAYER_CARD_TYPES.ATTACK_GRID
 ];
 
+const promisifyEvent = (emitter, eventName) =>
+  new Promise(resolve => emitter.once(eventName, resolve));
+
 export default class ActionRunner {
   constructor(scene, playerManager, enemyManager, gameBoard) {
     this.scene = scene;
@@ -37,7 +40,7 @@ export default class ActionRunner {
     this.proxy.on(emitter, EVENT_NAMES.ACTION_COMPLETE, this.onComplete, this);
 
     // Allow the player to take actions until they explicitly click the "end turn" button
-    await this.endActions();
+    await promisifyEvent(emitter, EVENT_NAMES.PLAYER_TURN_COMPLETE);
 
     this.playerManager.disableSelecting();
     this.endTurnButton.deactivate();
@@ -58,10 +61,6 @@ export default class ActionRunner {
   onComplete(card) {
     if (this.currentAction) this.currentAction.destroy();
     this.playerManager.discardCard(card);
-  }
-
-  endActions() {
-    return new Promise(resolve => emitter.once(EVENT_NAMES.PLAYER_TURN_COMPLETE, resolve));
   }
 
   runAction(card) {
