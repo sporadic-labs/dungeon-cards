@@ -1,6 +1,5 @@
 import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import Action from "./action";
-import logger from "../../helpers/logger";
 import { PopupText } from "../hud";
 import { PLAYER_CARD_TYPES } from "../player-manager";
 
@@ -97,7 +96,7 @@ export default class ShiftAction extends Action {
         if (this.showMessage) {
           this.showMessage = false;
           // Some UI to indicate player can't play this card.
-          const { width, height } = this.scene.sys.game.config;
+          const { width, _ } = this.scene.sys.game.config;
           new PopupText(this.scene, "You don't have enough energy!", width / 4, 20, null, () => {
             this.showMessage = true;
           });
