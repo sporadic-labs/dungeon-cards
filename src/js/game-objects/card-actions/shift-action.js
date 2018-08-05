@@ -42,10 +42,17 @@ export default class ShiftAction extends Action {
   onPointerMove(pointer) {
     if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) return;
 
-    this.focusWithinRange(this.board, this.enemyManager, pointer, this.attackPattern);
+    // Get the enemies and board positions in the current row & focus them
+    const positions = [];
+    const { y } = this.board.getBoardPosition(pointer.x, pointer.y);
+    for (let x = 0; x < this.board.boardColumns; x++) {
+      positions.push({ x, y });
+    }
+    const enemies = this.board.getAtMultiple(positions);
+    this.enemyManager.focusEnemies(enemies);
+    this.board.focusPositions(positions);
 
     // Preview attack
-    const positions = this.getBoardPositionsWithinRange(this.board, pointer, this.attackPattern);
     const offsetX = (this.direction === SHIFT_DIRECTIONS.LEFT ? -0.5 : 0.5) * this.board.cellWidth;
     this.shiftPreviews.map(preview => preview.setVisible(false));
     this.xPreview.setVisible(false);
