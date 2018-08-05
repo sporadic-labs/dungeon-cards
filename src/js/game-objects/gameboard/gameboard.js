@@ -1,6 +1,5 @@
 import { GameBoardCell } from "./gameboard-cell";
 import { emitter, EVENT_NAMES } from "../events";
-import { PLAYER_CARD_INFO } from "../player-manager/player-card";
 import logger from "../../helpers/logger";
 
 export class GameBoard {
@@ -18,7 +17,7 @@ export class GameBoard {
 
     const width = scene.sys.game.config.width;
     this.worldX = width / 2 - this.boardWidth / 2;
-    this.worldY = 65;
+    this.worldY = 80;
 
     this.board = [];
     for (let boardY = 0; boardY < rows; boardY++) {
