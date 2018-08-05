@@ -1,4 +1,4 @@
-import ENEMY_CARD_TYPES from "./enemy-card-types";
+import { ENEMY_CARD_INFO } from "./enemy-card-types";
 import { emitter, EVENT_NAMES } from "../../events";
 
 export default class EnemyCard {
@@ -11,25 +11,33 @@ export default class EnemyCard {
 
     this.scene = scene;
     this.type = type;
-    this.health = type === ENEMY_CARD_TYPES.STRONG_ENEMY ? 2 : 1;
+    this.health = ENEMY_CARD_INFO[type].health;
+
+    this.x = x;
+    this.y = y;
 
     this.cardShadow = scene.add.sprite(0, 0, "assets", "cards/card-shadow");
     this.card = scene.add.sprite(0, 0, "assets", "cards/card");
 
-    const key = type === ENEMY_CARD_TYPES.STRONG_ENEMY ? "big" : "small";
-    this.cardContents = scene.add
-      .sprite(0, 0, "assets", `cards/card-contents-enemy-${key}`)
-      .setInteractive();
+    const key = ENEMY_CARD_INFO[type].key;
+    if (key) {
+      this.cardContents = scene.add.sprite(0, 0, "assets", key).setInteractive();
+    }
 
-    const healthFrame = `cards/card-contents-enemy-health-${this.health}`;
-    this.healthDisplay = scene.add.sprite(0, 0, "assets", healthFrame);
+    if (this.health) {
+      const healthFrame = `cards/card-contents-enemy-health-${this.health}`;
+      this.healthDisplay = scene.add.sprite(0, 0, "assets", healthFrame);
+    }
 
-    this.container = scene.add.container(x + this.card.width / 2, y + this.card.height / 2, [
-      this.cardShadow,
-      this.card,
-      this.cardContents,
-      this.healthDisplay
-    ]);
+    const spriteList = [this.cardShadow, this.card];
+    if (this.cardContents) spriteList.push(this.cardContents);
+    if (this.healthDisplay) spriteList.push(this.healthDisplay);
+
+    this.container = scene.add.container(
+      x + this.card.width / 2,
+      y + this.card.height / 2,
+      spriteList
+    );
 
     this.selected = false;
     this.focused = false;
@@ -71,21 +79,21 @@ export default class EnemyCard {
   }
 
   getPosition() {
-    return { x: this.cardContents.x, y: this.cardContents.y };
+    return { x: this.card.x, y: this.card.y };
   }
 
   // Set via top left
   setPosition(x, y) {
-    this.x = x + this.cardContents.width / 2;
-    this.y = y + this.cardContents.height / 2;
+    this.x = x + this.card.width / 2;
+    this.y = y + this.card.height / 2;
   }
 
   enableSelecting() {
-    this.cardContents.on("pointerdown", this.onPointerDown);
+    this.card.on("pointerdown", this.onPointerDown);
   }
 
   disableSelecting() {
-    this.cardContents.off("pointerdown", this.onPointerDown);
+    this.card.off("pointerdown", this.onPointerDown);
   }
 
   onPointerOver = () => emitter.emit(EVENT_NAMES.ENEMY_CARD_FOCUS, this);
@@ -130,7 +138,7 @@ export default class EnemyCard {
 
   fadeIn(delay) {
     this.scene.tweens.killTweensOf(this.container);
-    this.alpha = 0;
+    this.container.alpha = 0;
     return new Promise(resolve => {
       this.scene.tweens.add({
         targets: this.container,
