@@ -90,15 +90,18 @@ export default class EnemyManager {
    * of the screen to the right side of the screen.
    *
    * @memberof EnemyManager
+   * @returns Copy of the array, sorted
    */
   sortEnemies(enemies) {
-    enemies.sort((enemy1, enemy2) => {
+    const copy = enemies.slice();
+    copy.sort((enemy1, enemy2) => {
       const p1 = enemy1.getPosition();
       const p2 = enemy2.getPosition();
       // y2 - y1 = bigger Y sorts earlier in array
       // x1 - x2 = smaller X sorts earlier in array
       return p2.y - p1.y || p1.x - p2.x;
     });
+    return copy;
   }
 
   /**
@@ -129,9 +132,9 @@ export default class EnemyManager {
   async damageEnemies(enemies, damage) {
     let delay = 0;
 
-    this.sortEnemies(enemies);
+    const sortedEnemies = this.sortEnemies(enemies);
 
-    const deathPromises = enemies.map(enemy => {
+    const deathPromises = sortedEnemies.map(enemy => {
       enemy.takeDamage(damage);
       if (enemy.health <= 0) {
         delay += 50;
@@ -153,9 +156,9 @@ export default class EnemyManager {
   async moveEnemies() {
     await this.defocusAllEnemies();
 
-    this.sortEnemies(this.enemies);
+    const sortedEnemies = this.sortEnemies(this.enemies);
     let delay = 0;
-    const movePromises = this.enemies.map(enemy => {
+    const movePromises = sortedEnemies.map(enemy => {
       const boardPosition = this.gameBoard.findPositionOf(enemy);
 
       // Is the enemy about to go off the board?
