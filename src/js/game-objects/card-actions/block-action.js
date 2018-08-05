@@ -25,7 +25,11 @@ export default class BlockAction extends Action {
   onPointerMove(pointer) {
     this.previews.map(preview => preview.setVisible(false));
 
-    if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) return;
+    if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) {
+      this.enemyManager.defocusAllEnemies();
+      this.board.defocusBoard();
+      return;
+    }
 
     this.focusWithinRange(this.board, this.enemyManager, pointer, this.attackPattern);
 

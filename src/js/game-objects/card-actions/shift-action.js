@@ -43,7 +43,11 @@ export default class ShiftAction extends Action {
     this.shiftPreviews.map(preview => preview.setVisible(false));
     this.xPreview.setVisible(false);
 
-    if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) return;
+    if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) {
+      this.enemyManager.defocusAllEnemies();
+      this.board.defocusBoard();
+      return;
+    }
 
     // Get the enemies and board positions in the current row & focus them
     const positions = [];
