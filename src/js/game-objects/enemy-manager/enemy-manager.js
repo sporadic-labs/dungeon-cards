@@ -107,15 +107,17 @@ export default class EnemyManager {
    *
    * @param {*} enemies
    * @param {*} reverse
+   * @returns Copy of the array, sorted
    */
   sortRow(enemies, reverse = false) {
-    enemies.sort((enemy1, enemy2) => {
+    const copy = enemies.slice();
+    copy.sort((enemy1, enemy2) => {
       const p1 = enemy1.getPosition();
       const p2 = enemy2.getPosition();
-      // x1 - x2 = smaller X sorts earlier in array
-      if (reverse) return p2.x - p1.x;
-      else return p1.x - p2.x;
+      return p1.x - p2.x; // x1 - x2 = smaller X sorts earlier in array
     });
+    if (reverse) copy.reverse();
+    return copy;
   }
 
   /**
@@ -187,20 +189,17 @@ export default class EnemyManager {
     await this.defocusAllEnemies();
 
     // Sort the enemy group based on the direction you are shifting.
-    this.sortRow(enemies, direction === SHIFT_DIRECTIONS.RIGHT);
+    const sortedEnemies = this.sortRow(enemies, direction === SHIFT_DIRECTIONS.RIGHT);
 
     // Move the enemy cards!
     let delay = 0;
-    const movePromises = enemies.map(enemy => {
+    const movePromises = sortedEnemies.map(enemy => {
       const boardPosition = this.gameBoard.findPositionOf(enemy);
-      // Is the enemy about to go off the board?
+      // Check if there's room left on the board to shift the enemy over
       if (!this.gameBoard.isInBounds(boardPosition.x + direction, boardPosition.y)) {
         // TODO(rex): Animate enemy before removing it.
         this.removeEnemy(enemy);
-      }
-
-      // Is the next spot open for the enemy?
-      if (
+      } else if (
         !enemy.isBlocked() &&
         this.gameBoard.isEmpty(boardPosition.x + direction, boardPosition.y)
       ) {
