@@ -30,13 +30,14 @@ export default class AttackAction extends Action {
   }
 
   onPointerMove(pointer) {
+    this.previews.map(preview => preview.setVisible(false));
+
     if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) return;
 
     this.focusWithinRange(this.board, this.enemyManager, pointer, this.attackPattern);
 
     // Preview attack
     const positions = this.getBoardPositionsWithinRange(this.board, pointer, this.attackPattern);
-    this.previews.map(preview => preview.setVisible(false));
     positions.map((position, i) => {
       const enemy = this.board.getAt(position.x, position.y);
       if (enemy) {

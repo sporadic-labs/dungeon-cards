@@ -40,6 +40,9 @@ export default class ShiftAction extends Action {
   }
 
   onPointerMove(pointer) {
+    this.shiftPreviews.map(preview => preview.setVisible(false));
+    this.xPreview.setVisible(false);
+
     if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) return;
 
     // Get the enemies and board positions in the current row & focus them
@@ -54,8 +57,6 @@ export default class ShiftAction extends Action {
 
     // Preview attack
     const offsetX = (this.direction === SHIFT_DIRECTIONS.LEFT ? -0.5 : 0.5) * this.board.cellWidth;
-    this.shiftPreviews.map(preview => preview.setVisible(false));
-    this.xPreview.setVisible(false);
     positions.map((position, i) => {
       const enemy = this.board.getAt(position.x, position.y);
       if (enemy) {
