@@ -1,4 +1,3 @@
-import Logger from "../../helpers/logger";
 import EnemyCard, { ENEMY_CARD_TYPES } from "./enemy-card";
 import { emitter, EVENT_NAMES } from "../events";
 import { DeckDisplay } from "../hud";
@@ -231,23 +230,30 @@ export default class EnemyManager {
     const locations = this.gameBoard.getOpenSpawnLocations().slice(0, cardsRemaining);
     if (locations.length === 0) return;
 
-    let delay = 0;
-
-    const spawnPromises = locations.map(location => {
+    let spawnDelay = 0;
+    const spawnPromises = locations.map(async location => {
       const enemyType = this.deck.draw();
+
       this.deckDisplay.setValue(this.deck.getNumCardsRemaining());
-      if (enemyType !== ENEMY_CARD_TYPES.BLANK) {
-        const { x, y } = this.gameBoard.getWorldPosition(location.x, location.y);
-        const enemy = new EnemyCard(this.scene, enemyType, x, y);
-        const fadePromise = enemy.fadeIn(delay);
+
+      spawnDelay += 124;
+
+      const { x, y } = this.gameBoard.getWorldPosition(location.x, location.y);
+      const startingYOffset = -72;
+
+      const enemy = new EnemyCard(this.scene, enemyType, x, y + startingYOffset);
+      await enemy.fadeIn(spawnDelay);
+
+      if (enemy.type !== ENEMY_CARD_TYPES.BLANK) {
         this.enemies.push(enemy);
         this.gameBoard.putAt(location.x, location.y, enemy);
-        delay += 100;
-        return fadePromise;
+        return enemy.moveTo(x, y, spawnDelay);
+      } else {
+        return enemy.die(spawnDelay);
       }
     });
 
-    // TODO: Make room for these to spawn above the game board and animate into position
+    // Wait until cards finish moving to continue.
     await Promise.all(spawnPromises);
   }
 }
