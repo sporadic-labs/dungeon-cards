@@ -1,0 +1,181 @@
+#hud {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 3px;
+  z-index: 1000;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // Disable pointer events on the HUD container, but re-enable on children
+  pointer-events: none;
+  & > * {
+    pointer-events: initial;
+  }
+
+  label {
+    text-align: center;
+    display: block;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .slider {
+    width: 60%;
+    display: block;
+    margin: 10px auto 0 auto;
+  }
+
+  button {
+    display: block;
+    margin: 24px auto;
+    padding: 16px 30px;
+    color: #5a867e;
+    background-color: white;
+    border-radius: 5px;
+    font-weight: 900;
+    font-size: 0.95rem;
+    letter-spacing: 0.075rem;
+    cursor: pointer;
+    transition: color 0.1s ease-in-out, background-color 0.1s ease-in-out;
+
+    &:hover {
+      color: white;
+      background-color: #5a867e;
+    }
+  }
+
+  .menu {
+    min-width: 65%;
+    padding: 20px;
+    position: relative;
+    border-radius: 10px;
+    pointer-events: initial;
+    cursor: default;
+    background-color: #82b9af;
+
+    .menu-title {
+      margin: 0 auto 20px auto;
+      padding: 12px 50px;
+      font-size: 32px;
+      font-weight: 600;
+      text-align: center;
+      text-shadow: 2px 2px rgb(64, 64, 64);
+    }
+
+    .final-score {
+      margin: 6px auto;
+      padding: 6px;
+      font-size: 24px;
+      text-align: center;
+    }
+
+    .btn-close {
+      position: absolute;
+      top: 3%;
+      right: 3%;
+      margin: 0;
+      padding: 6px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      svg {
+        width: 100%;
+        height: 100%;
+
+        * {
+          fill: #5a867e;
+        }
+      }
+
+      &:hover {
+        background-color: #5a867e;
+
+        svg * {
+          fill: white;
+        }
+      }
+    }
+
+    #about {
+      text-align: center;
+      font-size: 18px;
+      width: 32px;
+      height: 32px;
+      transition: all 0.1s ease-in-out;
+      &:hover {
+        cursor: pointer;
+        color: #5a867e;
+        transition: all 0.1s ease-in-out;
+      }
+    }
+  }
+
+  #about-menu {
+    padding: 36px;
+
+    .brand {
+      width: 100%;
+      .created-by {
+        font-size: 10px;
+      }
+      .logo-wrap {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+          margin: 12px;
+          border-radius: 12px;
+        }
+        .logo-text {
+          font-size: 32px;
+        }
+      }
+    }
+
+    #credits-wrap {
+      width: 80%;
+      margin: auto;
+      text-align: center;
+
+      #credits-title {
+        font-size: 16px;
+      }
+      a {
+        display: block;
+        text-decoration: none;
+        color: #fff;
+        transition: all 0.1s ease-in-out;
+        &:hover {
+          color: #5a867e;
+          transition: all 0.1s ease-in-out;
+        }
+      }
+    }
+
+    .links {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      a {
+        margin: 12px;
+        transition: all 0.1s ease-in-out;
+        &:hover {
+          opacity: 0.5;
+          cursor: pointer;
+          transition: all 0.1s ease-in-out;
+        }
+      }
+    }
+  }
+}
