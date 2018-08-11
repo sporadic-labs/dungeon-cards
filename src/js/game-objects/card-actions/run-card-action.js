@@ -36,6 +36,7 @@ export default class ActionRunner {
     this.endTurnButton.activate();
 
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_SELECT, this.onPlayerCardSelect, this);
+    this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DESELECT, this.killCurrentAction, this);
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DISCARD, this.killCurrentAction, this);
     this.proxy.on(emitter, EVENT_NAMES.ACTION_COMPLETE, this.onComplete, this);
 
