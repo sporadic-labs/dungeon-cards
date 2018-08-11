@@ -3,7 +3,8 @@
     "target": "es6",
     "allowSyntheticDefaultImports": true, // Necessary for default importing Phaser to pick up types properly
     "allowJs": true,
-    "checkJs": false
+    "checkJs": false,
+    "experimentalDecorators": true
   },
   "include": ["src/**/*", "types/**/*"]
 }
