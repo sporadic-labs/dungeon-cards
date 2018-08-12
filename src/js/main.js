@@ -6,6 +6,12 @@ import { Loading, Play, SCENE_NAME } from "./scenes";
 import logger, { LOG_LEVEL } from "./helpers/logger";
 import LifecyclePlugin from "./plugins/lifecycle-plugin/index";
 
+import React from "react";
+import { render } from "react-dom";
+
+import Menu from "./menu/menu-app";
+import gameStore from "./menu/game-store";
+
 logger.setLevel(PRODUCTION ? LOG_LEVEL.OFF : LOG_LEVEL.ALL);
 
 const gameDimensions = 800;
@@ -33,6 +39,12 @@ document.getElementById(containerId).addEventListener("contextmenu", e => {
   e.preventDefault();
   return false;
 });
+
+// Setup Menus
+render(
+  <Menu gameStore={gameStore} width={gameDimensions} height={gameDimensions} />,
+  document.getElementById("menu-container")
+);
 
 game.scene.add(SCENE_NAME.LOADING, Loading);
 game.scene.add(SCENE_NAME.PLAY, Play);

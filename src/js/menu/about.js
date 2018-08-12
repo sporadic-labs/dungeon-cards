@@ -6,14 +6,16 @@ import Github from "../../images/GitHub-Mark-Light-32px.png";
 
 export default class AboutMenu extends Component {
   render() {
+    const { onBack } = this.props;
+
     return (
-      <div id="about-menu" class="menu">
-        <div class="menu-title">About</div>
-        <div class="brand">
-          <div class="created-by">Created by</div>
-          <div class="logo-wrap">
+      <div id="about-menu" className="menu">
+        <div className="menu-title">About</div>
+        <div className="brand">
+          <div className="created-by">Created by</div>
+          <div className="logo-wrap">
             <img src={Logo} />
-            <span class="logo-text">Sporadic Labs</span>
+            <span className="logo-text">Sporadic Labs</span>
           </div>
         </div>
         <div id="credits-wrap">
@@ -35,7 +37,7 @@ export default class AboutMenu extends Component {
             Rex Twedt
           </a>
         </div>
-        <div class="links">
+        <div className="links">
           <a
             href="https://github.com/sporadic-labs/the-atomic-incident"
             alt="Github"

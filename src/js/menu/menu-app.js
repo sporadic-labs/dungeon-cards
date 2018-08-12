@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { observer } from "mobx-react";
 import { MENU_STATES } from "./menu-states";
-import StartMenu from "./components/start-menu";
-import AboutMenu from "./components/about-menu";
-import GameOverMenu from "./components/game-over-menu";
+import StartMenu from "./start";
+import AboutMenu from "./about";
+import GameOverMenu from "./game-over";
 
 @observer
 class Menu extends Component {
@@ -33,20 +33,14 @@ class Menu extends Component {
     let activeMenu;
     if (gameStore.menuState === MENU_STATES.START_MENU) {
       activeMenu = (
-        <StartMenu
-          gameStore={gameStore}
-          onOptions={this.goToOptionsMenu}
-          onStart={this.startGame}
-          onAbout={this.goToAboutMenu}
-          goToInstructionsMenu={this.goToInstructionsMenu}
-        />
+        <StartMenu gameStore={gameStore} onStart={this.startGame} onAbout={this.goToAboutMenu} />
       );
     } else if (gameStore.menuState === MENU_STATES.GAME_OVER) {
       activeMenu = (
         <GameOverMenu
           gameStore={gameStore}
           onMainMenu={this.goToStartMenu}
-          onRestart={this.restartGame}
+          onRestart={this.startGame}
         />
       );
     } else if (gameStore.menuState === MENU_STATES.ABOUT) {

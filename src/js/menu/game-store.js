@@ -1,5 +1,4 @@
 import { autorun, computed, observable } from "mobx";
-import storageAutosync from "./sync-to-storage";
 import { MENU_STATES } from "./menu-states";
 
 const maxMenuHistory = 3;
@@ -16,7 +15,7 @@ class GameStore {
 
   constructor() {
     autorun(() => {
-      console.log(this.menuState());
+      console.log(this.menuState);
     });
   }
 
@@ -35,6 +34,5 @@ class GameStore {
 }
 
 const gameStore = new GameStore();
-storageAutosync("game-store", gameStore);
 
 export default gameStore;
