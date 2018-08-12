@@ -1,16 +1,8 @@
 {
-  "presets": [
-    [
-      "env",
-      {
-        "targets": {
-          "browsers": ["last 2 versions"]
-        }
-      }
-    ]
-  ],
+  "presets": ["env", "react", "stage-2"],
   "plugins": [
-    ["transform-react-jsx", { "pragma": "h" }],
+    "transform-decorators-legacy",
+    "transform-react-jsx",
     ["transform-class-properties", { "loose": true }],
     "transform-object-rest-spread"
   ]

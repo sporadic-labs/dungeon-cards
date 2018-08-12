@@ -21,7 +21,10 @@ module.exports = function(env, argv) {
     module: {
       rules: [
         { test: /\.(js|jsx)$/, use: "babel-loader", exclude: /node_modules/ },
-
+        {
+          test: /\.svg$/,
+          use: { loader: "react-svg-loader" }
+        },
         {
           test: /\.(scss|sass)$/,
           use: [
@@ -32,7 +35,6 @@ module.exports = function(env, argv) {
             { loader: "sass-loader", options: { sourceMap: true } }
           ]
         },
-
         //   Ensure that urls in scss are loaded correctly
         {
           test: /\.(eot|ttf|woff|woff2|png|jpg)$/,
@@ -45,7 +47,6 @@ module.exports = function(env, argv) {
             }
           }
         },
-
         // Allow shaders to be loaded via glslify
         { test: /\.(glsl|frag|vert)$/, use: ["raw-loader", "glslify"] }
       ]
