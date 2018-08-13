@@ -34,7 +34,7 @@
     display: block;
     margin: 24px auto;
     padding: 16px 30px;
-    color: #5a867e;
+    color: #c7c3ad;
     background-color: white;
     border-radius: 5px;
     font-weight: 900;
@@ -45,7 +45,7 @@
 
     &:hover {
       color: white;
-      background-color: #5a867e;
+      background-color: #c7c3ad;
     }
   }
 
@@ -56,7 +56,7 @@
     border-radius: 10px;
     pointer-events: initial;
     cursor: default;
-    background-color: #82b9af;
+    background-color: #dedcd6;
 
     .menu-title {
       margin: 0 auto 20px auto;
@@ -93,12 +93,12 @@
         height: 100%;
 
         * {
-          fill: #5a867e;
+          fill: #c7c3ad;
         }
       }
 
       &:hover {
-        background-color: #5a867e;
+        background-color: #c7c3ad;
 
         svg * {
           fill: white;
@@ -114,7 +114,7 @@
       transition: all 0.1s ease-in-out;
       &:hover {
         cursor: pointer;
-        color: #5a867e;
+        color: #c7c3ad;
         transition: all 0.1s ease-in-out;
       }
     }
@@ -157,7 +157,7 @@
         color: #fff;
         transition: all 0.1s ease-in-out;
         &:hover {
-          color: #5a867e;
+          color: #c7c3ad;
           transition: all 0.1s ease-in-out;
         }
       }
