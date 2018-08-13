@@ -4,6 +4,7 @@ import { MENU_STATES } from "./menu-states";
 import StartMenu from "./start";
 import AboutMenu from "./about";
 import GameOverMenu from "./game-over";
+import { emitter, EVENT_NAMES } from "../game-objects/events";
 
 @observer
 class Menu extends Component {
@@ -13,6 +14,7 @@ class Menu extends Component {
 
   startGame = () => {
     this.props.gameStore.setMenuState(MENU_STATES.GAME_ON);
+    emitter.emit(EVENT_NAMES.GAME_START);
   };
 
   goToStartMenu = () => {

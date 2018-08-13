@@ -7,13 +7,74 @@ import ActionRunner from "../game-objects/card-actions";
 import { emitter, EVENT_NAMES } from "../game-objects/events";
 import run from "../game-objects/game-runner";
 import Logger from "../helpers/logger";
+import gameStore from "../menu/game-store";
+import { MENU_STATES } from "../menu/menu-states";
 
 export default class PlayScene extends Scene {
+  gameBoard;
+  enemyManager;
+  playerManager;
+  actionRunner;
+
   create() {
+    console.log("create the scene!");
     const { width, height } = this.sys.game.config;
     this.add.tileSprite(0, 0, 10 * width, 10 * height, "assets", "background");
 
-    const gameBoard = new GameBoard(this, 5, 4);
+    this.gameBoard = new GameBoard(this, 5, 4);
+
+    this.initGame();
+
+    // const enemyDeckComposition = [
+    //   { id: ENEMY_CARD_TYPES.WEAK_ENEMY, quantity: 17 },
+    //   { id: ENEMY_CARD_TYPES.STRONG_ENEMY, quantity: 3 },
+    //   { id: ENEMY_CARD_TYPES.BLANK, quantity: 30 }
+    // ];
+
+    // const enemyDeck = new Deck(enemyDeckComposition);
+    // const enemyManager = new EnemyManager(this, gameBoard, enemyDeck);
+
+    // const playerDeckComposition = [
+    //   { id: PLAYER_CARD_TYPES.ATTACK_ONE, quantity: 12 },
+    //   { id: PLAYER_CARD_TYPES.ATTACK_THREE_VERTICAL, quantity: 7 },
+    //   { id: PLAYER_CARD_TYPES.ATTACK_THREE_HORIZONTAL, quantity: 7 },
+    //   { id: PLAYER_CARD_TYPES.ATTACK_GRID, quantity: 5 },
+    //   { id: PLAYER_CARD_TYPES.ENERGY, quantity: 10 },
+    //   { id: PLAYER_CARD_TYPES.DRAW_THREE, quantity: 4 },
+    //   { id: PLAYER_CARD_TYPES.SHIFT_RIGHT, quantity: 5 },
+    //   { id: PLAYER_CARD_TYPES.SHIFT_LEFT, quantity: 5 },
+    //   { id: PLAYER_CARD_TYPES.BLOCK, quantity: 5 }
+    // ];
+
+    // const playerDeck = new Deck(playerDeckComposition);
+    // const playerManager = new PlayerManager(this, gameBoard, playerDeck);
+    // const actionRunner = new ActionRunner(this, playerManager, enemyManager, gameBoard);
+
+    emitter.on(EVENT_NAMES.GAME_OVER, () => {
+      console.log("game over!");
+      this.endGame();
+      this.initGame();
+      gameStore.setMenuState(MENU_STATES.GAME_OVER);
+    });
+
+    emitter.on(EVENT_NAMES.GAME_START, () => {
+      // gameStore.setMenuState(MENU_STATES.GAME_ON);
+      // this.initGame();
+
+      console.log("is this happening multiple times??");
+
+      // run(this.playerManager, this.enemyManager, this.actionRunner);
+    });
+
+    // emitter.emit(EVENT_NAMES.GAME_START);
+
+    // run(playerManager, enemyManager, actionRunner);
+    run(this.playerManager, this.enemyManager, this.actionRunner);
+  }
+
+  initGame() {
+    console.log("init game!");
+    // const gameBoard = new GameBoard(this, 5, 4);
 
     const enemyDeckComposition = [
       { id: ENEMY_CARD_TYPES.WEAK_ENEMY, quantity: 17 },
@@ -22,7 +83,7 @@ export default class PlayScene extends Scene {
     ];
 
     const enemyDeck = new Deck(enemyDeckComposition);
-    const enemyManager = new EnemyManager(this, gameBoard, enemyDeck);
+    this.enemyManager = new EnemyManager(this, this.gameBoard, enemyDeck);
 
     const playerDeckComposition = [
       { id: PLAYER_CARD_TYPES.ATTACK_ONE, quantity: 12 },
@@ -37,11 +98,18 @@ export default class PlayScene extends Scene {
     ];
 
     const playerDeck = new Deck(playerDeckComposition);
-    const playerManager = new PlayerManager(this, gameBoard, playerDeck);
-    const actionRunner = new ActionRunner(this, playerManager, enemyManager, gameBoard);
+    this.playerManager = new PlayerManager(this, this.gameBoard, playerDeck);
+    this.actionRunner = new ActionRunner(
+      this,
+      this.playerManager,
+      this.enemyManager,
+      this.gameBoard
+    );
 
-    emitter.emit(EVENT_NAMES.GAME_START);
+    // run(this.playerManager, this.enemyManager, this.actionRunner);
+  }
 
-    run(playerManager, enemyManager, actionRunner);
+  endGame() {
+    this.gameBoard.clearBoard();
   }
 }

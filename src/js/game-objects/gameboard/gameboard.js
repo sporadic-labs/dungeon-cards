@@ -50,6 +50,13 @@ export class GameBoard {
     logger.log(message);
   }
 
+  clearBoard() {
+    console.log("clearing the board!");
+    this.forEachCell((cell, x, y) => {
+      this.removeAt(x, y);
+    });
+  }
+
   /**
    * Runs the given callback for each cell in the board. If the callback returns false, then the
    * loop will stop.

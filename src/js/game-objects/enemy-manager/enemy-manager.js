@@ -145,7 +145,6 @@ export default class EnemyManager {
     await Promise.all(deathPromises);
 
     if (this.enemies.length === 0) {
-      console.log("Game Over!  You Win!");
       emitter.emit(EVENT_NAMES.GAME_OVER);
     }
   }
@@ -161,9 +160,10 @@ export default class EnemyManager {
     const movePromises = sortedEnemies.map(enemy => {
       const boardPosition = this.gameBoard.findPositionOf(enemy);
 
+      console.log(enemy);
+
       // Is the enemy about to go off the board?
       if (!this.gameBoard.isInBounds(boardPosition.x, boardPosition.y + 1)) {
-        console.log(`You have been attacked by an enemy!  You lose!`);
         emitter.emit(EVENT_NAMES.GAME_OVER);
       }
 
@@ -244,6 +244,7 @@ export default class EnemyManager {
       const startingYOffset = -72;
 
       const enemy = new EnemyCard(this.scene, enemyType, x, y + startingYOffset);
+      console.log(enemy);
       await enemy.fadeIn(spawnDelay);
 
       if (enemy.type !== ENEMY_CARD_TYPES.BLANK) {
