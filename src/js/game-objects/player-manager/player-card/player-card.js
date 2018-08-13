@@ -60,8 +60,15 @@ export default class PlayerCard {
     this.y = y + this.card.height / 2;
   }
 
-  getPosition() {
-    return { x: this.x, y: this.y };
+  /**
+   * Get position of the card. By default, returns the center, but it can return any point on the
+   * card via the optional origin parameter
+   */
+  getPosition(originX = 0.5, originY = 0.5) {
+    const x = originX * this.card.displayWidth - this.card.displayWidth / 2;
+    const y = originY * this.card.displayHeight - this.card.displayHeight / 2;
+    const p = this.container.localTransform.transformPoint(x, y);
+    return p;
   }
 
   enableFocusing() {
