@@ -19,9 +19,12 @@ export default class DiscardPile {
 
     this.container = scene.add.container(x, y, [this.cardShadow, this.card]);
 
+    this.pointerOver = false;
+
     this.card.on("pointerdown", () => this.select());
 
     this.card.on("pointerover", () => {
+      this.pointerOver = true;
       this.scene.tweens.killTweensOf(this.container);
       this.scene.tweens.add({
         targets: this.container,
@@ -33,6 +36,7 @@ export default class DiscardPile {
     });
 
     this.card.on("pointerout", () => {
+      this.pointerOver = false;
       this.scene.tweens.killTweensOf(this.container);
       this.scene.tweens.add({
         targets: this.container,
@@ -46,6 +50,10 @@ export default class DiscardPile {
 
   select() {
     emitter.emit(EVENT_NAMES.PLAYER_CARD_DISCARD);
+  }
+
+  isPointerOver() {
+    return this.pointerOver;
   }
 
   activate() {
