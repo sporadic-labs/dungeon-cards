@@ -2,6 +2,7 @@ import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import Action from "./action";
 import logger from "../../helpers/logger";
 import { PopupText } from "../hud";
+import Arrow from "./arrow";
 
 export default class AttackAction extends Action {
   constructor(scene, card, playerManager, gameBoard, enemyManager) {
@@ -15,6 +16,7 @@ export default class AttackAction extends Action {
     this.proxy = new EventProxy();
     this.playerManager = playerManager;
     this.enemyManager = enemyManager;
+    this.discardPile = playerManager.discardPile;
 
     this.showMessage = true; // Any better ideas?
 
@@ -27,35 +29,44 @@ export default class AttackAction extends Action {
         .setAlpha(0.9)
         .setVisible(false);
     });
+
+    const p = card.getPosition(0.5, 0.2);
+    this.arrow = new Arrow(scene, p, p, { fillStyle: 0x9e2828 });
   }
 
   onPointerMove(pointer) {
     this.previews.map(preview => preview.setVisible(false));
 
-    if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) {
+    const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
+    const isOverBoard = this.board.isWorldPointInBoard(pointer.x, pointer.y);
+    const isOverValidTarget = enemies.length > 0 || this.discardPile.isPointerOver();
+
+    if (!isOverBoard) {
       this.enemyManager.defocusAllEnemies();
       this.board.defocusBoard();
-      return;
+    } else {
+      this.focusWithinRange(this.board, this.enemyManager, pointer, this.attackPattern);
+
+      // Preview attack
+      const positions = this.getBoardPositionsWithinRange(this.board, pointer, this.attackPattern);
+      positions.map((position, i) => {
+        const enemy = this.board.getAt(position.x, position.y);
+        if (enemy) {
+          this.previews[i].setPosition(enemy.container.x, enemy.container.y).setVisible(true);
+        } else {
+          const worldPos = this.board.getWorldPosition(position.x, position.y);
+          this.previews[i]
+            .setPosition(
+              worldPos.x + this.board.cellWidth / 2,
+              worldPos.y + this.board.cellHeight / 2
+            )
+            .setVisible(true);
+        }
+      });
     }
 
-    this.focusWithinRange(this.board, this.enemyManager, pointer, this.attackPattern);
-
-    // Preview attack
-    const positions = this.getBoardPositionsWithinRange(this.board, pointer, this.attackPattern);
-    positions.map((position, i) => {
-      const enemy = this.board.getAt(position.x, position.y);
-      if (enemy) {
-        this.previews[i].setPosition(enemy.container.x, enemy.container.y).setVisible(true);
-      } else {
-        const worldPos = this.board.getWorldPosition(position.x, position.y);
-        this.previews[i]
-          .setPosition(
-            worldPos.x + this.board.cellWidth / 2,
-            worldPos.y + this.board.cellHeight / 2
-          )
-          .setVisible(true);
-      }
-    });
+    this.arrow.setEndPoint(pointer);
+    this.arrow.setHighlighted(isOverValidTarget);
   }
 
   onPointerDown(pointer) {
@@ -83,6 +94,7 @@ export default class AttackAction extends Action {
 
   destroy() {
     this.previews.map(sprite => sprite.destroy());
+    this.arrow.destroy();
     this.proxy.removeAll();
   }
 }
