@@ -51,6 +51,8 @@ export class GameBoardCell {
    * Remove the current card.
    */
   clearCard() {
-    this.card = null;
+    if (!this.isEmpty()) {
+      this.card = null;
+    }
   }
 }

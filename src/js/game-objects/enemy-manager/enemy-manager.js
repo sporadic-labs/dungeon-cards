@@ -78,6 +78,10 @@ export default class EnemyManager {
     await Promise.all(promises);
   }
 
+  removeAllEnemies() {
+    this.enemies.forEach(e => this.removeEnemy(e));
+  }
+
   removeEnemy(enemy) {
     this.enemies = this.enemies.filter(e => e !== enemy);
     const boardPosition = this.gameBoard.findPositionOf(enemy);
@@ -145,7 +149,6 @@ export default class EnemyManager {
     await Promise.all(deathPromises);
 
     if (this.enemies.length === 0) {
-      console.log("Game Over!  You Win!");
       emitter.emit(EVENT_NAMES.GAME_OVER);
     }
   }
@@ -163,7 +166,6 @@ export default class EnemyManager {
 
       // Is the enemy about to go off the board?
       if (!this.gameBoard.isInBounds(boardPosition.x, boardPosition.y + 1)) {
-        console.log(`You have been attacked by an enemy!  You lose!`);
         emitter.emit(EVENT_NAMES.GAME_OVER);
       }
 

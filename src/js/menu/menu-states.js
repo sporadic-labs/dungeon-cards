@@ -1,0 +1,6 @@
+export const MENU_STATES = {
+  START_MENU: "START_MENU",
+  ABOUT: "ABOUT",
+  GAME_ON: "GAME_ON",
+  GAME_OVER: "GAME_OVER"
+};

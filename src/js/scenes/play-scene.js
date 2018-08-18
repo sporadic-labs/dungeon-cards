@@ -7,14 +7,39 @@ import ActionRunner from "../game-objects/card-actions";
 import { emitter, EVENT_NAMES } from "../game-objects/events";
 import run from "../game-objects/game-runner";
 import Logger from "../helpers/logger";
+import gameStore from "../menu/game-store";
+import { MENU_STATES } from "../menu/menu-states";
 
 export default class PlayScene extends Scene {
+  gameBoard;
+  enemyManager;
+  playerManager;
+  actionRunner;
+
   create() {
     const { width, height } = this.sys.game.config;
     this.add.tileSprite(0, 0, 10 * width, 10 * height, "assets", "background");
 
-    const gameBoard = new GameBoard(this, 5, 4);
+    this.gameBoard = new GameBoard(this, 5, 4);
 
+    this.initGame();
+
+    emitter.on(EVENT_NAMES.GAME_OVER, () => {
+      this.endGame();
+      this.initGame();
+      gameStore.setMenuState(MENU_STATES.GAME_OVER);
+    });
+
+    emitter.on(EVENT_NAMES.GAME_START, () => {
+      console.log("is this happening multiple times??");
+    });
+
+    // emitter.emit(EVENT_NAMES.GAME_START);
+
+    run(this.playerManager, this.enemyManager, this.actionRunner);
+  }
+
+  initGame() {
     const enemyDeckComposition = [
       { id: ENEMY_CARD_TYPES.WEAK_ENEMY, quantity: 17 },
       { id: ENEMY_CARD_TYPES.STRONG_ENEMY, quantity: 3 },
@@ -22,7 +47,7 @@ export default class PlayScene extends Scene {
     ];
 
     const enemyDeck = new Deck(enemyDeckComposition);
-    const enemyManager = new EnemyManager(this, gameBoard, enemyDeck);
+    this.enemyManager = new EnemyManager(this, this.gameBoard, enemyDeck);
 
     const playerDeckComposition = [
       { id: PLAYER_CARD_TYPES.ATTACK_ONE, quantity: 12 },
@@ -37,11 +62,16 @@ export default class PlayScene extends Scene {
     ];
 
     const playerDeck = new Deck(playerDeckComposition);
-    const playerManager = new PlayerManager(this, gameBoard, playerDeck);
-    const actionRunner = new ActionRunner(this, playerManager, enemyManager, gameBoard);
+    this.playerManager = new PlayerManager(this, this.gameBoard, playerDeck);
+    this.actionRunner = new ActionRunner(
+      this,
+      this.playerManager,
+      this.enemyManager,
+      this.gameBoard
+    );
+  }
 
-    emitter.emit(EVENT_NAMES.GAME_START);
-
-    run(playerManager, enemyManager, actionRunner);
+  endGame() {
+    this.enemyManager.removeAllEnemies();
   }
 }

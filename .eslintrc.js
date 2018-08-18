@@ -23,11 +23,9 @@ module.exports = {
     sourceType: "module",
     ecmaFeatures: {
       jsx: true,
-      experimentalObjectRestSpread: true
+      experimentalObjectRestSpread: true,
+      experimentalDecorators: true
     }
-  },
-  settings: {
-    react: { pragma: "h" }
   },
   globals: {
     Phaser: true
