@@ -78,6 +78,10 @@ export default class EnemyManager {
     await Promise.all(promises);
   }
 
+  removeAllEnemies() {
+    this.enemies.forEach(e => this.removeEnemy(e));
+  }
+
   removeEnemy(enemy) {
     this.enemies = this.enemies.filter(e => e !== enemy);
     const boardPosition = this.gameBoard.findPositionOf(enemy);
