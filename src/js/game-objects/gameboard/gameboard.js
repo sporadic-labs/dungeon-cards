@@ -51,7 +51,6 @@ export class GameBoard {
   }
 
   clearBoard() {
-    console.log("clearing the board!");
     this.forEachCell((cell, x, y) => {
       this.removeAt(x, y);
     });
