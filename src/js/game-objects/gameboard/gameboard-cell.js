@@ -52,7 +52,6 @@ export class GameBoardCell {
    */
   clearCard() {
     if (!this.isEmpty()) {
-      this.card.destroy();
       this.card = null;
     }
   }
