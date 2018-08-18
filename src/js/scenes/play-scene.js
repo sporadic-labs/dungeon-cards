@@ -69,11 +69,9 @@ export default class PlayScene extends Scene {
       this.enemyManager,
       this.gameBoard
     );
-
-    // run(this.playerManager, this.enemyManager, this.actionRunner);
   }
 
   endGame() {
-    this.gameBoard.clearBoard();
+    this.enemyManager.removeAllEnemies();
   }
 }
