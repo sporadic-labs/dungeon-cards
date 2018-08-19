@@ -21,12 +21,14 @@ export default class Arrow {
     this.startPoint.x = x;
     this.startPoint.y = y;
     if (redraw) this.redraw();
+    return this;
   }
 
   setEndPoint({ x, y }, redraw = true) {
     this.endPoint.x = x;
     this.endPoint.y = y;
     if (redraw) this.redraw();
+    return this;
   }
 
   setHighlighted(shouldBeHighlighted, animate = true) {
@@ -45,10 +47,12 @@ export default class Arrow {
         this.graphics.setAlpha(newAlpha);
       }
     }
+    return this;
   }
 
   setVisible(shouldBeVisible) {
     this.graphics.setVisible(shouldBeVisible);
+    return this;
   }
 
   redraw() {
@@ -82,6 +86,8 @@ export default class Arrow {
     this.graphics.fillStyle(this.fillStyle);
     this.graphics.fillPoints(linePoints, true);
     this.graphics.fillPoints(arrowheadPoints, true);
+
+    return this;
   }
 
   destroy() {
