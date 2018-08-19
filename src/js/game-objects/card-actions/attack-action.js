@@ -2,7 +2,6 @@ import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import Action from "./action";
 import logger from "../../helpers/logger";
 import { PopupText } from "../hud";
-import Arrow from "./arrow";
 
 export default class AttackAction extends Action {
   constructor(actionRunner, scene, card, playerManager, gameBoard, enemyManager) {
@@ -30,8 +29,12 @@ export default class AttackAction extends Action {
         .setVisible(false);
     });
 
-    const p = card.getPosition(0.5, 0.2);
-    this.arrow = new Arrow(scene, p, p, { fillStyle: 0x9e2828 });
+    const p = card.getPosition(0.5, 0.1);
+    this.arrow = actionRunner.arrow
+      .setStartPoint(p)
+      .setEndPoint(p)
+      .setColor(0x9e2828)
+      .setVisible(true);
   }
 
   onPointerMove(pointer) {
@@ -83,7 +86,7 @@ export default class AttackAction extends Action {
         if (this.showMessage) {
           this.showMessage = false;
           // Some UI to indicate player can't play this card.
-          const { width, height } = this.scene.sys.game.config;
+          const { width } = this.scene.sys.game.config;
           new PopupText(this.scene, "You don't have enough energy!", width / 4, 20, null, () => {
             this.showMessage = true;
           });
@@ -94,7 +97,7 @@ export default class AttackAction extends Action {
 
   destroy() {
     this.previews.map(sprite => sprite.destroy());
-    this.arrow.destroy();
+    this.arrow.setVisible(false);
     this.proxy.removeAll();
   }
 }

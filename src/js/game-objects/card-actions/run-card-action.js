@@ -7,6 +7,7 @@ import BlockAction from "./block-action";
 import DrawCardAction from "./draw-card-action";
 import GetEnergyAction from "./get-energy-action";
 import ShiftAction from "./shift-action";
+import Arrow from "./arrow";
 
 const attacks = [
   PLAYER_CARD_TYPES.ATTACK_ONE,
@@ -27,8 +28,11 @@ export default class ActionRunner {
     this.currentAction = null;
     this.proxy = new EventProxy();
 
-    const { width, height } = scene.sys.game.config;
+    const { height } = scene.sys.game.config;
     this.endTurnButton = new EndTurnButton(scene, 80, height / 2);
+
+    const p = { x: 0, y: 0 };
+    this.arrow = new Arrow(scene, p, p).setVisible(false).setDepth(1);
   }
 
   async runActions() {

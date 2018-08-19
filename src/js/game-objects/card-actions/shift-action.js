@@ -20,6 +20,7 @@ export default class ShiftAction extends Action {
     this.proxy = new EventProxy();
     this.playerManager = playerManager;
     this.enemyManager = enemyManager;
+    this.discardPile = playerManager.discardPile;
 
     this.showMessage = true; // Any better ideas?
 
@@ -37,61 +38,75 @@ export default class ShiftAction extends Action {
       .sprite(0, 0, "assets", "attacks/x")
       .setAlpha(0.9)
       .setVisible(false);
+
+    const p = card.getPosition(0.5, 0.1);
+    this.arrow = actionRunner.arrow
+      .setStartPoint(p)
+      .setEndPoint(p)
+      .setColor(0xef8843)
+      .setVisible(true);
   }
 
   onPointerMove(pointer) {
     this.shiftPreviews.map(preview => preview.setVisible(false));
     this.xPreview.setVisible(false);
 
-    if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) {
+    const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
+    const isOverBoard = this.board.isWorldPointInBoard(pointer.x, pointer.y);
+    const isOverValidTarget = enemies.length > 0 || this.discardPile.isPointerOver();
+
+    if (!isOverBoard) {
       this.enemyManager.defocusAllEnemies();
       this.board.defocusBoard();
-      return;
-    }
+    } else {
+      // Get the enemies and board positions in the current row & focus them
+      const positions = [];
+      const { y } = this.board.getBoardPosition(pointer.x, pointer.y);
+      for (let x = 0; x < this.board.boardColumns; x++) {
+        positions.push({ x, y });
+      }
+      const enemies = this.board.getAtMultiple(positions);
+      this.enemyManager.focusEnemies(enemies);
+      this.board.focusPositions(positions);
 
-    // Get the enemies and board positions in the current row & focus them
-    const positions = [];
-    const { y } = this.board.getBoardPosition(pointer.x, pointer.y);
-    for (let x = 0; x < this.board.boardColumns; x++) {
-      positions.push({ x, y });
-    }
-    const enemies = this.board.getAtMultiple(positions);
-    this.enemyManager.focusEnemies(enemies);
-    this.board.focusPositions(positions);
-
-    // Preview attack
-    const offsetX = (this.direction === SHIFT_DIRECTIONS.LEFT ? -0.5 : 0.5) * this.board.cellWidth;
-    positions.map((position, i) => {
-      const enemy = this.board.getAt(position.x, position.y);
-      if (enemy) {
-        this.shiftPreviews[i]
-          .setPosition(enemy.container.x + offsetX, enemy.container.y)
-          .setVisible(true);
-        if (this.direction === SHIFT_DIRECTIONS.LEFT && i === 0) {
-          this.xPreview
-            .setPosition(
-              this.shiftPreviews[i].x - this.shiftPreviews[i].width,
-              this.shiftPreviews[i].y
-            )
+      // Preview attack
+      const offsetX =
+        (this.direction === SHIFT_DIRECTIONS.LEFT ? -0.5 : 0.5) * this.board.cellWidth;
+      positions.map((position, i) => {
+        const enemy = this.board.getAt(position.x, position.y);
+        if (enemy) {
+          this.shiftPreviews[i]
+            .setPosition(enemy.container.x + offsetX, enemy.container.y)
             .setVisible(true);
-        } else if (this.direction === SHIFT_DIRECTIONS.RIGHT && i === positions.length - 1) {
-          this.xPreview
+          if (this.direction === SHIFT_DIRECTIONS.LEFT && i === 0) {
+            this.xPreview
+              .setPosition(
+                this.shiftPreviews[i].x - this.shiftPreviews[i].width,
+                this.shiftPreviews[i].y
+              )
+              .setVisible(true);
+          } else if (this.direction === SHIFT_DIRECTIONS.RIGHT && i === positions.length - 1) {
+            this.xPreview
+              .setPosition(
+                this.shiftPreviews[i].x + this.shiftPreviews[i].width,
+                this.shiftPreviews[i].y
+              )
+              .setVisible(true);
+          }
+        } else {
+          const worldPos = this.board.getWorldPosition(position.x, position.y);
+          this.shiftPreviews[i]
             .setPosition(
-              this.shiftPreviews[i].x + this.shiftPreviews[i].width,
-              this.shiftPreviews[i].y
+              worldPos.x + this.board.cellWidth / 2 + offsetX,
+              worldPos.y + this.board.cellHeight / 2
             )
             .setVisible(true);
         }
-      } else {
-        const worldPos = this.board.getWorldPosition(position.x, position.y);
-        this.shiftPreviews[i]
-          .setPosition(
-            worldPos.x + this.board.cellWidth / 2 + offsetX,
-            worldPos.y + this.board.cellHeight / 2
-          )
-          .setVisible(true);
-      }
-    });
+      });
+    }
+
+    this.arrow.setEndPoint(pointer);
+    this.arrow.setHighlighted(isOverValidTarget);
   }
 
   onPointerDown(pointer) {
@@ -128,6 +143,7 @@ export default class ShiftAction extends Action {
   }
 
   destroy() {
+    this.arrow.setVisible(false);
     this.shiftPreviews.map(sprite => sprite.destroy());
     this.xPreview.destroy();
     this.proxy.removeAll();

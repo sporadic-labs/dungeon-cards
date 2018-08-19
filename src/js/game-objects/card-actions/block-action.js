@@ -10,6 +10,7 @@ export default class BlockAction extends Action {
     this.board = gameBoard;
     this.proxy = new EventProxy();
     this.enemyManager = enemyManager;
+    this.discardPile = playerManager.discardPile;
 
     this.proxy.on(scene.input, "pointermove", this.onPointerMove, this);
     this.proxy.on(scene.input, "pointerdown", this.onPointerDown, this);
@@ -20,35 +21,48 @@ export default class BlockAction extends Action {
         .setAlpha(0.9)
         .setVisible(false);
     });
+
+    const p = card.getPosition(0.5, 0.1);
+    this.arrow = actionRunner.arrow
+      .setStartPoint(p)
+      .setEndPoint(p)
+      .setColor(0xef8843)
+      .setVisible(true);
   }
 
   onPointerMove(pointer) {
     this.previews.map(preview => preview.setVisible(false));
 
-    if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) {
+    const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
+    const isOverBoard = this.board.isWorldPointInBoard(pointer.x, pointer.y);
+    const isOverValidTarget = enemies.length > 0 || this.discardPile.isPointerOver();
+
+    if (!isOverBoard) {
       this.enemyManager.defocusAllEnemies();
       this.board.defocusBoard();
-      return;
+    } else {
+      this.focusWithinRange(this.board, this.enemyManager, pointer, this.attackPattern);
+
+      // Preview attack
+      const positions = this.getBoardPositionsWithinRange(this.board, pointer, this.attackPattern);
+      positions.map((position, i) => {
+        const enemy = this.board.getAt(position.x, position.y);
+        if (enemy) {
+          this.previews[i].setPosition(enemy.container.x, enemy.container.y).setVisible(true);
+        } else {
+          const worldPos = this.board.getWorldPosition(position.x, position.y);
+          this.previews[i]
+            .setPosition(
+              worldPos.x + this.board.cellWidth / 2,
+              worldPos.y + this.board.cellHeight / 2
+            )
+            .setVisible(true);
+        }
+      });
     }
 
-    this.focusWithinRange(this.board, this.enemyManager, pointer, this.attackPattern);
-
-    // Preview attack
-    const positions = this.getBoardPositionsWithinRange(this.board, pointer, this.attackPattern);
-    positions.map((position, i) => {
-      const enemy = this.board.getAt(position.x, position.y);
-      if (enemy) {
-        this.previews[i].setPosition(enemy.container.x, enemy.container.y).setVisible(true);
-      } else {
-        const worldPos = this.board.getWorldPosition(position.x, position.y);
-        this.previews[i]
-          .setPosition(
-            worldPos.x + this.board.cellWidth / 2,
-            worldPos.y + this.board.cellHeight / 2
-          )
-          .setVisible(true);
-      }
-    });
+    this.arrow.setEndPoint(pointer);
+    this.arrow.setHighlighted(isOverValidTarget);
   }
 
   onPointerDown(pointer) {
@@ -63,6 +77,7 @@ export default class BlockAction extends Action {
   }
 
   destroy() {
+    this.arrow.setVisible(false);
     this.previews.map(sprite => sprite.destroy());
     this.proxy.removeAll();
   }
