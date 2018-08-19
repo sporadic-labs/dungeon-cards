@@ -40,7 +40,7 @@ export default class Arrow {
   setHighlighted(shouldBeHighlighted, animate = true) {
     if (this.isHighlighted !== shouldBeHighlighted) {
       this.isHighlighted = shouldBeHighlighted;
-      const newAlpha = shouldBeHighlighted ? 0.9 : 0.25;
+      const newAlpha = shouldBeHighlighted ? 0.9 : 0.2;
       if (animate) {
         this.scene.tweens.killTweensOf(this.graphics);
         this.scene.tweens.add({
