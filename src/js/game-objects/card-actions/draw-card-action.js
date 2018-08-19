@@ -2,7 +2,7 @@ import { emitter, EVENT_NAMES } from "../events";
 import Action from "./action";
 
 export default class DrawCardAction extends Action {
-  constructor(scene, card, playerManager, gameBoard, enemyManager) {
+  constructor(actionRunner, scene, card, playerManager, gameBoard, enemyManager) {
     super();
     playerManager.drawCard();
     playerManager.drawCard();

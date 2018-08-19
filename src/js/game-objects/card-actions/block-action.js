@@ -2,7 +2,7 @@ import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import Action from "./action";
 
 export default class BlockAction extends Action {
-  constructor(scene, card, gameManager, gameBoard, enemyManager) {
+  constructor(actionRunner, scene, card, playerManager, gameBoard, enemyManager) {
     super();
 
     this.card = card;

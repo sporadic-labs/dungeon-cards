@@ -5,7 +5,7 @@ import { PopupText } from "../hud";
 import Arrow from "./arrow";
 
 export default class AttackAction extends Action {
-  constructor(scene, card, playerManager, gameBoard, enemyManager) {
+  constructor(actionRunner, scene, card, playerManager, gameBoard, enemyManager) {
     super();
 
     this.scene = scene;

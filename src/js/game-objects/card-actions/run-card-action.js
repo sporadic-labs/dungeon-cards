@@ -84,6 +84,7 @@ export default class ActionRunner {
 
     if (Constructor) {
       this.currentAction = new Constructor(
+        this,
         this.scene,
         card,
         this.playerManager,
