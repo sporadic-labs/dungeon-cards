@@ -17,6 +17,12 @@ export default class Arrow {
     this.redraw();
   }
 
+  setColor(color, redraw = true) {
+    this.fillStyle = color;
+    if (redraw) this.redraw();
+    return this;
+  }
+
   setStartPoint({ x, y }, redraw = true) {
     this.startPoint.x = x;
     this.startPoint.y = y;
@@ -52,6 +58,11 @@ export default class Arrow {
 
   setVisible(shouldBeVisible) {
     this.graphics.setVisible(shouldBeVisible);
+    return this;
+  }
+
+  setDepth(depth) {
+    this.graphics.setDepth(depth);
     return this;
   }
 
