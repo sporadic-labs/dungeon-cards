@@ -35,13 +35,14 @@ class Menu extends Component {
   };
 
   render() {
-    const { gameStore, width, height, musicStore } = this.props;
+    const { gameStore, width, height, musicStore, sfxPlayer } = this.props;
 
+    const commonProps = { gameStore, musicStore, sfxPlayer };
     let activeMenu;
     if (gameStore.menuState === MENU_STATES.START_MENU) {
       activeMenu = (
         <StartMenu
-          gameStore={gameStore}
+          {...commonProps}
           onStart={this.startGame}
           onAbout={this.goToAboutMenu}
           onOptions={this.goToOptionsMenu}
@@ -49,17 +50,13 @@ class Menu extends Component {
       );
     } else if (gameStore.menuState === MENU_STATES.GAME_OVER) {
       activeMenu = (
-        <GameOverMenu
-          gameStore={gameStore}
-          onMainMenu={this.goToStartMenu}
-          onRestart={this.startGame}
-        />
+        <GameOverMenu {...commonProps} onMainMenu={this.goToStartMenu} onRestart={this.startGame} />
       );
     } else if (gameStore.menuState === MENU_STATES.ABOUT) {
-      activeMenu = <AboutMenu gameStore={gameStore} onBack={this.goBackOneState} />;
+      activeMenu = <AboutMenu {...commonProps} onBack={this.goBackOneState} />;
     } else if (gameStore.menuState === MENU_STATES.OPTIONS) {
       activeMenu = (
-        <OptionsMenu gameStore={gameStore} musicStore={musicStore} onBack={this.goBackOneState} />
+        <OptionsMenu {...commonProps} musicStore={musicStore} onBack={this.goBackOneState} />
       );
     }
 

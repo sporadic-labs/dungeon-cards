@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 
 import CloseSvg from "../../images/close.svg";
+import ButtonWithSfx from "./button-with-sfx";
 
 export default class GameOverMenu extends Component {
   render() {
-    const { onMainMenu, onRestart } = this.props;
+    const { onMainMenu, onRestart, sfxPlayer } = this.props;
 
     return (
       <div id="game-over" className="menu">
@@ -12,8 +13,12 @@ export default class GameOverMenu extends Component {
           <CloseSvg />
         </button>
         <div className="menu-title">Game Over</div>
-        <button onClick={onRestart}>Restart</button>
-        <button onClick={onMainMenu}>Main Menu</button>
+        <ButtonWithSfx sfxPlayer={sfxPlayer} onClick={onRestart}>
+          Restart
+        </ButtonWithSfx>
+        <ButtonWithSfx sfxPlayer={sfxPlayer} onClick={onMainMenu}>
+          Main Menu
+        </ButtonWithSfx>
       </div>
     );
   }

@@ -3,10 +3,11 @@ import React, { Component } from "react";
 import Logo from "../../images/sporadicLabs-logo-color-64.png";
 import Website from "../../images/sporadicLabs-logo-white-32.png";
 import Github from "../../images/GitHub-Mark-Light-32px.png";
+import ButtonWithSfx from "./button-with-sfx";
 
 export default class AboutMenu extends Component {
   render() {
-    const { onBack } = this.props;
+    const { onBack, sfxPlayer } = this.props;
 
     return (
       <div id="about-menu" className="menu">
@@ -55,7 +56,10 @@ export default class AboutMenu extends Component {
             <img src={Website} />
           </a>
         </div>
-        <button onClick={onBack}>Back</button>
+
+        <ButtonWithSfx sfxPlayer={sfxPlayer} onClick={onBack}>
+          Back
+        </ButtonWithSfx>
       </div>
     );
   }

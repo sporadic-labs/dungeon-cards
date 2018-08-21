@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { observer } from "mobx-react";
+import ButtonWithSfx from "./button-with-sfx";
 
 @observer
 export default class OptionsMenu extends Component {
@@ -11,7 +12,7 @@ export default class OptionsMenu extends Component {
   onSlide = e => this.props.musicStore.setVolume(e.target.value);
 
   render() {
-    const { onBack, musicStore } = this.props;
+    const { onBack, musicStore, sfxPlayer } = this.props;
 
     return (
       <div id="options" className="menu">
@@ -36,7 +37,9 @@ export default class OptionsMenu extends Component {
           </label>
         </form>
 
-        <button onClick={onBack}>Back</button>
+        <ButtonWithSfx sfxPlayer={sfxPlayer} onClick={onBack}>
+          Back Game
+        </ButtonWithSfx>
       </div>
     );
   }

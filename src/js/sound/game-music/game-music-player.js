@@ -1,6 +1,6 @@
 import { autorun } from "mobx";
 
-class GameMusicPlayer {
+export default class GameMusicPlayer {
   constructor(game, musicStore, musicFileKey) {
     this.game = game;
     this.musicFileKey = musicFileKey;
@@ -32,5 +32,3 @@ class GameMusicPlayer {
     if (this.unsubscribe) this.unsubscribe();
   }
 }
-
-export default GameMusicPlayer;

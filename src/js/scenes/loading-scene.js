@@ -33,6 +33,8 @@ export default class LoadingScene extends Scene {
       "music",
       "sounds/music/Chris_Zabriskie_-_05_-_Air_Hockey_Saloon_Compressed.mp3"
     );
+
+    this.load.audio("click1", "sounds/ui/click1.wav");
   }
 
   create() {
