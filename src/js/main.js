@@ -4,7 +4,7 @@ import "../css/main.scss";
 import { AUTO, Game } from "phaser";
 import { Loading, Play, SCENE_NAME } from "./scenes";
 import logger, { LOG_LEVEL } from "./helpers/logger";
-import LifecyclePlugin from "./plugins/lifecycle-plugin/index";
+import PhaserLifecyclePlugin from "phaser-lifecycle-plugin/src/";
 
 import React from "react";
 import { render } from "react-dom";
@@ -24,7 +24,7 @@ const game = new Game({
   backgroundColor: "#000",
   pixelArt: false,
   plugins: {
-    scene: [{ key: "LifecyclePlugin", plugin: LifecyclePlugin, mapping: "lifecycle", start: true }]
+    scene: [{ plugin: PhaserLifecyclePlugin, key: "lifecycle", mapping: "lifecycle" }]
   },
   physics: {
     default: "arcade",

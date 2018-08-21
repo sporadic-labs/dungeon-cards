@@ -33,6 +33,7 @@
     "fontfaceobserver": "^2.0.13",
     "mobx": "^5.0.3",
     "mobx-react": "^5.2.5",
+    "phaser-lifecycle-plugin": "0.0.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "typeface-chivo": "0.0.54"
