@@ -36,8 +36,8 @@ export default class LoadingScene extends Scene {
   }
 
   create() {
-    const { musicStore } = this.sys.game.globals;
-    musicStore.play();
+    const { musicPlayer } = this.sys.game.globals;
+    musicPlayer.init();
 
     // Fail gracefully by allowing the game to load even if the fonts errored
     if (this.fontsLoaded || this.fontsErrored) {

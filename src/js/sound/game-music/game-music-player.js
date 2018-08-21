@@ -1,41 +1,34 @@
-// TODO: split the store and view parts of this code into separate files. GameMusicStore is already
-// set up with the store bits.
-
-import { action, observable } from "mobx";
+import { autorun } from "mobx";
 
 class GameMusicPlayer {
-  @observable volume = 1;
-  @observable isPlaying = false;
-
-  constructor(game, musicFileKey) {
+  constructor(game, musicStore, musicFileKey) {
     this.game = game;
     this.musicFileKey = musicFileKey;
+    this.musicStore = musicStore;
     this.music = null;
   }
 
-  @action
-  play() {
-    if (!this.music) this.music = this.game.sound.add(this.musicFileKey, { loop: true });
-    this.music.play();
-    this.isPlaying = true;
-  }
+  init() {
+    this.music = this.game.sound.add(this.musicFileKey, { looping: true });
 
-  @action
-  pause() {
-    this.music.pause();
-    this.isPlaying = false;
-  }
+    const store = this.musicStore;
 
-  @action
-  setVolume(newVolume) {
-    if (newVolume < 0) newVolume = 0;
-    if (newVolume > 1) newVolume = 1;
-    this.volume = newVolume;
-    this.music.setVolume(newVolume);
+    this.unsubscribe = autorun(() => {
+      if (store.volume !== this.music.volume) this.music.setVolume(store.volume);
+
+      if (store.isPlaying && !this.music.isPlaying) this.music.play();
+      else if (!store.isPlaying && this.music.isPlaying) this.music.stop();
+
+      if (store.isMuted !== this.music.isMuted) this.music.setMute(store.isMuted);
+    });
+
+    store.volume = 0.1;
+    store.play();
   }
 
   destroy() {
-    this.music = this.game.sound.destroy();
+    if (this.music) this.music.destroy();
+    if (this.unsubscribe) this.unsubscribe();
   }
 }
 

@@ -1,8 +1,9 @@
 import { action, observable } from "mobx";
 
 class GameMusicStore {
-  @observable volume = 1;
+  @observable volume = 0.5;
   @observable isPlaying = false;
+  @observable isMuted = false;
 
   @action
   play() {
@@ -15,12 +16,18 @@ class GameMusicStore {
   }
 
   @action
+  setMute(isMuted) {
+    this.isMuted = isMuted;
+  }
+
+  @action
   setVolume(newVolume) {
     if (newVolume < 0) newVolume = 0;
     if (newVolume > 1) newVolume = 1;
     this.volume = newVolume;
-    this.music.setVolume(newVolume);
   }
 }
 
-export default GameMusicStore;
+const store = new GameMusicStore();
+
+export default store;

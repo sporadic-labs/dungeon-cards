@@ -11,7 +11,7 @@ import { render } from "react-dom";
 
 import Menu from "./menu/menu-app";
 import gameStore from "./menu/game-store";
-import GameMusicPlayer from "./sound/game-music/game-music-player";
+import { GameMusicPlayer, gameMusicStore } from "./sound/game-music/index";
 
 logger.setLevel(PRODUCTION ? LOG_LEVEL.OFF : LOG_LEVEL.ALL);
 
@@ -35,9 +35,9 @@ const game = new Game({
   }
 });
 
-const musicStore = new GameMusicPlayer(game, "music");
+const musicPlayer = new GameMusicPlayer(game, gameMusicStore, "music");
 
-game.globals = { musicStore };
+game.globals = { musicStore: gameMusicStore, musicPlayer };
 
 // Disable right click menu
 document.getElementById(containerId).addEventListener("contextmenu", e => {
@@ -49,7 +49,7 @@ document.getElementById(containerId).addEventListener("contextmenu", e => {
 render(
   <Menu
     gameStore={gameStore}
-    musicStore={musicStore}
+    musicStore={gameMusicStore}
     width={gameDimensions}
     height={gameDimensions}
   />,

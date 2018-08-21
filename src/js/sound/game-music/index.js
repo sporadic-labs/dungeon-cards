@@ -1,4 +1,4 @@
 import GameMusicPlayer from "./game-music-player";
-import GameMusicStore from "./game-music-store";
+import gameMusicStore from "./game-music-store";
 
-export { GameMusicPlayer, GameMusicStore };
+export { GameMusicPlayer, gameMusicStore };

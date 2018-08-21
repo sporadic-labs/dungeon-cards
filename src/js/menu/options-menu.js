@@ -3,16 +3,12 @@ import { observer } from "mobx-react";
 
 @observer
 export default class OptionsMenu extends Component {
-  onToggle = () => {
+  onToggleMute = () => {
     const { musicStore } = this.props;
-    if (musicStore.isPlaying) musicStore.pause();
-    else musicStore.play();
+    musicStore.setMute(!musicStore.isMuted);
   };
 
-  onSlide = e => {
-    console.log(e.target.value);
-    this.props.musicStore.setVolume(e.target.value);
-  };
+  onSlide = e => this.props.musicStore.setVolume(e.target.value);
 
   render() {
     const { onBack, musicStore } = this.props;
@@ -36,7 +32,7 @@ export default class OptionsMenu extends Component {
 
           <label>
             Mute Background Music:
-            <input type="checkbox" checked={!musicStore.isPlaying} onChange={this.onToggle} />
+            <input type="checkbox" checked={musicStore.isMuted} onChange={this.onToggleMute} />
           </label>
         </form>
 
