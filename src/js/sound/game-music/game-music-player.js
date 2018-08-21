@@ -6,6 +6,7 @@ class GameMusicPlayer {
     this.musicFileKey = musicFileKey;
     this.musicStore = musicStore;
     this.music = null;
+    this.musicVolumeScale = 0.1;
   }
 
   init() {
@@ -14,7 +15,8 @@ class GameMusicPlayer {
     const store = this.musicStore;
 
     this.unsubscribe = autorun(() => {
-      if (store.volume !== this.music.volume) this.music.setVolume(store.volume);
+      const musicVolume = store.volume * this.musicVolumeScale;
+      if (store.volume !== musicVolume) this.music.setVolume(musicVolume);
 
       if (store.isPlaying && !this.music.isPlaying) this.music.play();
       else if (!store.isPlaying && this.music.isPlaying) this.music.stop();
@@ -22,7 +24,6 @@ class GameMusicPlayer {
       if (store.isMuted !== this.music.isMuted) this.music.setMute(store.isMuted);
     });
 
-    store.volume = 0.1;
     store.play();
   }
 

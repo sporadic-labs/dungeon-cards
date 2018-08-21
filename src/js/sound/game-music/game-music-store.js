@@ -1,7 +1,7 @@
 import { action, observable } from "mobx";
 
 class GameMusicStore {
-  @observable volume = 0.5;
+  @observable volume = 1;
   @observable isPlaying = false;
   @observable isMuted = false;
 
