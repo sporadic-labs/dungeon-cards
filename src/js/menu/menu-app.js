@@ -5,6 +5,7 @@ import StartMenu from "./start";
 import AboutMenu from "./about";
 import GameOverMenu from "./game-over";
 import { emitter, EVENT_NAMES } from "../game-objects/events";
+import OptionsMenu from "./options-menu";
 
 @observer
 class Menu extends Component {
@@ -21,6 +22,10 @@ class Menu extends Component {
     this.props.gameStore.setMenuState(MENU_STATES.START_MENU);
   };
 
+  goToOptionsMenu = () => {
+    this.props.gameStore.setMenuState(MENU_STATES.OPTIONS);
+  };
+
   goToAboutMenu = () => {
     this.props.gameStore.setMenuState(MENU_STATES.ABOUT);
   };
@@ -30,12 +35,17 @@ class Menu extends Component {
   };
 
   render() {
-    const { gameStore, width, height } = this.props;
+    const { gameStore, width, height, musicStore } = this.props;
 
     let activeMenu;
     if (gameStore.menuState === MENU_STATES.START_MENU) {
       activeMenu = (
-        <StartMenu gameStore={gameStore} onStart={this.startGame} onAbout={this.goToAboutMenu} />
+        <StartMenu
+          gameStore={gameStore}
+          onStart={this.startGame}
+          onAbout={this.goToAboutMenu}
+          onOptions={this.goToOptionsMenu}
+        />
       );
     } else if (gameStore.menuState === MENU_STATES.GAME_OVER) {
       activeMenu = (
@@ -47,6 +57,10 @@ class Menu extends Component {
       );
     } else if (gameStore.menuState === MENU_STATES.ABOUT) {
       activeMenu = <AboutMenu gameStore={gameStore} onBack={this.goBackOneState} />;
+    } else if (gameStore.menuState === MENU_STATES.OPTIONS) {
+      activeMenu = (
+        <OptionsMenu gameStore={gameStore} musicStore={musicStore} onBack={this.goBackOneState} />
+      );
     }
 
     return (

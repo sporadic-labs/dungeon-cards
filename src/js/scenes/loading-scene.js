@@ -28,9 +28,17 @@ export default class LoadingScene extends Scene {
 
     this.load.setPath("resources/");
     this.load.atlas("assets", "atlases/assets.png", "atlases/assets.json");
+
+    this.load.audio(
+      "music",
+      "sounds/music/Chris_Zabriskie_-_05_-_Air_Hockey_Saloon_Compressed.mp3"
+    );
   }
 
   create() {
+    const { musicStore } = this.sys.game.globals;
+    musicStore.play();
+
     // Fail gracefully by allowing the game to load even if the fonts errored
     if (this.fontsLoaded || this.fontsErrored) {
       this.scene.start(SCENE_NAME.PLAY);
