@@ -19,6 +19,7 @@ export default class PlayerHand {
 
     emitter.on(EVENT_NAMES.PLAYER_CARD_SELECT, card => {
       this.selectedCard = card;
+      store.setActivePlayerCard(card);
       this.updateCards();
     });
 
@@ -26,6 +27,7 @@ export default class PlayerHand {
       // Card & discard are listening for pointerup and card triggers first
       if (!store.isReclaimActive) {
         this.selectedCard = null;
+        store.setActivePlayerCard(null);
         this.updateCards();
       }
     });
