@@ -21,7 +21,7 @@ export default class AttackAction extends Action {
     this.showMessage = true; // Any better ideas?
 
     this.proxy.on(scene.input, "pointermove", this.onPointerMove, this);
-    this.proxy.on(scene.input, "pointerdown", this.onPointerDown, this);
+    this.proxy.on(scene.input, "pointerup", this.onPointerUp, this);
 
     this.previews = this.attackPattern.map(() => {
       return scene.add
@@ -73,7 +73,7 @@ export default class AttackAction extends Action {
     this.arrow.setHighlighted(isOverValidTarget);
   }
 
-  onPointerDown(pointer) {
+  onPointerUp(pointer) {
     if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) return;
 
     const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
@@ -92,6 +92,7 @@ export default class AttackAction extends Action {
             this.showMessage = true;
           });
         }
+        emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
       }
     }
   }

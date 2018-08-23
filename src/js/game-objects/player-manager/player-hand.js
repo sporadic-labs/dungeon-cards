@@ -1,5 +1,6 @@
 import PlayerCard from "./player-card";
 import { emitter, EVENT_NAMES } from "../events";
+import store from "../../store/index";
 
 export default class PlayerHand {
   /**
@@ -22,8 +23,11 @@ export default class PlayerHand {
     });
 
     emitter.on(EVENT_NAMES.PLAYER_CARD_DESELECT, card => {
-      this.selectedCard = null;
-      this.updateCards();
+      // Card & discard are listening for pointerup and card triggers first
+      if (!store.isReclaimActive) {
+        this.selectedCard = null;
+        this.updateCards();
+      }
     });
 
     emitter.on(EVENT_NAMES.PLAYER_CARD_FOCUS, card => {

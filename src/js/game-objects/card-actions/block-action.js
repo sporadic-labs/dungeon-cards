@@ -14,7 +14,7 @@ export default class BlockAction extends Action {
     this.discardPile = playerManager.discardPile;
 
     this.proxy.on(scene.input, "pointermove", this.onPointerMove, this);
-    this.proxy.on(scene.input, "pointerdown", this.onPointerDown, this);
+    this.proxy.on(scene.input, "pointerup", this.onPointerUp, this);
 
     this.previews = this.attackPattern.map(() => {
       return scene.add
@@ -66,7 +66,7 @@ export default class BlockAction extends Action {
     this.arrow.setHighlighted(isOverValidTarget);
   }
 
-  onPointerDown(pointer) {
+  onPointerUp(pointer) {
     if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) return;
 
     const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
@@ -74,6 +74,8 @@ export default class BlockAction extends Action {
     if (enemies.length) {
       enemies.forEach(enemy => enemy.setBlocked());
       emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
+    } else {
+      emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
     }
   }
 

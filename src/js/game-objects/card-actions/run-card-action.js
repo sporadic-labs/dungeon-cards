@@ -43,6 +43,7 @@ export default class ActionRunner {
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DESELECT, this.killCurrentAction, this);
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DISCARD, this.killCurrentAction, this);
     this.proxy.on(emitter, EVENT_NAMES.ACTION_COMPLETE, this.onComplete, this);
+    this.proxy.on(emitter, EVENT_NAMES.ACTION_UNSUCCESSFUL, this.killCurrentAction, this);
 
     // Allow the player to take actions until they explicitly click the "end turn" button
     await promisifyEvent(emitter, EVENT_NAMES.PLAYER_TURN_COMPLETE);

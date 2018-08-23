@@ -23,7 +23,7 @@ export default class DiscardPile {
 
     this.pointerOver = false;
 
-    this.card.on("pointerdown", () => this.select());
+    this.card.on("pointerup", () => this.select());
     this.card.on("pointerover", () => store.setReclaimActive(true));
     this.card.on("pointerout", () => store.setReclaimActive(false));
 

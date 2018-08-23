@@ -83,10 +83,12 @@ export default class PlayerCard {
 
   enableSelecting() {
     this.cardContents.on("pointerdown", this.onPointerDown);
+    this.scene.input.off("pointerup", this.onPointerRelease);
   }
 
   disableSelecting() {
     this.cardContents.off("pointerdown", this.onPointerDown);
+    this.scene.input.off("pointerup", this.onPointerRelease);
   }
 
   onPointerOver = () => emitter.emit(EVENT_NAMES.PLAYER_CARD_FOCUS, this);
@@ -94,9 +96,14 @@ export default class PlayerCard {
   onPointerOut = () => emitter.emit(EVENT_NAMES.PLAYER_CARD_DEFOCUS, this);
 
   onPointerDown = () => {
-    const { PLAYER_CARD_DESELECT, PLAYER_CARD_SELECT } = EVENT_NAMES;
-    const name = this.selected ? PLAYER_CARD_DESELECT : PLAYER_CARD_SELECT;
-    emitter.emit(name, this);
+    const { PLAYER_CARD_SELECT } = EVENT_NAMES;
+    emitter.emit(PLAYER_CARD_SELECT, this);
+    this.scene.input.once("pointerup", this.onPointerRelease);
+  };
+
+  onPointerRelease = () => {
+    const { PLAYER_CARD_DESELECT } = EVENT_NAMES;
+    emitter.emit(PLAYER_CARD_DESELECT, this);
   };
 
   setDepth(depth) {
@@ -177,6 +184,7 @@ export default class PlayerCard {
   }
 
   destroy() {
+    this.scene.input.off("pointerup", this.onPointerRelease);
     this.container.destroy();
     this.scene.lifecycle.remove(this);
   }
