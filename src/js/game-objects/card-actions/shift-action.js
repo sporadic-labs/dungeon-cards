@@ -2,6 +2,7 @@ import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import Action from "./action";
 import { PopupText } from "../hud";
 import { PLAYER_CARD_TYPES } from "../player-manager";
+import store from "../../store";
 
 export const SHIFT_DIRECTIONS = {
   RIGHT: 1,
@@ -53,7 +54,7 @@ export default class ShiftAction extends Action {
 
     const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
     const isOverBoard = this.board.isWorldPointInBoard(pointer.x, pointer.y);
-    const isOverValidTarget = enemies.length > 0 || this.discardPile.isPointerOver();
+    const isOverValidTarget = enemies.length > 0 || store.isReclaimActive;
 
     if (!isOverBoard) {
       this.enemyManager.defocusAllEnemies();

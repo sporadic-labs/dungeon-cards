@@ -1,4 +1,6 @@
 import { emitter, EVENT_NAMES } from "../events";
+import store from "../../store";
+import { autorun } from "mobx";
 
 /**
  * @export
@@ -22,38 +24,34 @@ export default class DiscardPile {
     this.pointerOver = false;
 
     this.card.on("pointerdown", () => this.select());
+    this.card.on("pointerover", () => store.setReclaimActive(true));
+    this.card.on("pointerout", () => store.setReclaimActive(false));
 
-    this.card.on("pointerover", () => {
-      this.pointerOver = true;
-      this.scene.tweens.killTweensOf(this.container);
-      this.scene.tweens.add({
-        targets: this.container,
-        scaleX: 1.05,
-        scaleY: 1.05,
-        duration: 200,
-        ease: "Quad.easeOut"
-      });
-    });
-
-    this.card.on("pointerout", () => {
-      this.pointerOver = false;
-      this.scene.tweens.killTweensOf(this.container);
-      this.scene.tweens.add({
-        targets: this.container,
-        scaleX: 1,
-        scaleY: 1,
-        duration: 200,
-        ease: "Quad.easeOut"
-      });
+    this.dispose = autorun(() => {
+      if (store.isReclaimActive) {
+        this.scene.tweens.killTweensOf(this.container);
+        this.scene.tweens.add({
+          targets: this.container,
+          scaleX: 1.05,
+          scaleY: 1.05,
+          duration: 200,
+          ease: "Quad.easeOut"
+        });
+      } else {
+        this.scene.tweens.killTweensOf(this.container);
+        this.scene.tweens.add({
+          targets: this.container,
+          scaleX: 1,
+          scaleY: 1,
+          duration: 200,
+          ease: "Quad.easeOut"
+        });
+      }
     });
   }
 
   select() {
     emitter.emit(EVENT_NAMES.PLAYER_CARD_DISCARD);
-  }
-
-  isPointerOver() {
-    return this.pointerOver;
   }
 
   activate() {
@@ -68,5 +66,6 @@ export default class DiscardPile {
 
   destroy() {
     this.container.destroy();
+    this.dispose();
   }
 }

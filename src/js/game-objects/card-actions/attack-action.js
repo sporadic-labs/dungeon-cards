@@ -2,6 +2,7 @@ import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import Action from "./action";
 import logger from "../../helpers/logger";
 import { PopupText } from "../hud";
+import store from "../../store";
 
 export default class AttackAction extends Action {
   constructor(actionRunner, scene, card, playerManager, gameBoard, enemyManager) {
@@ -42,7 +43,7 @@ export default class AttackAction extends Action {
 
     const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
     const isOverBoard = this.board.isWorldPointInBoard(pointer.x, pointer.y);
-    const isOverValidTarget = enemies.length > 0 || this.discardPile.isPointerOver();
+    const isOverValidTarget = enemies.length > 0 || store.isReclaimActive;
 
     if (!isOverBoard) {
       this.enemyManager.defocusAllEnemies();

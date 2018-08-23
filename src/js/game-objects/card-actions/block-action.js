@@ -1,4 +1,5 @@
 import { EventProxy, emitter, EVENT_NAMES } from "../events";
+import store from "../../store";
 import Action from "./action";
 
 export default class BlockAction extends Action {
@@ -35,7 +36,7 @@ export default class BlockAction extends Action {
 
     const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
     const isOverBoard = this.board.isWorldPointInBoard(pointer.x, pointer.y);
-    const isOverValidTarget = enemies.length > 0 || this.discardPile.isPointerOver();
+    const isOverValidTarget = enemies.length > 0 || store.isReclaimActive;
 
     if (!isOverBoard) {
       this.enemyManager.defocusAllEnemies();
