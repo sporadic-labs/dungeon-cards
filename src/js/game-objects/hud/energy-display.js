@@ -7,6 +7,10 @@ const style = {
   fill: "#E5E0D6"
 };
 
+const previewTextStyle = Object.assign({}, style, {
+  font: getFontString("Chivo", { size: "36px", weight: 600 })
+});
+
 export default class EnergyDisplay {
   /**
    *
@@ -19,14 +23,44 @@ export default class EnergyDisplay {
 
     this.sprite = scene.add.sprite(x, y, "assets", "ui/energy-background").setOrigin(0.5, 0.5);
     this.text = scene.add.text(x, y, "0", style).setOrigin(0.5, 0.5);
-    this.previewText = scene.add.text(x, y - 30, "", style).setOrigin(0.5, 0.5);
+
+    this.previewText = scene.add
+      .text(x + 10, y - 30, "", previewTextStyle)
+      .setOrigin(0.5, 0.5)
+      .setScale(0);
 
     this.dispose = autorun(() => {
       const card = store.activePlayerCard;
       if (card && store.isReclaimActive) {
         this.previewText.setText(`+${card.getEnergy()}`);
-      } else this.previewText.setText("");
+        this.showPreviewText();
+      } else this.hidePreviewText();
     });
+  }
+
+  showPreviewText() {
+    if (this.timeline) this.timeline.destroy();
+    this.timeline = this.scene.tweens
+      .createTimeline()
+      .add({
+        targets: this.previewText,
+        scaleX: 1.2,
+        scaleY: 1.2,
+        duration: 100,
+        ease: "Bounce.In"
+      })
+      .add({
+        targets: this.previewText,
+        scaleX: 1,
+        scaleY: 1,
+        duration: 150,
+        ease: "Quad.Out"
+      })
+      .play();
+  }
+
+  hidePreviewText() {
+    this.previewText.setText("").setScale(0);
   }
 
   setEnergy(value) {
@@ -34,6 +68,7 @@ export default class EnergyDisplay {
   }
 
   destroy() {
+    if (this.timeline) this.timeline.destroy();
     this.dispose();
     this.sprite.destroy();
     this.text.destroy();
