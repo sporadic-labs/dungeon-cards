@@ -31,9 +31,8 @@ export default class PlayScene extends Scene {
     });
 
     emitter.on(EVENT_NAMES.GAME_START, () => {
-      console.log("is this happening multiple times??");
+      // TODO(rex): Do something useful here...
     });
-    // emitter.emit(EVENT_NAMES.GAME_START);
 
     run(this.playerManager, this.enemyManager, this.actionRunner);
   }
