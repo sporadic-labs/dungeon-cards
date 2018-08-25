@@ -6,6 +6,9 @@ import { Scene } from "phaser";
 import { SCENE_NAME } from "./index.js";
 import { loadFonts } from "../font";
 import logger from "../helpers/logger";
+import store from "../store/index.js";
+import { MENU_STATES } from "../menu/menu-states.js";
+import { autorun } from "mobx";
 
 export default class LoadingScene extends Scene {
   preload() {
@@ -41,9 +44,16 @@ export default class LoadingScene extends Scene {
     const { musicPlayer } = this.sys.game.globals;
     musicPlayer.init();
 
+    const dispose = autorun(() => {
+      if (store.hasGameStarted) {
+        this.scene.start(SCENE_NAME.PLAY);
+        dispose();
+      }
+    });
+
     // Fail gracefully by allowing the game to load even if the fonts errored
     if (this.fontsLoaded || this.fontsErrored) {
-      this.scene.start(SCENE_NAME.PLAY);
+      store.setMenuState(MENU_STATES.START_MENU);
     }
   }
 }

@@ -10,7 +10,7 @@ import React from "react";
 import { render } from "react-dom";
 
 import Menu from "./menu/menu-app";
-import gameStore from "./menu/game-store";
+import gameStore from "./store";
 import { GameMusicPlayer, gameMusicStore } from "./sound/game-music/index";
 import GameSfxPlayer from "./sound/game-sfx-player/index";
 

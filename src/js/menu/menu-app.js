@@ -15,6 +15,7 @@ class Menu extends Component {
 
   startGame = () => {
     this.props.gameStore.setMenuState(MENU_STATES.GAME_ON);
+    this.props.gameStore.setGameStarted(true);
     emitter.emit(EVENT_NAMES.GAME_START);
   };
 

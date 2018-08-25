@@ -7,8 +7,8 @@ import ActionRunner from "../game-objects/card-actions";
 import { emitter, EVENT_NAMES } from "../game-objects/events";
 import run from "../game-objects/game-runner";
 import Logger from "../helpers/logger";
-import gameStore from "../menu/game-store";
 import { MENU_STATES } from "../menu/menu-states";
+import store from "../store/index";
 
 export default class PlayScene extends Scene {
   gameBoard;
@@ -27,13 +27,12 @@ export default class PlayScene extends Scene {
     emitter.on(EVENT_NAMES.GAME_OVER, () => {
       this.endGame();
       this.initGame();
-      gameStore.setMenuState(MENU_STATES.GAME_OVER);
+      store.setMenuState(MENU_STATES.GAME_OVER);
     });
 
     emitter.on(EVENT_NAMES.GAME_START, () => {
       console.log("is this happening multiple times??");
     });
-
     // emitter.emit(EVENT_NAMES.GAME_START);
 
     run(this.playerManager, this.enemyManager, this.actionRunner);

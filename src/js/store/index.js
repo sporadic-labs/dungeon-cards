@@ -1,8 +1,22 @@
-import { action, observable } from "mobx";
+import { action, observable, computed } from "mobx";
+
+const maxMenuHistory = 3;
 
 class GameStore {
   @observable isReclaimActive = false;
   @observable activePlayerCard = null;
+  @observable menuStateHistory = []; // Reverse chronological order
+  @observable hasGameStarted = false;
+
+  @action
+  setGameStarted(isGameStarted) {
+    this.hasGameStarted = isGameStarted;
+  }
+
+  @computed
+  get menuState() {
+    return this.menuStateHistory[0];
+  }
 
   @action
   setReclaimActive(isActive) {
@@ -12,6 +26,20 @@ class GameStore {
   @action
   setActivePlayerCard(card) {
     this.activePlayerCard = card;
+  }
+
+  @action
+  setMenuState(newMenuState) {
+    if (newMenuState !== this.menuStateHistory[0]) {
+      this.menuStateHistory = [newMenuState, ...this.menuStateHistory.slice(0, maxMenuHistory - 1)];
+    }
+  }
+
+  @action
+  goBackOneMenuState() {
+    if (this.menuStateHistory.length > 0) {
+      this.menuStateHistory = [...this.menuStateHistory.slice(1)];
+    }
   }
 }
 
