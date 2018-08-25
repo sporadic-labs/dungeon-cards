@@ -38,7 +38,7 @@ export default class OptionsMenu extends Component {
         </form>
 
         <ButtonWithSfx sfxPlayer={sfxPlayer} onClick={onBack}>
-          Back Game
+          Back
         </ButtonWithSfx>
       </div>
     );
