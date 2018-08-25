@@ -30,6 +30,7 @@ export default class ActionRunner {
 
     const { height } = scene.sys.game.config;
     this.endTurnButton = new EndTurnButton(scene, 80, height / 2);
+    this.endTurnButton.deactivate();
 
     const p = { x: 0, y: 0 };
     this.arrow = new Arrow(scene, p, p).setVisible(false).setDepth(1);
