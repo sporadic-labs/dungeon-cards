@@ -9,9 +9,6 @@ export default class GameOverMenu extends Component {
 
     return (
       <div id="game-over" className="menu">
-        <button className="btn-close">
-          <CloseSvg />
-        </button>
         <div className="menu-title">Game Over</div>
         <ButtonWithSfx sfxPlayer={sfxPlayer} onClick={onRestart}>
           Restart
