@@ -148,7 +148,7 @@ export default class EnemyManager {
 
     await Promise.all(deathPromises);
 
-    if (this.enemies.length === 0) {
+    if (!this.deck.anyCardsRemaining() && this.enemies.length === 0) {
       emitter.emit(EVENT_NAMES.GAME_OVER);
     }
   }
