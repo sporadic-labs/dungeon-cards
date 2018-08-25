@@ -49,6 +49,10 @@ export default class PlayerManager {
       this.attemptCompleteTurn,
       this
     );
+
+    scene.events.on("shutdown", () => {
+      this.proxy.removeAll();
+    });
   }
 
   /**

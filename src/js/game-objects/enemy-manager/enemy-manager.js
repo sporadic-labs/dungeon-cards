@@ -1,5 +1,5 @@
 import EnemyCard, { ENEMY_CARD_TYPES } from "./enemy-card";
-import { emitter, EVENT_NAMES } from "../events";
+import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import { DeckDisplay } from "../hud";
 import { SHIFT_DIRECTIONS } from "../card-actions";
 
@@ -14,6 +14,8 @@ export default class EnemyManager {
     this.gameBoard = gameBoard;
     this.deck = enemyDeck;
 
+    this.proxy = new EventProxy();
+
     const { width, height } = this.scene.sys.game.config;
     this.deckDisplay = new DeckDisplay(
       scene,
@@ -25,17 +27,22 @@ export default class EnemyManager {
     this.enemies = [];
     this.selectingEnabled = false;
 
-    emitter.on(EVENT_NAMES.ENEMY_CARD_SELECT, card => {
+    this.proxy.on(emitter, EVENT_NAMES.ENEMY_CARD_SELECT, card => {
       // TODO(rex): Do something useful here.
     });
 
-    emitter.on(EVENT_NAMES.ENEMY_CARD_FOCUS, card => {
+    this.proxy.on(emitter, EVENT_NAMES.ENEMY_CARD_FOCUS, card => {
       this.enemies.forEach(c => c.defocus());
       card.focus();
     });
 
-    emitter.on(EVENT_NAMES.ENEMY_CARD_DEFOCUS, card => {
+    this.proxy.on(emitter, EVENT_NAMES.ENEMY_CARD_DEFOCUS, card => {
       this.enemies.forEach(c => c.defocus());
+    });
+
+    scene.events.on("shutdown", () => {
+      this.removeAllEnemies();
+      this.proxy.removeAll();
     });
   }
 

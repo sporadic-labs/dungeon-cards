@@ -4,7 +4,7 @@ import { GameBoard } from "../game-objects/gameboard/gameboard";
 import EnemyManager, { ENEMY_CARD_TYPES } from "../game-objects/enemy-manager";
 import PlayerManager, { PLAYER_CARD_TYPES } from "../game-objects/player-manager";
 import ActionRunner from "../game-objects/card-actions";
-import { emitter, EVENT_NAMES } from "../game-objects/events";
+import { EventProxy, emitter, EVENT_NAMES } from "../game-objects/events";
 import run from "../game-objects/game-runner";
 import Logger from "../helpers/logger";
 import { MENU_STATES } from "../menu/menu-states";
@@ -15,6 +15,7 @@ export default class PlayScene extends Scene {
   enemyManager;
   playerManager;
   actionRunner;
+  proxy;
 
   create() {
     const { width, height } = this.sys.game.config;
@@ -22,16 +23,18 @@ export default class PlayScene extends Scene {
 
     this.gameBoard = new GameBoard(this, 5, 4);
 
+    this.proxy = new EventProxy();
+
     this.initGame();
 
-    emitter.on(EVENT_NAMES.GAME_OVER, () => {
-      this.endGame();
-      this.initGame();
+    this.proxy.on(emitter, EVENT_NAMES.GAME_OVER, () => {
+      this.scene.pause();
       store.setMenuState(MENU_STATES.GAME_OVER);
     });
 
-    emitter.on(EVENT_NAMES.GAME_START, () => {
-      // TODO(rex): Do something useful here...
+    this.proxy.on(emitter, EVENT_NAMES.GAME_START, () => {
+      this.proxy.removeAll();
+      this.scene.restart();
     });
 
     run(this.playerManager, this.enemyManager, this.actionRunner);
@@ -67,9 +70,5 @@ export default class PlayScene extends Scene {
       this.enemyManager,
       this.gameBoard
     );
-  }
-
-  endGame() {
-    this.enemyManager.removeAllEnemies();
   }
 }
