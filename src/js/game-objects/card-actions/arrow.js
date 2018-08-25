@@ -6,10 +6,14 @@ export default class Arrow {
    */
   constructor(scene, startPoint, endPoint, { fillStyle = 0xff0000, thickness = 10 } = {}) {
     this.scene = scene;
+    this.scene.lifecycle.add(this);
+
     this.graphics = scene.add.graphics();
 
     this.fillStyle = fillStyle;
     this.thickness = thickness;
+    this.dashLength = 20;
+    this.gapLength = 20;
     this.startPoint = { x: startPoint.x, y: startPoint.y };
     this.endPoint = { x: endPoint.x, y: endPoint.y };
 
@@ -67,41 +71,57 @@ export default class Arrow {
   }
 
   redraw() {
-    const { x: x1, y: y1 } = this.startPoint;
-    const { x: x2, y: y2 } = this.endPoint;
+    const { dashLength, gapLength, thickness, endPoint, startPoint, fillStyle } = this;
+    const arrowheadLength = 2.5 * thickness;
+    const arrowheadWidth = 2.3 * thickness;
+    const { x: x1, y: y1 } = startPoint;
+    const { x: x2, y: y2 } = endPoint;
     const angle = Phaser.Math.Angle.Between(x1, y1, x2, y2);
     const normalAngle = angle - Math.PI / 2;
     const normalX = Math.cos(normalAngle);
     const normalY = Math.sin(normalAngle);
-    const lineOffsetX = (this.thickness / 2) * normalX;
-    const lineOffsetY = (this.thickness / 2) * normalY;
-    const arrowheadLength = 2.5 * this.thickness;
-    const arrowheadWidth = 2.3 * this.thickness;
-    const headStartX = this.endPoint.x - arrowheadLength * Math.cos(angle);
-    const headStartY = this.endPoint.y - arrowheadLength * Math.sin(angle);
+    const lineOffsetX = (thickness / 2) * normalX;
+    const lineOffsetY = (thickness / 2) * normalY;
+    const headStartX = endPoint.x - arrowheadLength * Math.cos(angle);
+    const headStartY = endPoint.y - arrowheadLength * Math.sin(angle);
     const headOffsetX = (arrowheadWidth / 2) * Math.cos(normalAngle);
     const headOffsetY = (arrowheadWidth / 2) * Math.sin(normalAngle);
 
-    const linePoints = [];
-    linePoints.push({ x: this.startPoint.x - lineOffsetX, y: this.startPoint.y - lineOffsetY });
-    linePoints.push({ x: this.startPoint.x + lineOffsetX, y: this.startPoint.y + lineOffsetY });
-    linePoints.push({ x: headStartX + lineOffsetX, y: headStartY + lineOffsetY });
-    linePoints.push({ x: headStartX - lineOffsetX, y: headStartY - lineOffsetY });
+    this.graphics.clear();
+    this.graphics.fillStyle(fillStyle);
+
+    const line = new Phaser.Geom.Line(x1, y1, headStartX, headStartY);
+    const segmentLength = dashLength + gapLength;
+    const dashedLineLength = Phaser.Geom.Line.Length(line);
+    const offset = (this.scene.time.now / 20) % segmentLength;
+    for (let l = offset; l < dashedLineLength; l += segmentLength) {
+      const linePoints = [];
+      const startLengthFraction = l / dashedLineLength;
+      const endLengthFraction = Math.min((l + dashLength) / dashedLineLength, 1);
+      const p1 = line.getPoint(startLengthFraction);
+      const p2 = line.getPoint(endLengthFraction);
+      linePoints.push({ x: p1.x - lineOffsetX, y: p1.y - lineOffsetY });
+      linePoints.push({ x: p1.x + lineOffsetX, y: p1.y + lineOffsetY });
+      linePoints.push({ x: p2.x + lineOffsetX, y: p2.y + lineOffsetY });
+      linePoints.push({ x: p2.x - lineOffsetX, y: p2.y - lineOffsetY });
+      this.graphics.fillPoints(linePoints, true);
+    }
 
     const arrowheadPoints = [];
     arrowheadPoints.push({ x: headStartX - headOffsetX, y: headStartY - headOffsetY });
     arrowheadPoints.push({ x: headStartX + headOffsetX, y: headStartY + headOffsetY });
-    arrowheadPoints.push({ x: this.endPoint.x, y: this.endPoint.y });
-
-    this.graphics.clear();
-    this.graphics.fillStyle(this.fillStyle);
-    this.graphics.fillPoints(linePoints, true);
+    arrowheadPoints.push({ x: endPoint.x, y: endPoint.y });
     this.graphics.fillPoints(arrowheadPoints, true);
 
     return this;
   }
 
+  update() {
+    this.redraw();
+  }
+
   destroy() {
+    this.scene.lifecycle.remove(this);
     this.scene.tweens.killTweensOf(this.graphics);
     this.graphics.destroy();
   }
