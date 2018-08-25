@@ -165,8 +165,9 @@ export default class EnemyManager {
       const boardPosition = this.gameBoard.findPositionOf(enemy);
 
       // Is the enemy about to go off the board?
-      if (!this.gameBoard.isInBounds(boardPosition.x, boardPosition.y + 1)) {
+      if (!boardPosition || !this.gameBoard.isInBounds(boardPosition.x, boardPosition.y + 1)) {
         emitter.emit(EVENT_NAMES.GAME_OVER);
+        return;
       }
 
       // Is the next spot open for the enemy?
