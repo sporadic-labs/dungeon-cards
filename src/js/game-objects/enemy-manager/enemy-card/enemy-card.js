@@ -102,6 +102,23 @@ export default class EnemyCard {
 
   onPointerDown = () => emitter.emit(EVENT_NAMES.ENEMY_CARD_SELECT, this);
 
+  shake() {
+    this.scene.tweens.killTweensOf(this.container);
+    const { x, y, angle } = this.container;
+    this.timeline = this.scene.tweens.timeline({
+      targets: this.container,
+      ease: Phaser.Math.Easing.Quadratic.InOut,
+      loop: -1,
+      duration: 40,
+      tweens: [
+        { x: x - 1, y: y - 1, angle: angle + 1 },
+        { x: x + 1, y: y + 1.5, angle: angle - 1.5 },
+        { x: x + 0.5, y: y + 1, angle: angle + 0.5 },
+        { x: x - 1.5, y: y - 0.5, angle: angle - 0.5 }
+      ]
+    });
+  }
+
   focus() {
     if (this.focused) return;
     this.focused = true;
@@ -196,5 +213,6 @@ export default class EnemyCard {
   destroy() {
     this.scene.lifecycle.remove(this);
     this.container.destroy();
+    this.scene.tweens.killTweensOf(this.container);
   }
 }

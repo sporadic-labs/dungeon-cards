@@ -184,6 +184,12 @@ export default class EnemyManager {
         this.gameBoard.removeAt(boardPosition.x, boardPosition.y);
         this.gameBoard.putAt(boardPosition.x, boardPosition.y + 1, enemy);
         delay += 50;
+
+        // Give user feedback when an attack is imminent
+        if (!this.gameBoard.isInBounds(boardPosition.x, boardPosition.y + 2)) {
+          promise.then(() => enemy.shake());
+        }
+
         return promise;
       }
     });
