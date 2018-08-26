@@ -3,10 +3,20 @@ import { action, observable, computed } from "mobx";
 const maxMenuHistory = 3;
 
 class GameStore {
-  @observable isReclaimActive = false;
-  @observable activePlayerCard = null;
-  @observable menuStateHistory = []; // Reverse chronological order
-  @observable hasGameStarted = false;
+  @observable
+  isReclaimActive = false;
+
+  @observable
+  activePlayerCard = null;
+
+  @observable
+  focusedPlayerCard = null;
+
+  @observable
+  menuStateHistory = []; // Reverse chronological order
+
+  @observable
+  hasGameStarted = false;
 
   @action
   setGameStarted(isGameStarted) {
@@ -26,6 +36,11 @@ class GameStore {
   @action
   setActivePlayerCard(card) {
     this.activePlayerCard = card;
+  }
+
+  @action
+  setFocusedPlayerCard(card) {
+    this.focusedPlayerCard = card;
   }
 
   @action

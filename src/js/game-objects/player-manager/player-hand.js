@@ -1,3 +1,4 @@
+import { autorun } from "mobx";
 import PlayerCard from "./player-card";
 import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import store from "../../store/index";
@@ -20,38 +21,35 @@ export default class PlayerHand {
     this.selectedCard = null;
 
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_SELECT, card => {
-      this.selectedCard = card;
       store.setActivePlayerCard(card);
-      this.updateCards();
     });
 
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DESELECT, card => {
       // Card & discard are listening for pointerup and card triggers first
-      if (!store.isReclaimActive) {
-        this.selectedCard = null;
-        store.setActivePlayerCard(null);
-        this.updateCards();
-      }
+      if (!store.isReclaimActive) store.setActivePlayerCard(null);
     });
 
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_FOCUS, card => {
-      this.focusedCard = card;
-      this.updateCards();
+      store.setFocusedPlayerCard(card);
     });
 
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DEFOCUS, card => {
-      this.focusedCard = null;
-      this.updateCards();
+      store.setFocusedPlayerCard(null);
     });
 
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_TURN_COMPLETE, () => {
-      this.selectedCard = null;
-      this.focusedCard = null;
-      this.updateCards();
+      store.setActivePlayerCard(null);
+      store.setFocusedPlayerCard(null);
     });
 
     scene.events.on("shutdown", () => {
       this.proxy.removeAll();
+    });
+
+    this.dispose = autorun(() => {
+      this.selectedCard = store.activePlayerCard;
+      this.focusedCard = store.focusedPlayerCard;
+      this.updateCards();
     });
   }
 
@@ -157,5 +155,9 @@ export default class PlayerHand {
       if (this.selectedCard === card) this.selectedCard = null;
       if (this.focusedCard === card) this.focusedCard = null;
     }
+  }
+
+  destroy() {
+    this.dispose();
   }
 }
