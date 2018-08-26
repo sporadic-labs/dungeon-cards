@@ -34,7 +34,7 @@ export default class AttackAction extends Action {
     this.arrow = actionRunner.arrow
       .setStartPoint(p)
       .setEndPoint(p)
-      .setColor(0x9e2828)
+      .setColor(0x9e2828, 0x7c2323)
       .setVisible(true);
   }
 

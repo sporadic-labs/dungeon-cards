@@ -4,13 +4,19 @@ export default class Arrow {
   /**
    * @param {Phaser.Scene} scene
    */
-  constructor(scene, startPoint, endPoint, { fillStyle = 0xff0000, thickness = 15 } = {}) {
+  constructor(
+    scene,
+    startPoint,
+    endPoint,
+    { fillStyle = 0xff0000, shadowFillStyle = 0xff0000, thickness = 15 } = {}
+  ) {
     this.scene = scene;
     this.scene.lifecycle.add(this);
 
     this.graphics = scene.add.graphics();
 
     this.fillStyle = fillStyle;
+    this.shadowFillStyle = shadowFillStyle;
     this.thickness = thickness;
     this.dashLength = 25;
     this.gapLength = 25;
@@ -21,8 +27,9 @@ export default class Arrow {
     this.redraw();
   }
 
-  setColor(color, redraw = true) {
+  setColor(color, shadowColor, redraw = true) {
     this.fillStyle = color;
+    this.shadowFillStyle = shadowColor;
     if (redraw) this.redraw();
     return this;
   }
@@ -71,7 +78,15 @@ export default class Arrow {
   }
 
   redraw() {
-    const { dashLength, gapLength, thickness, endPoint, startPoint, fillStyle } = this;
+    const {
+      dashLength,
+      gapLength,
+      thickness,
+      endPoint,
+      startPoint,
+      fillStyle,
+      shadowFillStyle
+    } = this;
     const arrowheadLength = 2.4 * thickness;
     const arrowheadWidth = 2.3 * thickness;
     const { x: x1, y: y1 } = startPoint;
@@ -86,32 +101,67 @@ export default class Arrow {
     const headStartY = endPoint.y - arrowheadLength * Math.sin(angle);
     const headOffsetX = (arrowheadWidth / 2) * Math.cos(normalAngle);
     const headOffsetY = (arrowheadWidth / 2) * Math.sin(normalAngle);
+    const shadowX = 1.25;
+    const shadowY = 1.25;
 
     this.graphics.clear();
+
+    // Arrowhead shadow
+    this.graphics.fillStyle(shadowFillStyle);
+    this.graphics.fillPoints(
+      [
+        { x: headStartX - headOffsetX + shadowX, y: headStartY - headOffsetY + shadowY },
+        { x: headStartX + headOffsetX + shadowX, y: headStartY + headOffsetY + shadowY },
+        { x: endPoint.x + shadowX, y: endPoint.y + shadowY }
+      ],
+      true
+    );
+
+    // Arrowhead
     this.graphics.fillStyle(fillStyle);
+    this.graphics.fillPoints(
+      [
+        { x: headStartX - headOffsetX, y: headStartY - headOffsetY },
+        { x: headStartX + headOffsetX, y: headStartY + headOffsetY },
+        { x: endPoint.x, y: endPoint.y }
+      ],
+      true
+    );
 
     const line = new Phaser.Geom.Line(x1, y1, headStartX, headStartY);
     const segmentLength = dashLength + gapLength;
     const dashedLineLength = Phaser.Geom.Line.Length(line);
     const offset = (this.scene.time.now / 20) % segmentLength;
     for (let l = offset; l < dashedLineLength; l += segmentLength) {
-      const linePoints = [];
       const startLengthFraction = l / dashedLineLength;
       const endLengthFraction = Math.min((l + dashLength) / dashedLineLength, 1);
       const p1 = line.getPoint(startLengthFraction);
       const p2 = line.getPoint(endLengthFraction);
-      linePoints.push({ x: p1.x - lineOffsetX, y: p1.y - lineOffsetY });
-      linePoints.push({ x: p1.x + lineOffsetX, y: p1.y + lineOffsetY });
-      linePoints.push({ x: p2.x + lineOffsetX, y: p2.y + lineOffsetY });
-      linePoints.push({ x: p2.x - lineOffsetX, y: p2.y - lineOffsetY });
-      this.graphics.fillPoints(linePoints, true);
-    }
 
-    const arrowheadPoints = [];
-    arrowheadPoints.push({ x: headStartX - headOffsetX, y: headStartY - headOffsetY });
-    arrowheadPoints.push({ x: headStartX + headOffsetX, y: headStartY + headOffsetY });
-    arrowheadPoints.push({ x: endPoint.x, y: endPoint.y });
-    this.graphics.fillPoints(arrowheadPoints, true);
+      // Dash shadow
+      this.graphics.fillStyle(shadowFillStyle);
+      this.graphics.fillPoints(
+        [
+          { x: p1.x - lineOffsetX + shadowX, y: p1.y - lineOffsetY + shadowY },
+          { x: p1.x + lineOffsetX + shadowX, y: p1.y + lineOffsetY + shadowY },
+          { x: p2.x + lineOffsetX + shadowX, y: p2.y + lineOffsetY + shadowY },
+          { x: p2.x - lineOffsetX + shadowX, y: p2.y - lineOffsetY + shadowY }
+        ],
+        true
+      );
+
+      // Dash
+      this.graphics.fillStyle(fillStyle);
+      this.graphics.fillPoints(
+        [
+          { x: p1.x - lineOffsetX, y: p1.y - lineOffsetY },
+          { x: p1.x + lineOffsetX, y: p1.y + lineOffsetY },
+          { x: p2.x + lineOffsetX, y: p2.y + lineOffsetY },
+          { x: p2.x - lineOffsetX, y: p2.y - lineOffsetY }
+        ],
+        true
+      );
+    }
 
     return this;
   }

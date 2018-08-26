@@ -27,7 +27,7 @@ export default class BlockAction extends Action {
     this.arrow = actionRunner.arrow
       .setStartPoint(p)
       .setEndPoint(p)
-      .setColor(0xef8843)
+      .setColor(0xef8843, 0xcf773c)
       .setVisible(true);
   }
 
