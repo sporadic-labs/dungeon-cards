@@ -171,14 +171,17 @@ export default class EnemyManager {
     const movePromises = sortedEnemies.map(enemy => {
       const boardPosition = this.gameBoard.findPositionOf(enemy);
 
-      // Is the enemy about to go off the board?
+      // Skip moving & attacking if blocked
+      if (enemy.isBlocked()) return;
+
+      // Enemy attack & kill player
       if (!boardPosition || !this.gameBoard.isInBounds(boardPosition.x, boardPosition.y + 1)) {
         emitter.emit(EVENT_NAMES.GAME_OVER);
         return;
       }
 
-      // Is the next spot open for the enemy?
-      if (!enemy.isBlocked() && this.gameBoard.isEmpty(boardPosition.x, boardPosition.y + 1)) {
+      // Move
+      if (this.gameBoard.isEmpty(boardPosition.x, boardPosition.y + 1)) {
         const { x, y } = this.gameBoard.getWorldPosition(boardPosition.x, boardPosition.y + 1);
         const promise = enemy.moveTo(x, y, delay);
         this.gameBoard.removeAt(boardPosition.x, boardPosition.y);
