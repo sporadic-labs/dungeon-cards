@@ -4,7 +4,7 @@ export default class Arrow {
   /**
    * @param {Phaser.Scene} scene
    */
-  constructor(scene, startPoint, endPoint, { fillStyle = 0xff0000, thickness = 10 } = {}) {
+  constructor(scene, startPoint, endPoint, { fillStyle = 0xff0000, thickness = 15 } = {}) {
     this.scene = scene;
     this.scene.lifecycle.add(this);
 
@@ -12,8 +12,8 @@ export default class Arrow {
 
     this.fillStyle = fillStyle;
     this.thickness = thickness;
-    this.dashLength = 20;
-    this.gapLength = 20;
+    this.dashLength = 25;
+    this.gapLength = 25;
     this.startPoint = { x: startPoint.x, y: startPoint.y };
     this.endPoint = { x: endPoint.x, y: endPoint.y };
 
@@ -44,7 +44,7 @@ export default class Arrow {
   setHighlighted(shouldBeHighlighted, animate = true) {
     if (this.isHighlighted !== shouldBeHighlighted) {
       this.isHighlighted = shouldBeHighlighted;
-      const newAlpha = shouldBeHighlighted ? 0.9 : 0.2;
+      const newAlpha = shouldBeHighlighted ? 0.9 : 0.35;
       if (animate) {
         this.scene.tweens.killTweensOf(this.graphics);
         this.scene.tweens.add({
@@ -72,7 +72,7 @@ export default class Arrow {
 
   redraw() {
     const { dashLength, gapLength, thickness, endPoint, startPoint, fillStyle } = this;
-    const arrowheadLength = 2.5 * thickness;
+    const arrowheadLength = 2.4 * thickness;
     const arrowheadWidth = 2.3 * thickness;
     const { x: x1, y: y1 } = startPoint;
     const { x: x2, y: y2 } = endPoint;
