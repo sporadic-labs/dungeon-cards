@@ -29,13 +29,14 @@ export default class PlayScene extends Scene {
     this.initGame();
 
     this.proxy.on(emitter, EVENT_NAMES.GAME_OVER, () => {
-      this.scene.pause();
+      store.pause();
       store.setMenuState(MENU_STATES.GAME_OVER);
     });
 
     this.proxy.on(emitter, EVENT_NAMES.GAME_START, () => {
       this.proxy.removeAll();
       this.scene.restart();
+      store.unpause();
     });
 
     this.storeUnsubscribe = autorun(() => {
