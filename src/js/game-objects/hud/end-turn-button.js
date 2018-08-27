@@ -54,7 +54,7 @@ export default class EndTurnButton {
   }
 
   deactivate() {
-    this.sprite.setAlpha(0.5);
+    this.sprite.setAlpha(0.8);
     this.disableInteractivity();
   }
 }
