@@ -36,6 +36,7 @@
     "phaser-lifecycle-plugin": "0.0.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
+    "store": "^2.0.12",
     "typeface-chivo": "0.0.54"
   },
   "devDependencies": {
