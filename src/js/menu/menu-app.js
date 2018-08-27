@@ -66,9 +66,18 @@ class Menu extends Component {
           onOptions={this.goToOptionsMenu}
         />
       );
-    } else if (gameStore.menuState === MENU_STATES.GAME_OVER) {
+    } else if (
+      gameStore.menuState === MENU_STATES.GAME_OVER_WON ||
+      gameStore.menuState === MENU_STATES.GAME_OVER_LOST
+    ) {
+      const gameWon = gameStore.menuState === MENU_STATES.GAME_OVER_WON;
       activeMenu = (
-        <GameOverMenu {...commonProps} onMainMenu={this.goToStartMenu} onRestart={this.startGame} />
+        <GameOverMenu
+          {...commonProps}
+          onMainMenu={this.goToStartMenu}
+          onRestart={this.startGame}
+          gameWon={gameWon}
+        />
       );
     } else if (gameStore.menuState === MENU_STATES.ABOUT) {
       activeMenu = <AboutMenu {...commonProps} onBack={this.goBackOneState} />;

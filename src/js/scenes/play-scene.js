@@ -30,8 +30,7 @@ export default class PlayScene extends Scene {
 
     this.proxy.on(emitter, EVENT_NAMES.GAME_OVER, win => {
       store.setPaused(true);
-      store.setMenuState(MENU_STATES.GAME_OVER);
-      console.log(`Game was ${win ? "won!  Nice!" : "lost.  Bummer..."}`);
+      store.setMenuState(win ? MENU_STATES.GAME_OVER_WON : MENU_STATES.GAME_OVER_LOST);
     });
 
     this.proxy.on(emitter, EVENT_NAMES.GAME_START, () => {

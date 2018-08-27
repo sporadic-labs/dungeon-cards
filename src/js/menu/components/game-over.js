@@ -4,11 +4,12 @@ import ButtonWithSfx from "./button-with-sfx";
 
 export default class GameOverMenu extends Component {
   render() {
-    const { onMainMenu, onRestart, sfxPlayer } = this.props;
+    const { onMainMenu, onRestart, gameWon, sfxPlayer } = this.props;
 
     return (
       <div id="game-over" className="menu">
         <div className="menu-title">Game Over</div>
+        <div className="menu-title">You {gameWon ? "won!  Nice!" : "lost.  Bummer..."}</div>
         <ButtonWithSfx sfxPlayer={sfxPlayer} onClick={onRestart}>
           Restart
         </ButtonWithSfx>
