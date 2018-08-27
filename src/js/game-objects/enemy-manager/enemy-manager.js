@@ -156,7 +156,7 @@ export default class EnemyManager {
     await Promise.all(deathPromises);
 
     if (!this.deck.anyCardsRemaining() && this.enemies.length === 0) {
-      emitter.emit(EVENT_NAMES.GAME_OVER);
+      emitter.emit(EVENT_NAMES.GAME_OVER, true);
     }
   }
 
@@ -176,7 +176,7 @@ export default class EnemyManager {
 
       // Enemy attack & kill player
       if (!boardPosition || !this.gameBoard.isInBounds(boardPosition.x, boardPosition.y + 1)) {
-        emitter.emit(EVENT_NAMES.GAME_OVER);
+        emitter.emit(EVENT_NAMES.GAME_OVER, false);
         return;
       }
 
