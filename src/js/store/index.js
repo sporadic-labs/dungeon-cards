@@ -28,7 +28,7 @@ class GameStore {
 
   @computed
   get menuState() {
-    return this.menuStateHistory[0];
+    return this.menuStateHistory.length > 0 ? this.menuStateHistory[0] : null;
   }
 
   @computed
@@ -58,7 +58,9 @@ class GameStore {
 
   @action
   setMenuState(newMenuState) {
-    if (newMenuState !== this.menuStateHistory[0]) {
+    if (this.menuStateHistory.length === 0) {
+      this.menuStateHistory = [newMenuState];
+    } else if (newMenuState !== this.menuStateHistory[0]) {
       this.menuStateHistory = [newMenuState, ...this.menuStateHistory.slice(0, maxMenuHistory - 1)];
     }
   }
