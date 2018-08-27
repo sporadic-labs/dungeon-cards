@@ -34,6 +34,9 @@ export default class ActionRunner {
 
     const p = { x: 0, y: 0 };
     this.arrow = new Arrow(scene, p, p).setVisible(false).setDepth(1);
+
+    this.proxy.on(scene.events, "shutdown", this.destroy, this);
+    this.proxy.on(scene.events, "destroy", this.destroy, this);
   }
 
   async runActions() {
@@ -98,5 +101,10 @@ export default class ActionRunner {
         this.enemyManager
       );
     }
+  }
+
+  destroy() {
+    this.killCurrentAction();
+    this.proxy.removeAll();
   }
 }
