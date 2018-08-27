@@ -57,7 +57,7 @@ export default class EventProxy {
   }
 
   once(eventEmitter, eventName, listener, context) {
-    this.listeners.push(new EventListener(eventEmitter, eventName, listener, context), true);
+    this.listeners.push(new EventListener(eventEmitter, eventName, listener, context, true));
   }
 
   off(eventEmitter, eventName, listener, context) {
