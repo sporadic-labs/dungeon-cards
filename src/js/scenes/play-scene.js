@@ -9,6 +9,7 @@ import run from "../game-objects/game-runner";
 import Logger from "../helpers/logger";
 import { MENU_STATES } from "../menu/menu-states";
 import store from "../store/index";
+import { autorun } from "mobx";
 
 export default class PlayScene extends Scene {
   gameBoard;
@@ -35,6 +36,15 @@ export default class PlayScene extends Scene {
     this.proxy.on(emitter, EVENT_NAMES.GAME_START, () => {
       this.proxy.removeAll();
       this.scene.restart();
+    });
+
+    this.storeUnsubscribe = autorun(() => {
+      store.isGamePaused ? this.scene.pause() : this.scene.resume();
+    });
+
+    this.input.keyboard.on("keydown_E", event => {
+      store.pause();
+      store.setMenuState(MENU_STATES.DEBUG);
     });
 
     run(this.playerManager, this.enemyManager, this.actionRunner);
@@ -70,5 +80,9 @@ export default class PlayScene extends Scene {
       this.enemyManager,
       this.gameBoard
     );
+  }
+
+  shutdown() {
+    this.storeUnsubscribe();
   }
 }

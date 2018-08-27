@@ -10,22 +10,35 @@ class GameStore {
   activePlayerCard = null;
 
   @observable
-  focusedPlayerCard = null;
-
-  @observable
   menuStateHistory = []; // Reverse chronological order
 
   @observable
   hasGameStarted = false;
 
-  @action
-  setGameStarted(isGameStarted) {
-    this.hasGameStarted = isGameStarted;
+  @observable
+  focusedPlayerCard = null;
+
+  @observable
+  isPaused = false;
+
+  @computed
+  get gameStarted() {
+    return this.hasGameStarted;
   }
 
   @computed
   get menuState() {
     return this.menuStateHistory[0];
+  }
+
+  @computed
+  get isGamePaused() {
+    return this.isPaused;
+  }
+
+  @action
+  setGameStarted(isGameStarted) {
+    this.hasGameStarted = isGameStarted;
   }
 
   @action
@@ -54,6 +67,20 @@ class GameStore {
   goBackOneMenuState() {
     if (this.menuStateHistory.length > 0) {
       this.menuStateHistory = [...this.menuStateHistory.slice(1)];
+    }
+  }
+
+  @action
+  pause() {
+    if (!this.isPaused) {
+      this.isPaused = true;
+    }
+  }
+
+  @action
+  unpause() {
+    if (this.isPaused) {
+      this.isPaused = false;
     }
   }
 }
