@@ -40,7 +40,7 @@ export default class PlayerManager {
       this.deck.getNumCardsRemaining()
     );
     this.energyDisplay = new EnergyDisplay(scene, 45, height - 45);
-    this.scroll = new Scroll(scene, width - 105, height / 2);
+    this.scroll = new Scroll(scene, width - 185, height / 2 - 90);
 
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DISCARD, this.discardSelectedCard, this);
     this.proxy.on(
@@ -89,10 +89,12 @@ export default class PlayerManager {
 
   enableSelecting() {
     this.playerHand.enableSelecting();
+    this.scroll.enableSelecting();
   }
 
   disableSelecting() {
     this.playerHand.disableSelecting();
+    this.scroll.disableSelecting();
   }
 
   discardSelectedCard() {

@@ -48,6 +48,15 @@ export default class PlayerCard {
     this.enableFocusing();
   }
 
+  isInBounds(x, y) {
+    const bounds = this.container.getBounds();
+    const x1 = bounds.x;
+    const x2 = bounds.x + bounds.width;
+    const y1 = bounds.y;
+    const y2 = bounds.y + bounds.height;
+    return x >= x1 && x <= x2 && y >= y1 && y <= y2;
+  }
+
   shake() {
     this.scene.tweens.killTweensOf(this);
     this.timeline = this.scene.tweens.timeline({
@@ -203,8 +212,9 @@ export default class PlayerCard {
   }
 
   destroy() {
-    this.scene.input.off("pointerup", this.onPointerRelease);
-    this.container.destroy();
     this.scene.lifecycle.remove(this);
+    this.scene.input.off("pointerup", this.onPointerRelease);
+    this.scene.tweens.killTweensOf(this.container);
+    this.container.destroy();
   }
 }
