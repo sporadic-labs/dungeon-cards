@@ -1,6 +1,7 @@
 import { emitter, EVENT_NAMES } from "../events";
 import store from "../../store";
 import { autorun } from "mobx";
+import { EventProxy } from "../events/index";
 
 /**
  * @export
@@ -23,9 +24,10 @@ export default class DiscardPile {
 
     this.pointerOver = false;
 
-    this.card.on("pointerup", () => this.select());
-    this.card.on("pointerover", () => store.setReclaimActive(true));
-    this.card.on("pointerout", () => store.setReclaimActive(false));
+    this.proxy = new EventProxy();
+    this.proxy.on(this.card, "pointerup", () => this.select());
+    this.proxy.on(this.card, "pointerover", () => store.setReclaimActive(true));
+    this.proxy.on(this.card, "pointerout", () => store.setReclaimActive(false));
 
     this.dispose = autorun(() => {
       if (store.isReclaimActive) {
@@ -48,6 +50,9 @@ export default class DiscardPile {
         });
       }
     });
+
+    this.proxy.on(scene.events, "shutdown", this.destroy, this);
+    this.proxy.on(scene.events, "destroy", this.destroy, this);
   }
 
   select() {
@@ -65,6 +70,7 @@ export default class DiscardPile {
   }
 
   destroy() {
+    this.proxy.removeAll();
     this.container.destroy();
     this.dispose();
   }

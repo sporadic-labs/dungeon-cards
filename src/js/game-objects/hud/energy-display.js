@@ -1,6 +1,7 @@
 import { autorun } from "mobx";
 import { getFontString } from "../../font";
 import store from "../../store";
+import { EventProxy } from "../events/index";
 
 const style = {
   font: getFontString("Chivo", { size: "24px", weight: 600 }),
@@ -36,6 +37,10 @@ export default class EnergyDisplay {
         this.showPreviewText();
       } else this.hidePreviewText();
     });
+
+    this.proxy = new EventProxy();
+    this.proxy.on(scene.events, "shutdown", this.destroy, this);
+    this.proxy.on(scene.events, "destroy", this.destroy, this);
   }
 
   showPreviewText() {
@@ -73,5 +78,6 @@ export default class EnergyDisplay {
     this.sprite.destroy();
     this.text.destroy();
     this.previewText.destroy();
+    this.proxy.removeAll();
   }
 }
