@@ -1,9 +1,13 @@
 import { action, observable } from "mobx";
+import storageAutosync from "../../store/sync-to-storage";
 
 class GameMusicStore {
-  @observable volume = 1;
-  @observable isPlaying = false;
-  @observable isMuted = false;
+  @observable
+  volume = 1;
+  @observable
+  isPlaying = false;
+  @observable
+  isMuted = false;
 
   @action
   play() {
@@ -29,5 +33,6 @@ class GameMusicStore {
 }
 
 const store = new GameMusicStore();
+storageAutosync("tower-of-cards-game-music-store", store);
 
 export default store;
