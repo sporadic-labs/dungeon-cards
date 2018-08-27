@@ -42,6 +42,10 @@ export default class PlayerHand {
       store.setFocusedPlayerCard(null);
     });
 
+    this.proxy.on(emitter, EVENT_NAMES.ACTION_UNSUCCESSFUL, () => {
+      this.selectedCard.shake();
+    });
+
     scene.events.on("shutdown", () => {
       this.proxy.removeAll();
     });

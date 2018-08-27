@@ -74,7 +74,10 @@ export default class AttackAction extends Action {
   }
 
   onPointerUp(pointer) {
-    if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) return;
+    if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) {
+      emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
+      return;
+    }
 
     const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
     if (enemies.length) {
@@ -94,6 +97,8 @@ export default class AttackAction extends Action {
         }
         emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
       }
+    } else {
+      emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
     }
   }
 

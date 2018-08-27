@@ -16,6 +16,7 @@ export default class PlayerCard {
 
     this.x = x;
     this.y = y;
+    this.xShake = 0;
     this.yOffset = 0;
     this.scale = 1;
 
@@ -45,6 +46,24 @@ export default class PlayerCard {
 
     // TODO: Only be enabled after the card is tweened into position. It shouldn't start enabled.
     this.enableFocusing();
+  }
+
+  shake() {
+    this.scene.tweens.killTweensOf(this);
+    this.timeline = this.scene.tweens.timeline({
+      targets: this,
+      ease: Phaser.Math.Easing.Quadratic.InOut,
+      duration: 60,
+      tweens: [
+        { xShake: -1 },
+        { xShake: +2 },
+        { xShake: -4 },
+        { xShake: +4 },
+        { xShake: -4 },
+        { xShake: 2 },
+        { xShake: -1 }
+      ]
+    });
   }
 
   getEnergy() {
@@ -175,7 +194,7 @@ export default class PlayerCard {
   }
 
   postUpdate() {
-    this.container.x = this.x;
+    this.container.x = this.x + this.xShake;
     this.container.y = this.y + this.yOffset;
   }
 
