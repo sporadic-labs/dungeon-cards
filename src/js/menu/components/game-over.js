@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 
-import CloseSvg from "../../images/close.svg";
 import ButtonWithSfx from "./button-with-sfx";
 
 export default class GameOverMenu extends Component {

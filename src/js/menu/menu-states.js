@@ -3,5 +3,7 @@ export const MENU_STATES = {
   ABOUT: "ABOUT",
   GAME_ON: "GAME_ON",
   GAME_OVER: "GAME_OVER",
-  OPTIONS: "OPITONS"
+  OPTIONS: "OPTIONS",
+  PAUSE: "PAUSE",
+  DEBUG: "DEBUG"
 };

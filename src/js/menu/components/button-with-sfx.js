@@ -8,7 +8,7 @@ export default class ButtonWithSfx extends Component {
   };
 
   render() {
-    const { sfxPlayer, children, onClick, ...otherProps } = this.props;
+    const { children, ...otherProps } = this.props;
     return (
       <button {...otherProps} onClick={this.onClick}>
         {children}

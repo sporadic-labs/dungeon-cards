@@ -1,11 +1,16 @@
 import React, { Component } from "react";
 import { observer } from "mobx-react";
 import { MENU_STATES } from "./menu-states";
-import StartMenu from "./start";
-import AboutMenu from "./about";
-import GameOverMenu from "./game-over";
 import { emitter, EVENT_NAMES } from "../game-objects/events";
-import OptionsMenu from "./options-menu";
+import {
+  StartMenu,
+  AboutMenu,
+  GameOverMenu,
+  OptionsMenu,
+  PauseMenu,
+  PauseButton,
+  DebugMenu
+} from "./components";
 
 @observer
 class Menu extends Component {
@@ -19,7 +24,13 @@ class Menu extends Component {
     emitter.emit(EVENT_NAMES.GAME_START);
   };
 
+  resumeGame = () => {
+    this.props.gameStore.unpause();
+    this.props.gameStore.setMenuState(MENU_STATES.GAME_ON);
+  };
+
   goToStartMenu = () => {
+    this.props.gameStore.setGameStarted(false);
     this.props.gameStore.setMenuState(MENU_STATES.START_MENU);
   };
 
@@ -31,7 +42,13 @@ class Menu extends Component {
     this.props.gameStore.setMenuState(MENU_STATES.ABOUT);
   };
 
+  goToPauseMenu = () => {
+    this.props.gameStore.pause();
+    this.props.gameStore.setMenuState(MENU_STATES.PAUSE);
+  };
+
   gameOver = () => {
+    this.props.gameStore.pause();
     this.props.gameStore.setMenuState(MENU_STATES.GAME_OVER);
   };
 
@@ -56,14 +73,32 @@ class Menu extends Component {
     } else if (gameStore.menuState === MENU_STATES.ABOUT) {
       activeMenu = <AboutMenu {...commonProps} onBack={this.goBackOneState} />;
     } else if (gameStore.menuState === MENU_STATES.OPTIONS) {
+      activeMenu = <OptionsMenu {...commonProps} onBack={this.goBackOneState} />;
+    } else if (gameStore.menuState === MENU_STATES.PAUSE) {
       activeMenu = (
-        <OptionsMenu {...commonProps} musicStore={musicStore} onBack={this.goBackOneState} />
+        <PauseMenu
+          {...commonProps}
+          onMainMenu={this.goToStartMenu}
+          onOptions={this.goToOptionsMenu}
+          onResume={this.resumeGame}
+        />
       );
+    } else if (gameStore.menuState === MENU_STATES.DEBUG) {
+      activeMenu = <DebugMenu {...commonProps} onResume={this.resumeGame} />;
     }
 
     return (
       <div id="hud" style={{ width: `${width}px`, height: `${height}px` }}>
         {activeMenu}
+        {gameStore.gameStarted ? (
+          <PauseButton
+            {...commonProps}
+            isPaused={gameStore.isPaused}
+            onPause={() => this.goToPauseMenu()}
+          />
+        ) : (
+          ""
+        )}
       </div>
     );
   }
