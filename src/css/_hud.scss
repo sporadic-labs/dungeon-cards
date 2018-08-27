@@ -107,6 +107,7 @@
       font-size: 18px;
       width: 32px;
       height: 32px;
+      text-shadow: 2px 2px rgb(64, 64, 64);
       transition: all 0.1s ease-in-out;
       &:hover {
         cursor: pointer;
@@ -123,6 +124,7 @@
       width: 100%;
       .created-by {
         font-size: 10px;
+        text-align: center;
       }
       .logo-wrap {
         width: 100%;
