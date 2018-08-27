@@ -46,9 +46,8 @@ export default class PlayerHand {
       this.selectedCard.shake();
     });
 
-    scene.events.on("shutdown", () => {
-      this.proxy.removeAll();
-    });
+    this.proxy.once(scene.events, "shutdown", this.destroy, this);
+    this.proxy.once(scene.events, "destroy", this.destroy, this);
 
     this.dispose = autorun(() => {
       this.selectedCard = store.activePlayerCard;
@@ -163,5 +162,6 @@ export default class PlayerHand {
 
   destroy() {
     this.dispose();
+    this.proxy.removeAll();
   }
 }
