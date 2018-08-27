@@ -36,6 +36,11 @@ class GameStore {
     return this.isPaused;
   }
 
+  @computed
+  get activeCard() {
+    return this.activePlayerCard;
+  }
+
   @action
   setGameStarted(isGameStarted) {
     this.hasGameStarted = isGameStarted;
