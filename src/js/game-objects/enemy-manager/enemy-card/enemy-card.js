@@ -212,7 +212,7 @@ export default class EnemyCard {
 
   destroy() {
     this.scene.lifecycle.remove(this);
-    this.container.destroy();
     this.scene.tweens.killTweensOf(this.container);
+    this.container.destroy();
   }
 }
