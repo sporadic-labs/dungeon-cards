@@ -49,10 +49,8 @@ export default class PlayerManager {
       this.attemptCompleteTurn,
       this
     );
-
-    scene.events.on("shutdown", () => {
-      this.proxy.removeAll();
-    });
+    this.proxy.on(scene.events, "shutdown", this.destroy, this);
+    this.proxy.on(scene.events, "destroy", this.destroy, this);
   }
 
   /**
@@ -139,5 +137,9 @@ export default class PlayerManager {
         );
       }
     });
+  }
+
+  destroy() {
+    this.proxy.removeAll();
   }
 }
