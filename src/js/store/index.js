@@ -71,17 +71,8 @@ class GameStore {
   }
 
   @action
-  pause() {
-    if (!this.isPaused) {
-      this.isPaused = true;
-    }
-  }
-
-  @action
-  unpause() {
-    if (this.isPaused) {
-      this.isPaused = false;
-    }
+  setPaused(isPaused) {
+    this.isPaused = isPaused;
   }
 }
 

@@ -25,7 +25,7 @@ class Menu extends Component {
   };
 
   resumeGame = () => {
-    this.props.gameStore.unpause();
+    this.props.gameStore.setPaused(false);
     this.props.gameStore.setMenuState(MENU_STATES.GAME_ON);
   };
 
@@ -43,12 +43,12 @@ class Menu extends Component {
   };
 
   goToPauseMenu = () => {
-    this.props.gameStore.pause();
+    this.props.gameStore.setPaused(true);
     this.props.gameStore.setMenuState(MENU_STATES.PAUSE);
   };
 
   gameOver = () => {
-    this.props.gameStore.pause();
+    this.props.gameStore.setPaused(true);
     this.props.gameStore.setMenuState(MENU_STATES.GAME_OVER);
   };
 

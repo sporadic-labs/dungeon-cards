@@ -29,14 +29,14 @@ export default class PlayScene extends Scene {
     this.initGame();
 
     this.proxy.on(emitter, EVENT_NAMES.GAME_OVER, () => {
-      store.pause();
+      store.setPaused(true);
       store.setMenuState(MENU_STATES.GAME_OVER);
     });
 
     this.proxy.on(emitter, EVENT_NAMES.GAME_START, () => {
       this.proxy.removeAll();
       this.scene.restart();
-      store.unpause();
+      store.setPaused(false);
     });
 
     this.storeUnsubscribe = autorun(() => {
@@ -44,7 +44,7 @@ export default class PlayScene extends Scene {
     });
 
     this.input.keyboard.on("keydown_E", event => {
-      store.pause();
+      store.setPaused(true);
       store.setMenuState(MENU_STATES.DEBUG);
     });
 
