@@ -17,18 +17,17 @@ export default class DiscardPile {
   constructor(scene, x, y) {
     this.scene = scene;
 
-    this.cardShadow = scene.add.sprite(0, 0, "assets", "cards/card-shadow");
-    this.card = scene.add.sprite(0, 0, "assets", "cards/card").setInteractive();
+    this.cardOutline = scene.add.sprite(0, 0, "assets", "cards/card-drop-target").setInteractive();
     this.reclaim = scene.add.sprite(0, 0, "assets", "cards/card-reclaim");
 
-    this.container = scene.add.container(x, y, [this.cardShadow, this.card, this.reclaim]);
+    this.container = scene.add.container(x, y, [this.cardOutline, this.reclaim]);
 
     this.pointerOver = false;
 
     this.proxy = new EventProxy();
-    this.proxy.on(this.card, "pointerup", () => this.select());
-    this.proxy.on(this.card, "pointerover", () => store.setReclaimActive(true));
-    this.proxy.on(this.card, "pointerout", () => store.setReclaimActive(false));
+    this.proxy.on(this.cardOutline, "pointerup", () => this.select());
+    this.proxy.on(this.cardOutline, "pointerover", () => store.setReclaimActive(true));
+    this.proxy.on(this.cardOutline, "pointerout", () => store.setReclaimActive(false));
 
     this.dispose = autorun(() => {
       if (store.isReclaimActive) {
@@ -61,13 +60,11 @@ export default class DiscardPile {
   }
 
   activate() {
-    this.card.setVisible(true);
-    this.cardShadow.setVisible(true);
+    this.container.setVisible(true);
   }
 
   deactivate() {
-    this.card.setVisible(false);
-    this.cardShadow.setVisible(false);
+    this.container.setVisible(false);
   }
 
   destroy() {
