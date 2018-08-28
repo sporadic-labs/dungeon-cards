@@ -17,10 +17,11 @@ export default class DiscardPile {
   constructor(scene, x, y) {
     this.scene = scene;
 
-    this.cardShadow = scene.add.sprite(0, 0, "assets", "cards/card-reclaim-shadow");
-    this.card = scene.add.sprite(0, 0, "assets", `cards/card-reclaim`).setInteractive();
+    this.cardShadow = scene.add.sprite(0, 0, "assets", "cards/card-shadow");
+    this.card = scene.add.sprite(0, 0, "assets", "cards/card").setInteractive();
+    this.reclaim = scene.add.sprite(0, 0, "assets", "cards/card-reclaim");
 
-    this.container = scene.add.container(x, y, [this.cardShadow, this.card]);
+    this.container = scene.add.container(x, y, [this.cardShadow, this.card, this.reclaim]);
 
     this.pointerOver = false;
 

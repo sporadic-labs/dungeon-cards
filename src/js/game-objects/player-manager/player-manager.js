@@ -29,7 +29,7 @@ export default class PlayerManager {
     this.showTooManyCardsMessage = true; // Any better ideas?
 
     const { width, height } = scene.sys.game.config;
-    this.discardPile = new DiscardPile(scene, 80, height - 202);
+    this.discardPile = new DiscardPile(scene, 60, height - 150);
     this.playerHandCount = scene.add
       .text(width / 2, height - 24, this.playerHand.getNumCards(), style)
       .setOrigin(0.5, 0.5);
