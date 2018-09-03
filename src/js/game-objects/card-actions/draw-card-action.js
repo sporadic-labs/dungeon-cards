@@ -14,18 +14,18 @@ export default class DrawCardAction extends Action {
     this.proxy.on(scene.input, "pointermove", this.onPointerMove, this);
     this.proxy.on(scene.input, "pointerup", this.onPointerUp, this);
 
-    const p = card.getPosition(0.5, 0.1);
-    this.arrow = actionRunner.arrow
-      .setStartPoint(p)
-      .setEndPoint(p)
-      .setColor(0x9e2828, 0x7c2323)
-      .setVisible(true);
+    // const p = card.getPosition(0.5, 0.1);
+    // this.arrow = actionRunner.arrow
+    //   .setStartPoint(p)
+    //   .setEndPoint(p)
+    //   .setColor(0x9e2828, 0x7c2323)
+    //   .setVisible(true);
   }
 
   onPointerMove(pointer) {
     const isOverValidTarget = this.scroll.isInBounds(pointer.x, pointer.y);
-    this.arrow.setEndPoint(pointer);
-    this.arrow.setHighlighted(isOverValidTarget);
+    // this.arrow.setEndPoint(pointer);
+    // this.arrow.setHighlighted(isOverValidTarget);
   }
 
   onPointerUp(pointer) {
@@ -38,7 +38,7 @@ export default class DrawCardAction extends Action {
   }
 
   destroy() {
-    this.arrow.setVisible(false);
+    // this.arrow.setVisible(false);
     this.proxy.removeAll();
   }
 }
