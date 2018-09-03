@@ -24,7 +24,7 @@ export default class PlayerCard {
     this.card = scene.add.sprite(0, 0, "assets", "cards/card");
 
     const key = PLAYER_CARD_INFO[type].key;
-    this.cardContents = scene.add.sprite(0, 0, "assets", key).setInteractive();
+    this.cardContents = scene.add.sprite(0, 0, "assets", key);
 
     // TODO(rex): Outline needs to be offset slightly for placement.  Fix this in the sprite.
     this.outline = scene.add.sprite(1, 1, "assets", `cards/card-outline`);
@@ -33,13 +33,18 @@ export default class PlayerCard {
     const cost = this.getCost();
     this.costDisplay = scene.add.sprite(0, 0, "assets", `cards/card-contents-cost-${cost}`);
 
-    this.container = scene.add.container(x + this.card.width / 2, y + this.card.height / 2, [
-      this.cardShadow,
-      this.outline,
-      this.card,
-      this.cardContents,
-      this.costDisplay
-    ]);
+    this.container = scene.add
+      .container(x + this.card.width / 2, y + this.card.height / 2, [
+        this.cardShadow,
+        this.outline,
+        this.card,
+        this.cardContents,
+        this.costDisplay
+      ])
+      .setSize(this.cardContents.width, this.cardContents.height)
+      .setInteractive();
+
+    this.enableDrag();
 
     this.selected = false;
     this.focused = false;
@@ -100,23 +105,75 @@ export default class PlayerCard {
   }
 
   enableFocusing() {
-    this.cardContents.on("pointerover", this.onPointerOver);
-    this.cardContents.on("pointerout", this.onPointerOut);
+    this.container.on("pointerover", this.onPointerOver);
+    this.container.on("pointerout", this.onPointerOut);
   }
 
   disableFocusing() {
-    this.cardContents.off("pointerover", this.onPointerOver);
-    this.cardContents.off("pointerout", this.onPointerOut);
+    this.container.off("pointerover", this.onPointerOver);
+    this.container.off("pointerout", this.onPointerOut);
   }
 
   enableSelecting() {
-    this.cardContents.on("pointerdown", this.onPointerDown);
+    this.container.on("pointerdown", this.onPointerDown);
     this.scene.input.off("pointerup", this.onPointerRelease);
   }
 
   disableSelecting() {
-    this.cardContents.off("pointerdown", this.onPointerDown);
+    this.container.off("pointerdown", this.onPointerDown);
     this.scene.input.off("pointerup", this.onPointerRelease);
+  }
+
+  enableDrag() {
+    this.scene.input.setDraggable(this.container, true);
+    this.container.on("dragstart", this.onDragStart, this);
+    this.container.on("drag", this.onDrag, this);
+    this.container.on("dragend", this.onDragEnd, this);
+  }
+
+  disableDrag() {
+    this.scene.input.setDraggable(this.container, false);
+    this.container.off("dragstart", this.onDragStart, this);
+    this.container.off("drag", this.onDrag, this);
+    this.container.off("dragend", this.onDragEnd, this);
+  }
+
+  onDragStart(pointer) {
+    // TODO: tween these without them being interrupted by focus/select tweens
+    this.container.setScale(0.9);
+    this.container.setAlpha(0.9);
+    this.setRotation(0);
+
+    this.yOffset = 0;
+
+    this.dragOffsetX = (this.x - pointer.x) * this.container.scaleX;
+    this.dragOffsetY = (this.y - pointer.y) * this.container.scaleY;
+
+    this.x = pointer.x + this.dragOffsetX;
+    this.y = pointer.y + this.dragOffsetY;
+  }
+
+  onDrag(pointer) {
+    this.x = pointer.x + this.dragOffsetX;
+    this.y = pointer.y + this.dragOffsetY;
+  }
+
+  onDragEnd(pointer) {
+    // TODO: tween these without them being interrupted by focus/select tweens
+    this.container.setScale(1);
+    this.container.setAlpha(1);
+
+    this.x = pointer.x + this.dragOffsetX;
+    this.y = pointer.y + this.dragOffsetY;
+
+    this.scene.tweens.killTweensOf(this.container);
+    this.scene.tweens.add({
+      targets: this.container,
+      scale: 1,
+      alpha: 1,
+      duration: 200,
+      ease: "Quad.easeOut"
+    });
   }
 
   onPointerOver = () => emitter.emit(EVENT_NAMES.PLAYER_CARD_FOCUS, this);
