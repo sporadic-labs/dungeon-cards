@@ -14,6 +14,7 @@ export default class ShiftAction extends Action {
   constructor(actionRunner, scene, card, playerManager, gameBoard, enemyManager) {
     super();
 
+    this.actionRunner = actionRunner;
     this.scene = scene;
     this.card = card;
     this.attackPattern = card.cardInfo.cells;
@@ -26,8 +27,8 @@ export default class ShiftAction extends Action {
 
     this.showMessage = true; // Any better ideas?
 
-    this.proxy.on(scene.input, "pointermove", this.onPointerMove, this);
-    this.proxy.on(scene.input, "pointerup", this.onPointerUp, this);
+    this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DRAG, this.onDrag, this);
+    this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DRAG_END, this.onDragEnd, this);
 
     const frame = this.direction === SHIFT_DIRECTIONS.LEFT ? "arrow-left" : "arrow-right";
     this.shiftPreviews = this.attackPattern.map(() => {
@@ -42,13 +43,16 @@ export default class ShiftAction extends Action {
       .setVisible(false);
   }
 
-  onPointerMove(pointer) {
+  onDrag(card) {
     this.shiftPreviews.map(preview => preview.setVisible(false));
     this.xPreview.setVisible(false);
 
+    const pointer = this.scene.input.activePointer;
     const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
     const isOverBoard = this.board.isWorldPointInBoard(pointer.x, pointer.y);
-    const isOverValidTarget = enemies.length > 0 || store.isReclaimActive;
+    const isOverValidTarget = enemies.length > 0 || store.isTargetingReclaim;
+
+    // TODO: do something to the card
 
     if (!isOverBoard) {
       this.enemyManager.defocusAllEnemies();
@@ -101,33 +105,31 @@ export default class ShiftAction extends Action {
     }
   }
 
-  onPointerUp(pointer) {
+  onDragEnd(card) {
+    const pointer = this.scene.input.activePointer;
     if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) {
+      this.actionRunner.showToast("You can't play that card there.");
       emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
       return;
     }
 
     const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
-    if (enemies.length) {
-      const enoughEnergyForAttack = this.playerManager.canUseCard(this.card);
-      if (enoughEnergyForAttack) {
-        this.enemyManager.shiftEnemies(enemies, this.direction);
-        this.playerManager.useEnergy(this.card.getEnergy());
-        emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
-      } else {
-        if (this.showMessage) {
-          this.showMessage = false;
-          // Some UI to indicate player can't play this card.
-          const { width } = this.scene.sys.game.config;
-          new PopupText(this.scene, "You don't have enough energy!", width / 4, 20, null, () => {
-            this.showMessage = true;
-          });
-        }
-        emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
-      }
-    } else {
+    if (!enemies.length) {
+      this.actionRunner.showToast("No enemy cards in range.");
       emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
+      return;
     }
+
+    const enoughEnergyForAttack = this.playerManager.canUseCard(this.card);
+    if (!enoughEnergyForAttack) {
+      this.actionRunner.showToast("You don't have enough energy for that.");
+      emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
+      return;
+    }
+
+    this.enemyManager.shiftEnemies(enemies, this.direction);
+    this.playerManager.useEnergy(this.card.getEnergy());
+    emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
   }
 
   getDirection(card) {

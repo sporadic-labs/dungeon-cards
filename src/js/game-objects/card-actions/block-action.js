@@ -7,15 +7,17 @@ export default class BlockAction extends Action {
   constructor(actionRunner, scene, card, playerManager, gameBoard, enemyManager) {
     super();
 
+    this.actionRunner = actionRunner;
     this.card = card;
     this.attackPattern = card.cardInfo.cells;
     this.board = gameBoard;
     this.proxy = new EventProxy();
     this.enemyManager = enemyManager;
     this.discardPile = playerManager.discardPile;
+    this.scene = scene;
 
-    this.proxy.on(scene.input, "pointermove", this.onPointerMove, this);
-    this.proxy.on(scene.input, "pointerup", this.onPointerUp, this);
+    this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DRAG, this.onDrag, this);
+    this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DRAG_END, this.onDragEnd, this);
 
     this.previews = this.attackPattern.map(() => {
       return scene.add
@@ -25,12 +27,15 @@ export default class BlockAction extends Action {
     });
   }
 
-  onPointerMove(pointer) {
+  onDrag(card) {
     this.previews.map(preview => preview.setVisible(false));
 
+    const pointer = this.scene.input.activePointer;
     const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
     const isOverBoard = this.board.isWorldPointInBoard(pointer.x, pointer.y);
-    const isOverValidTarget = enemies.length > 0 || store.isReclaimActive;
+    const isOverValidTarget = enemies.length > 0 || store.isTargetingReclaim;
+
+    // TODO: do something to the card
 
     if (!isOverBoard) {
       this.enemyManager.defocusAllEnemies();
@@ -57,20 +62,28 @@ export default class BlockAction extends Action {
     }
   }
 
-  onPointerUp(pointer) {
+  onDragEnd(card) {
+    if (store.isTargetingReclaim) {
+      emitter.emit(EVENT_NAMES.PLAYER_CARD_DISCARD);
+      return;
+    }
+
+    const pointer = this.scene.input.activePointer;
     if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) {
+      this.actionRunner.showToast("You can't play that card there.");
       emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
       return;
     }
 
     const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
-
-    if (enemies.length) {
-      enemies.forEach(enemy => enemy.setBlocked());
-      emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
-    } else {
+    if (!enemies.length) {
+      this.actionRunner.showToast("No enemy cards in range.");
       emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
+      return;
     }
+
+    enemies.forEach(enemy => enemy.setBlocked());
+    emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
   }
 
   destroy() {

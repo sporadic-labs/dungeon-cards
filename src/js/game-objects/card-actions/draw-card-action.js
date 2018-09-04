@@ -12,21 +12,14 @@ export default class DrawCardAction extends Action {
     this.playerManager = playerManager;
     this.scroll = playerManager.scroll;
 
-    this.proxy.on(scene.input, "pointermove", this.onPointerMove, this);
-    this.proxy.on(scene.input, "pointerup", this.onPointerUp, this);
+    this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DRAG_END, this.onDragEnd, this);
   }
 
-  onPointerMove(pointer) {
-    const isOverValidTarget = this.scroll.isInBounds(pointer.x, pointer.y);
-  }
-
-  onPointerUp(pointer) {
-    if (this.card.isInBounds(pointer.x, pointer.y)) {
-      this.playerManager.drawCard();
-      this.playerManager.drawCard();
-      this.playerManager.drawCard();
-      emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
-    }
+  onDragEnd(pointer) {
+    this.playerManager.drawCard();
+    this.playerManager.drawCard();
+    this.playerManager.drawCard();
+    emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
   }
 
   destroy() {
