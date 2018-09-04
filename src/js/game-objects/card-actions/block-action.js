@@ -3,6 +3,7 @@ import store from "../../store";
 import Action from "./action";
 
 export default class BlockAction extends Action {
+  /** @param {Phaser.Scene} scene */
   constructor(actionRunner, scene, card, playerManager, gameBoard, enemyManager) {
     super();
 

@@ -2,6 +2,7 @@ import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import Action from "./action";
 
 export default class DrawCardAction extends Action {
+  /** @param {Phaser.Scene} scene */
   constructor(actionRunner, scene, card, playerManager, gameBoard, enemyManager) {
     super();
 

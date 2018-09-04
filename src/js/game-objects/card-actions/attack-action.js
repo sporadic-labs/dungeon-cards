@@ -5,6 +5,7 @@ import { PopupText } from "../hud";
 import store from "../../store";
 
 export default class AttackAction extends Action {
+  /** @param {Phaser.Scene} scene */
   constructor(actionRunner, scene, card, playerManager, gameBoard, enemyManager) {
     super();
 

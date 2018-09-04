@@ -10,6 +10,7 @@ export const SHIFT_DIRECTIONS = {
 };
 
 export default class ShiftAction extends Action {
+  /** @param {Phaser.Scene} scene */
   constructor(actionRunner, scene, card, playerManager, gameBoard, enemyManager) {
     super();
 
