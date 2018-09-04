@@ -29,13 +29,6 @@ export default class AttackAction extends Action {
         .setAlpha(0.9)
         .setVisible(false);
     });
-
-    // const p = card.getPosition(0.5, 0.1);
-    // this.arrow = actionRunner.arrow
-    //   .setStartPoint(p)
-    //   .setEndPoint(p)
-    //   .setColor(0x9e2828, 0x7c2323)
-    //   .setVisible(true);
   }
 
   onPointerMove(pointer) {
@@ -68,9 +61,6 @@ export default class AttackAction extends Action {
         }
       });
     }
-
-    // this.arrow.setEndPoint(pointer);
-    // this.arrow.setHighlighted(isOverValidTarget);
   }
 
   onPointerUp(pointer) {
@@ -104,7 +94,6 @@ export default class AttackAction extends Action {
 
   destroy() {
     this.previews.map(sprite => sprite.destroy());
-    // this.arrow.setVisible(false);
     this.proxy.removeAll();
   }
 }
