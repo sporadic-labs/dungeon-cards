@@ -32,7 +32,7 @@ export default class EnergyDisplay {
 
     this.dispose = autorun(() => {
       const card = store.activePlayerCard;
-      if (card && store.isReclaimActive) {
+      if (card && card.getEnergy() > 0 && store.isTargetingReclaim) {
         this.previewText.setText(`+${card.getEnergy()}`);
         this.showPreviewText();
       } else this.hidePreviewText();

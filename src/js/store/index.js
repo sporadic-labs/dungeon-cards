@@ -4,7 +4,7 @@ const maxMenuHistory = 3;
 
 class GameStore {
   @observable
-  isReclaimActive = false;
+  isTargetingReclaim = false;
 
   @observable
   activePlayerCard = null;
@@ -20,6 +20,12 @@ class GameStore {
 
   @observable
   isPaused = false;
+
+  @observable
+  skipMenu = true;
+
+  @observable
+  noAudio = true;
 
   @computed
   get gameStarted() {
@@ -47,8 +53,8 @@ class GameStore {
   }
 
   @action
-  setReclaimActive(isActive) {
-    this.isReclaimActive = isActive;
+  setTargetingReclaim(isTargeting) {
+    this.isTargetingReclaim = isTargeting;
   }
 
   @action
