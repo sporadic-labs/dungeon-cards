@@ -295,7 +295,6 @@
             <key type="filename">assets/cards/card-contents-enemy-health.png</key>
             <key type="filename">assets/cards/card-contents-enemy-small.png</key>
             <key type="filename">assets/cards/card-contents-energy.png</key>
-            <key type="filename">assets/cards/card-contents-reclaim copy.png</key>
             <key type="filename">assets/cards/card-contents-shift-left.png</key>
             <key type="filename">assets/cards/card-contents-shift-right.png</key>
             <key type="filename">assets/cards/card-empty.png</key>
@@ -314,6 +313,7 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">assets/cards/card-contents-energy-3.png</key>
             <key type="filename">assets/cards/card-drop-target.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -324,19 +324,6 @@
                 <rect>21,27,42,54</rect>
                 <key>scale9Paddings</key>
                 <rect>21,27,42,54</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">assets/cards/card-reclaim-shadow.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>32,41,64,81</rect>
-                <key>scale9Paddings</key>
-                <rect>32,41,64,81</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
