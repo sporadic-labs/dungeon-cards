@@ -168,15 +168,12 @@ export default class PlayerHand {
 
     const startingAngularPosition = Math.PI / 2 - ((this.cards.length - 1) / 2) * angularStep;
     const startingRotation = (this.cards.length / 2) * angularStep;
-    const cardHalfWidth = this.cards[0].card.width / 2;
-    const cardHalfHeight = this.cards[0].card.height / 2;
     this.cards.forEach((card, i) => {
       const angle = startingAngularPosition + i * angularStep;
       const x = circleX + radius * Math.cos(angle);
       const y = circleY - radius * Math.sin(angle);
-      // Set position is set to expect the position to be top left, not center...
-      card.setPosition(x - cardHalfWidth, y - cardHalfHeight);
-      card.setRotation(startingRotation - i * angularStep);
+      const a = startingRotation - i * angularStep;
+      card.setTargetHandPlacement(x, y, a);
     });
   }
 

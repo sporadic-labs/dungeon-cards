@@ -4,6 +4,12 @@ import { EventProxy } from "../../events/index";
 import { observe } from "mobx";
 import store from "../../../store/index";
 
+const CARD_STATE = {
+  FOCUSED: "FOCUSED",
+  SELECTED: "SELECTED",
+  RETURNING: "RETURNING"
+};
+
 export default class PlayerCard {
   /**
    * @param {Phaser.Scene} scene
@@ -14,26 +20,31 @@ export default class PlayerCard {
 
     this.type = type;
     this.cardInfo = PLAYER_CARD_INFO[type];
+    this.key = PLAYER_CARD_INFO[type].key;
     this.scene = scene;
     this.cardEmitter = cardEmitter;
 
-    this.x = x;
-    this.y = y;
     this.xShake = 0;
     this.yOffset = 0;
     this.selected = false;
     this.focused = false;
     this.eventProxy = new EventProxy();
 
+    this.x = x;
+    this.y = y;
+    this.rotation = 0;
+
+    // Target position for the card within the hand
+    this.targetHandX = x;
+    this.targetHandY = y;
+    this.targetHandRotation = 0;
+
     this.cardShadow = scene.add.sprite(0, 0, "assets", "cards/card-shadow");
     this.card = scene.add.sprite(0, 0, "assets", "cards/card");
-
-    this.key = PLAYER_CARD_INFO[type].key;
     this.cardContents = scene.add.sprite(0, 0, "assets", this.key);
 
     // TODO(rex): Outline needs to be offset slightly for placement.  Fix this in the sprite.
-    this.outline = scene.add.sprite(1, 1, "assets", `cards/card-outline`);
-    this.outline.setAlpha(0);
+    this.outline = scene.add.sprite(1, 1, "assets", `cards/card-outline`).setAlpha(0);
 
     const cost = this.getCost();
     this.costDisplay = scene.add.sprite(0, 0, "assets", `cards/card-contents-cost-${cost}`);
@@ -89,15 +100,6 @@ export default class PlayerCard {
     }
   }
 
-  isInBounds(x, y) {
-    const bounds = this.container.getBounds();
-    const x1 = bounds.x;
-    const x2 = bounds.x + bounds.width;
-    const y1 = bounds.y;
-    const y2 = bounds.y + bounds.height;
-    return x >= x1 && x <= x2 && y >= y1 && y <= y2;
-  }
-
   shake() {
     this.scene.tweens.killTweensOf(this);
     this.timeline = this.scene.tweens.timeline({
@@ -124,9 +126,15 @@ export default class PlayerCard {
     return PLAYER_CARD_INFO[this.type].cost;
   }
 
-  setPosition(x, y) {
-    this.x = x + this.card.width / 2;
-    this.y = y + this.card.height / 2;
+  // Center of card, rotation in radians
+  setTargetHandPlacement(x, y, rotation) {
+    this.targetHandX = x;
+    this.targetHandY = y;
+    this.targetHandRotation = rotation;
+
+    this.x = x;
+    this.y = y;
+    this.rotation = rotation;
   }
 
   /**
@@ -180,7 +188,7 @@ export default class PlayerCard {
     // TODO: tween these without them being interrupted by focus/select tweens
     this.container.setScale(0.9);
     this.container.setAlpha(0.9);
-    this.setRotation(0);
+    this.rotation = 0;
 
     this.yOffset = 0;
 
@@ -226,10 +234,6 @@ export default class PlayerCard {
 
   setDepth(depth) {
     this.container.setDepth(depth);
-  }
-
-  setRotation(radians) {
-    this.container.rotation = radians;
   }
 
   focus() {
@@ -283,6 +287,7 @@ export default class PlayerCard {
   postUpdate() {
     this.container.x = this.x + this.xShake;
     this.container.y = this.y + this.yOffset;
+    this.container.rotation = this.rotation;
   }
 
   destroy() {
