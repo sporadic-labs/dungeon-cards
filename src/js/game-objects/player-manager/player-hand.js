@@ -19,6 +19,8 @@ export default class PlayerHand {
 
     this.focusedCard = null;
     this.selectedCard = null;
+    // Local emitter that is only for hand ⟷ card interaction
+    this.cardEmitter = new Events.EventEmitter();
 
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_SELECT, card => {
       store.setActivePlayerCard(card);
@@ -96,7 +98,7 @@ export default class PlayerHand {
     if (!this.deck.anyCardsRemaining()) return;
     // Tell a card to animate from deck position to hand
     const cardId = this.deck.draw();
-    const card = new PlayerCard(this.scene, cardId, 0, 0);
+    const card = new PlayerCard(this.scene, cardId, 0, 0, this.cardEmitter);
     this.cards.push(card);
     if (this.selectingEnabled) card.enableSelecting();
     this.arrangeCards();

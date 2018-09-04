@@ -1,30 +1,35 @@
 import { PLAYER_CARD_INFO } from "./player-card-info";
-import { emitter, EVENT_NAMES } from "../../events";
 import Phaser from "phaser";
+import { EventProxy } from "../../events/index";
+import { observe } from "mobx";
+import store from "../../../store/index";
 
 export default class PlayerCard {
   /**
    * @param {Phaser.Scene} scene
    * @param {PLAYER_CARD_TYPES} type
    */
-  constructor(scene, type, x, y) {
+  constructor(scene, type, x, y, cardEmitter) {
     scene.lifecycle.add(this);
 
     this.type = type;
     this.cardInfo = PLAYER_CARD_INFO[type];
     this.scene = scene;
+    this.cardEmitter = cardEmitter;
 
     this.x = x;
     this.y = y;
     this.xShake = 0;
     this.yOffset = 0;
-    this.scale = 1;
+    this.selected = false;
+    this.focused = false;
+    this.eventProxy = new EventProxy();
 
     this.cardShadow = scene.add.sprite(0, 0, "assets", "cards/card-shadow");
     this.card = scene.add.sprite(0, 0, "assets", "cards/card");
 
-    const key = PLAYER_CARD_INFO[type].key;
-    this.cardContents = scene.add.sprite(0, 0, "assets", key);
+    this.key = PLAYER_CARD_INFO[type].key;
+    this.cardContents = scene.add.sprite(0, 0, "assets", this.key);
 
     // TODO(rex): Outline needs to be offset slightly for placement.  Fix this in the sprite.
     this.outline = scene.add.sprite(1, 1, "assets", `cards/card-outline`);
@@ -44,13 +49,11 @@ export default class PlayerCard {
       .setSize(this.cardContents.width, this.cardContents.height)
       .setInteractive();
 
-    this.enableDrag();
+    this.isFocusEnabled = true;
+    this.disableFocusing();
 
-    this.selected = false;
-    this.focused = false;
-
-    // TODO: Only be enabled after the card is tweened into position. It shouldn't start enabled.
-    this.enableFocusing();
+    this.isDragEnabled = true;
+    this.disableDrag();
   }
 
   isInBounds(x, y) {
@@ -105,37 +108,39 @@ export default class PlayerCard {
   }
 
   enableFocusing() {
-    this.container.on("pointerover", this.onPointerOver);
-    this.container.on("pointerout", this.onPointerOut);
+    if (!this.isFocusEnabled) {
+      this.isFocusEnabled = true;
+      this.eventProxy.on(this.container, "pointerover", this.onPointerOver, this);
+      this.eventProxy.on(this.container, "pointerout", this.onPointerOut, this);
+    }
   }
 
   disableFocusing() {
-    this.container.off("pointerover", this.onPointerOver);
-    this.container.off("pointerout", this.onPointerOut);
-  }
-
-  enableSelecting() {
-    this.container.on("pointerdown", this.onPointerDown);
-    this.scene.input.off("pointerup", this.onPointerRelease);
-  }
-
-  disableSelecting() {
-    this.container.off("pointerdown", this.onPointerDown);
-    this.scene.input.off("pointerup", this.onPointerRelease);
+    if (this.isFocusEnabled) {
+      this.isFocusEnabled = false;
+      this.eventProxy.off(this.container, "pointerover", this.onPointerOver, this);
+      this.eventProxy.off(this.container, "pointerout", this.onPointerOut, this);
+    }
   }
 
   enableDrag() {
-    this.scene.input.setDraggable(this.container, true);
-    this.container.on("dragstart", this.onDragStart, this);
-    this.container.on("drag", this.onDrag, this);
-    this.container.on("dragend", this.onDragEnd, this);
+    if (!this.isDragEnabled) {
+      this.isDragEnabled = true;
+      this.scene.input.setDraggable(this.container, true);
+      this.eventProxy.on(this.container, "dragstart", this.onDragStart, this);
+      this.eventProxy.on(this.container, "drag", this.onDrag, this);
+      this.eventProxy.on(this.container, "dragend", this.onDragEnd, this);
+    }
   }
 
   disableDrag() {
-    this.scene.input.setDraggable(this.container, false);
-    this.container.off("dragstart", this.onDragStart, this);
-    this.container.off("drag", this.onDrag, this);
-    this.container.off("dragend", this.onDragEnd, this);
+    if (this.isDragEnabled) {
+      this.isDragEnabled = false;
+      this.scene.input.setDraggable(this.container, false);
+      this.eventProxy.off(this.container, "dragstart", this.onDragStart, this);
+      this.eventProxy.off(this.container, "drag", this.onDrag, this);
+      this.eventProxy.off(this.container, "dragend", this.onDragEnd, this);
+    }
   }
 
   onDragStart(pointer) {
@@ -151,11 +156,18 @@ export default class PlayerCard {
 
     this.x = pointer.x + this.dragOffsetX;
     this.y = pointer.y + this.dragOffsetY;
+
+    // Allow pointer events to pass through to other objects
+    this.container.disableInteractive();
+
+    this.cardEmitter.emit("dragstart", this);
   }
 
   onDrag(pointer) {
     this.x = pointer.x + this.dragOffsetX;
     this.y = pointer.y + this.dragOffsetY;
+
+    this.cardEmitter.emit("drag", this);
   }
 
   onDragEnd(pointer) {
@@ -166,30 +178,18 @@ export default class PlayerCard {
     this.x = pointer.x + this.dragOffsetX;
     this.y = pointer.y + this.dragOffsetY;
 
-    this.scene.tweens.killTweensOf(this.container);
-    this.scene.tweens.add({
-      targets: this.container,
-      scale: 1,
-      alpha: 1,
-      duration: 200,
-      ease: "Quad.easeOut"
-    });
+    this.container.setInteractive();
+
+    this.cardEmitter.emit("dragend", this);
   }
 
-  onPointerOver = () => emitter.emit(EVENT_NAMES.PLAYER_CARD_FOCUS, this);
+  onPointerOver() {
+    this.cardEmitter.emit("pointerover", this);
+  }
 
-  onPointerOut = () => emitter.emit(EVENT_NAMES.PLAYER_CARD_DEFOCUS, this);
-
-  onPointerDown = () => {
-    const { PLAYER_CARD_SELECT } = EVENT_NAMES;
-    emitter.emit(PLAYER_CARD_SELECT, this);
-    this.scene.input.once("pointerup", this.onPointerRelease);
-  };
-
-  onPointerRelease = () => {
-    const { PLAYER_CARD_DESELECT } = EVENT_NAMES;
-    emitter.emit(PLAYER_CARD_DESELECT, this);
-  };
+  onPointerOut() {
+    this.cardEmitter.emit("pointerout", this);
+  }
 
   setDepth(depth) {
     this.container.setDepth(depth);
@@ -204,12 +204,6 @@ export default class PlayerCard {
     this.focused = true;
     this.scene.tweens.killTweensOf(this);
     this.scene.tweens.add({
-      targets: this.container,
-      scale: 1,
-      duration: 200,
-      ease: "Quad.easeOut"
-    });
-    this.scene.tweens.add({
       targets: this,
       yOffset: -20,
       duration: 200,
@@ -221,12 +215,6 @@ export default class PlayerCard {
     if (!this.focused) return;
     this.focused = false;
     this.scene.tweens.killTweensOf(this);
-    this.scene.tweens.add({
-      targets: this.container,
-      scale: 1,
-      duration: 200,
-      ease: "Quad.easeOut"
-    });
     this.scene.tweens.add({
       targets: this,
       yOffset: 0,
@@ -264,13 +252,9 @@ export default class PlayerCard {
     this.container.y = this.y + this.yOffset;
   }
 
-  moveTo() {
-    // Animate and move to world pixel positions
-  }
-
   destroy() {
+    this.eventProxy.removeAll();
     this.scene.lifecycle.remove(this);
-    this.scene.input.off("pointerup", this.onPointerRelease);
     this.scene.tweens.killTweensOf(this.container);
     this.container.destroy();
   }
