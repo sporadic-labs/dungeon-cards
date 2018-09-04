@@ -5,8 +5,9 @@ import { observe } from "mobx";
 import store from "../../../store/index";
 
 const CARD_STATE = {
+  IDLE: "IDLE",
   FOCUSED: "FOCUSED",
-  SELECTED: "SELECTED",
+  DRAGGING: "DRAGGING",
   RETURNING: "RETURNING"
 };
 
@@ -29,7 +30,7 @@ export default class PlayerCard {
     this.selected = false;
     this.focused = false;
     this.eventProxy = new EventProxy();
-
+    this.state = CARD_STATE.IDLE;
     this.x = x;
     this.y = y;
     this.rotation = 0;
@@ -132,9 +133,11 @@ export default class PlayerCard {
     this.targetHandY = y;
     this.targetHandRotation = rotation;
 
-    this.x = x;
-    this.y = y;
-    this.rotation = rotation;
+    if (![CARD_STATE.RETURNING, CARD_STATE.DRAGGING].includes(this.state)) {
+      this.x = x;
+      this.y = y;
+      this.rotation = rotation;
+    }
   }
 
   /**
@@ -185,6 +188,8 @@ export default class PlayerCard {
   }
 
   onDragStart(pointer) {
+    this.state = CARD_STATE.DRAGGING;
+
     // TODO: tween these without them being interrupted by focus/select tweens
     this.container.setScale(0.9);
     this.container.setAlpha(0.9);
@@ -222,6 +227,23 @@ export default class PlayerCard {
     this.container.setInteractive();
 
     this.cardEmitter.emit("dragend", this);
+
+    this.state = CARD_STATE.RETURNING;
+
+    const speed = 1500 / 1000; // px/s => px/ms
+    const { x, y, targetHandX, targetHandY, targetHandRotation } = this;
+    const distance = Phaser.Math.Distance.Between(x, y, targetHandX, targetHandY);
+    const durationMs = distance / speed;
+    this.scene.tweens.killTweensOf(this);
+    this.scene.tweens.add({
+      targets: this,
+      x: targetHandX,
+      y: targetHandY,
+      rotation: targetHandRotation,
+      duration: durationMs,
+      ease: "Quad.easeOut",
+      onComplete: () => (this.state = CARD_STATE.IDLE)
+    });
   }
 
   onPointerOver() {
@@ -238,6 +260,7 @@ export default class PlayerCard {
 
   focus() {
     if (this.focused) return;
+    if ([CARD_STATE.RETURNING, CARD_STATE.DRAGGING].includes(this.state)) return;
     this.focused = true;
     this.scene.tweens.killTweensOf(this);
     this.scene.tweens.add({
@@ -250,6 +273,7 @@ export default class PlayerCard {
 
   defocus() {
     if (!this.focused) return;
+    if ([CARD_STATE.RETURNING, CARD_STATE.DRAGGING].includes(this.state)) return;
     this.focused = false;
     this.scene.tweens.killTweensOf(this);
     this.scene.tweens.add({
@@ -262,6 +286,7 @@ export default class PlayerCard {
 
   select() {
     if (this.selected) return;
+    if ([CARD_STATE.RETURNING, CARD_STATE.DRAGGING].includes(this.state)) return;
     this.selected = true;
     this.scene.tweens.killTweensOf(this.outline);
     this.scene.tweens.add({
@@ -274,6 +299,7 @@ export default class PlayerCard {
 
   deselect() {
     if (!this.selected) return;
+    if ([CARD_STATE.RETURNING, CARD_STATE.DRAGGING].includes(this.state)) return;
     this.selected = false;
     this.scene.tweens.killTweensOf(this.outline);
     this.scene.tweens.add({
