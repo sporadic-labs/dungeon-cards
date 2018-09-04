@@ -54,6 +54,39 @@ export default class PlayerCard {
 
     this.isDragEnabled = true;
     this.disableDrag();
+
+    // Giant hack just to get a feel for what flipping could be like
+    if (this.cardInfo.energy > 0 && type.startsWith("ATTACK")) {
+      observe(store, "isTargetingReclaim", change => {
+        if (store.activeCard !== this) return;
+        const isTargetingReclaim = change.newValue;
+        let newFrame = this.key;
+        let hideCost = false;
+        if (isTargetingReclaim) {
+          if (this.cardInfo.energy === 3) newFrame = "cards/card-contents-energy-3";
+          else newFrame = "cards/card-contents-energy";
+          hideCost = true;
+        }
+        const flip = (newFrame, hideCost = false) => {
+          const scaleTarget = this.container.scaleX > 0 ? -1 : 1;
+          this.scene.tweens.killTweensOf(this);
+          this.scene.tweens.add({
+            targets: this.container,
+            scaleX: scaleTarget,
+            duration: 200,
+            ease: "Quad.easeOut",
+            onUpdate: ({ progress }) => {
+              if (progress > 0.5) {
+                this.cardContents.setTexture("assets", newFrame);
+                this.costDisplay.setVisible(!hideCost);
+                if (scaleTarget < 0) this.cardContents.scaleX = -1; // Flip back to normal shadow
+              }
+            }
+          });
+        };
+        flip(newFrame, hideCost);
+      });
+    }
   }
 
   isInBounds(x, y) {
