@@ -33,10 +33,7 @@ export default class PlayerHand {
       store.setFocusedPlayerCard(null);
     });
 
-    this.proxy.on(emitter, EVENT_NAMES.ACTION_UNSUCCESSFUL, () => {
-      store.activePlayerCard.shake();
-      this.arrangeCards();
-    });
+    this.disableSelecting();
 
     this.proxy.once(scene.events, "shutdown", this.destroy, this);
     this.proxy.once(scene.events, "destroy", this.destroy, this);
@@ -45,8 +42,6 @@ export default class PlayerHand {
       // TODO: clean this up. These are ref'd so that mobx knows which props we are observing
       const activeCard = store.activePlayerCard;
       const playerCard = store.focusedPlayerCard;
-
-      this.updateCards();
 
       if (store.activePlayerCard) {
         this.cards.forEach(card => {
@@ -61,6 +56,8 @@ export default class PlayerHand {
           card.enableDrag();
         });
       }
+
+      this.depthSort();
     });
   }
 
@@ -86,36 +83,24 @@ export default class PlayerHand {
     if (store.focusedPlayerCard === card) store.setFocusedPlayerCard(null);
   }
 
-  updateCards() {
-    this.cards.forEach(card => {
-      // Force card to the correct state - selected cards should stay focused
-      if (card === store.activePlayerCard) {
-        card.focus();
-        card.select();
-      } else if (card === store.focusedPlayerCard) {
-        card.focus();
-        card.deselect();
-      } else {
-        card.defocus();
-        card.deselect();
-      }
-    });
-    this.depthSort();
-  }
-
   enableSelecting() {
     this.selectingEnabled = true;
-    this.cards.forEach(c => c.enableDrag());
+    this.cards.forEach(c => {
+      c.enableDrag();
+      c.enableFocusing();
+    });
   }
 
   disableSelecting() {
     this.selectingEnabled = false;
-    this.cards.forEach(c => c.deselect());
-    this.cards.forEach(c => c.disableDrag());
+    this.cards.forEach(c => {
+      c.disableDrag();
+      c.disableFocusing();
+    });
   }
 
   getSelected() {
-    return this.cards.find(card => card.selected);
+    return store.activeCard;
   }
 
   getNumCards() {

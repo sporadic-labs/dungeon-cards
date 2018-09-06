@@ -25,10 +25,7 @@ export default class PlayerCard {
     this.scene = scene;
     this.cardEmitter = cardEmitter;
 
-    this.xShake = 0;
-    this.yOffset = 0;
-    this.selected = false;
-    this.focused = false;
+    this.focusOffset = 0;
     this.eventProxy = new EventProxy();
     this.state = CARD_STATE.IDLE;
     this.x = x;
@@ -99,24 +96,6 @@ export default class PlayerCard {
         flip(newFrame, hideCost);
       });
     }
-  }
-
-  shake() {
-    this.scene.tweens.killTweensOf(this);
-    this.timeline = this.scene.tweens.timeline({
-      targets: this,
-      ease: Phaser.Math.Easing.Quadratic.InOut,
-      duration: 60,
-      tweens: [
-        { xShake: -1 },
-        { xShake: +2 },
-        { xShake: -4 },
-        { xShake: +4 },
-        { xShake: -4 },
-        { xShake: 2 },
-        { xShake: -1 }
-      ]
-    });
   }
 
   getEnergy() {
@@ -194,8 +173,7 @@ export default class PlayerCard {
     this.container.setScale(0.9);
     this.container.setAlpha(0.9);
     this.rotation = 0;
-
-    this.yOffset = 0;
+    this.focusOffset = 0;
 
     this.dragOffsetX = (this.x - pointer.x) * this.container.scaleX;
     this.dragOffsetY = (this.y - pointer.y) * this.container.scaleY;
@@ -207,6 +185,8 @@ export default class PlayerCard {
     this.container.disableInteractive();
 
     this.cardEmitter.emit("dragstart", this);
+
+    this.showOutline();
   }
 
   onDrag(pointer) {
@@ -244,50 +224,45 @@ export default class PlayerCard {
       ease: "Quad.easeOut",
       onComplete: () => (this.state = CARD_STATE.IDLE)
     });
+
+    this.hideOutline();
   }
 
   onPointerOver() {
     this.cardEmitter.emit("pointerover", this);
+
+    if (this.state === CARD_STATE.IDLE) {
+      this.state = CARD_STATE.FOCUSED;
+      this.scene.tweens.killTweensOf(this);
+      this.scene.tweens.add({
+        targets: this,
+        focusOffset: -20,
+        duration: 200,
+        ease: "Quad.easeOut"
+      });
+    }
   }
 
   onPointerOut() {
     this.cardEmitter.emit("pointerout", this);
+
+    if (this.state === CARD_STATE.FOCUSED) {
+      this.state = CARD_STATE.IDLE;
+      this.scene.tweens.killTweensOf(this);
+      this.scene.tweens.add({
+        targets: this,
+        focusOffset: 0,
+        duration: 200,
+        ease: "Quad.easeOut"
+      });
+    }
   }
 
   setDepth(depth) {
     this.container.setDepth(depth);
   }
 
-  focus() {
-    if (this.focused) return;
-    if ([CARD_STATE.RETURNING, CARD_STATE.DRAGGING].includes(this.state)) return;
-    this.focused = true;
-    this.scene.tweens.killTweensOf(this);
-    this.scene.tweens.add({
-      targets: this,
-      yOffset: -20,
-      duration: 200,
-      ease: "Quad.easeOut"
-    });
-  }
-
-  defocus() {
-    if (!this.focused) return;
-    if ([CARD_STATE.RETURNING, CARD_STATE.DRAGGING].includes(this.state)) return;
-    this.focused = false;
-    this.scene.tweens.killTweensOf(this);
-    this.scene.tweens.add({
-      targets: this,
-      yOffset: 0,
-      duration: 200,
-      ease: "Quad.easeOut"
-    });
-  }
-
-  select() {
-    if (this.selected) return;
-    if ([CARD_STATE.RETURNING, CARD_STATE.DRAGGING].includes(this.state)) return;
-    this.selected = true;
+  showOutline() {
     this.scene.tweens.killTweensOf(this.outline);
     this.scene.tweens.add({
       targets: this.outline,
@@ -297,10 +272,7 @@ export default class PlayerCard {
     });
   }
 
-  deselect() {
-    if (!this.selected) return;
-    if ([CARD_STATE.RETURNING, CARD_STATE.DRAGGING].includes(this.state)) return;
-    this.selected = false;
+  hideOutline() {
     this.scene.tweens.killTweensOf(this.outline);
     this.scene.tweens.add({
       targets: this.outline,
@@ -311,8 +283,14 @@ export default class PlayerCard {
   }
 
   postUpdate() {
-    this.container.x = this.x + this.xShake;
-    this.container.y = this.y + this.yOffset;
+    let focusOffsetX = 0;
+    let focusOffsetY = 0;
+    if (this.focusOffset !== 0) {
+      focusOffsetX = Math.cos(this.rotation - Math.PI / 2) * -this.focusOffset;
+      focusOffsetY = Math.sin(this.rotation - Math.PI / 2) * -this.focusOffset;
+    }
+    this.container.x = this.x + focusOffsetX;
+    this.container.y = this.y + focusOffsetY;
     this.container.rotation = this.rotation;
   }
 

@@ -51,8 +51,6 @@ export default class PlayerManager {
     );
     this.proxy.on(scene.events, "shutdown", this.destroy, this);
     this.proxy.on(scene.events, "destroy", this.destroy, this);
-
-    this.disableSelecting();
   }
 
   /**
