@@ -165,6 +165,7 @@ export default class PlayerHand {
   discardCard(card) {
     if (this.cards.includes(card)) {
       if (card === store.activePlayerCard) store.setActivePlayerCard(null);
+      if (card === store.focusedPlayerCard) store.setFocusedPlayerCard(null);
       this.cards = this.cards.filter(c => c !== card);
       this.deck.discard(card.type);
       this.arrangeCards();
