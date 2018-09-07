@@ -91,12 +91,10 @@ export default class PlayerManager {
 
   enableSelecting() {
     this.playerHand.enableSelecting();
-    this.scroll.enableSelecting();
   }
 
   disableSelecting() {
     this.playerHand.disableSelecting();
-    this.scroll.disableSelecting();
   }
 
   discardSelectedCard() {
