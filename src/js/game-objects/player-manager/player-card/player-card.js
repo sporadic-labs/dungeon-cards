@@ -76,24 +76,24 @@ export default class PlayerCard {
           else newFrame = "cards/card-contents-energy";
           hideCost = true;
         }
-        const flip = (newFrame, hideCost = false) => {
-          const scaleTarget = this.container.scaleX > 0 ? -1 : 1;
+        const flip = (newFrame, side, hideCost = false) => {
           this.scene.tweens.killTweensOf(this);
           this.scene.tweens.add({
             targets: this.container,
-            scaleX: scaleTarget,
+            scaleX: side,
             duration: 200,
             ease: "Quad.easeOut",
             onUpdate: ({ progress }) => {
               if (progress > 0.5) {
                 this.cardContents.setTexture("assets", newFrame);
                 this.costDisplay.setVisible(!hideCost);
-                if (scaleTarget < 0) this.cardContents.scaleX = -1; // Flip back to normal shadow
+                if (side < 0) this.cardContents.scaleX = -1; // Flip back to normal shadow
               }
             }
           });
         };
-        flip(newFrame, hideCost);
+        const direction = newFrame.includes("energy") ? -1 : 1;
+        flip(newFrame, direction, hideCost);
       });
     }
   }
