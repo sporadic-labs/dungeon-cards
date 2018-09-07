@@ -73,6 +73,7 @@ export default class PlayerHand {
   onCardDragEnd(card) {
     emitter.emit(EVENT_NAMES.PLAYER_CARD_DRAG_END, card);
     store.setActivePlayerCard(null);
+    store.setFocusedPlayerCard(null);
   }
 
   onCardOver(card) {
