@@ -62,6 +62,7 @@ export default class DiscardPile {
   }
 
   disable() {
+    store.setTargetingReclaim(false);
     if (this.isEnabled) {
       this.isEnabled = false;
       this.scene.tweens.killTweensOf(this.container);
