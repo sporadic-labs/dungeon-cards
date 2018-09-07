@@ -2,6 +2,7 @@ import { emitter, EVENT_NAMES } from "../events";
 import store from "../../store";
 import { autorun, observe } from "mobx";
 import { EventProxy } from "../events/index";
+import MobXProxy from "../../helpers/mobx-proxy";
 
 /**
  * @export
@@ -26,24 +27,20 @@ export default class DiscardPile {
     this.isEnabled = true;
     this.disable();
 
-    this.disposers = [];
-    this.disposers.push(
-      observe(store, "activePlayerCard", change => {
-        const card = change.newValue;
-        const isReclaimable = card && card.cardInfo.energy > 0;
-        if (isReclaimable) this.enable();
-        else this.disable();
-      })
-    );
-    this.disposers.push(
-      observe(store, "isTargetingReclaim", change => {
-        const isTargetingReclaim = change.newValue;
-        if (this.isEnabled) {
-          if (isTargetingReclaim) this.focus();
-          else this.defocus();
-        }
-      })
-    );
+    this.mobProxy = new MobXProxy();
+    this.mobProxy.observe(store, "activePlayerCard", change => {
+      const card = change.newValue;
+      const isReclaimable = card && card.cardInfo.energy > 0;
+      if (isReclaimable) this.enable();
+      else this.disable();
+    });
+    this.mobProxy = observe(store, "isTargetingReclaim", change => {
+      const isTargetingReclaim = change.newValue;
+      if (this.isEnabled) {
+        if (isTargetingReclaim) this.focus();
+        else this.defocus();
+      }
+    });
 
     this.proxy.on(scene.events, "shutdown", this.destroy, this);
     this.proxy.on(scene.events, "destroy", this.destroy, this);
@@ -108,6 +105,7 @@ export default class DiscardPile {
   }
 
   destroy() {
+    this.mobProxy.destroy();
     this.proxy.removeAll();
     this.container.destroy();
     this.disposers.forEach(fn => fn());
