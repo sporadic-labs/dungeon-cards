@@ -6,6 +6,7 @@ export default class DrawCardAction extends Action {
   constructor(actionRunner, scene, card, playerManager, gameBoard, enemyManager) {
     super();
 
+    this.actionRunner = actionRunner;
     this.scene = scene;
     this.card = card;
     this.proxy = new EventProxy();
@@ -16,10 +17,17 @@ export default class DrawCardAction extends Action {
   }
 
   onDragEnd(pointer) {
-    this.playerManager.drawCard();
-    this.playerManager.drawCard();
-    this.playerManager.drawCard();
-    emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
+    // Drawing 3 and discarding 1
+    if (this.playerManager.canDraw(2)) {
+      this.playerManager.drawCard();
+      this.playerManager.drawCard();
+      this.playerManager.drawCard();
+      emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
+    } else {
+      this.actionRunner.showToast("You can't draw cards - you'll have too many!");
+      emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
+      return;
+    }
   }
 
   destroy() {

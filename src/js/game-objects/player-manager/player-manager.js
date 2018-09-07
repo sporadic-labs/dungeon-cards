@@ -10,6 +10,8 @@ const style = {
   fill: "#E5E0D6"
 };
 
+const MAX_HAND = 10;
+
 export default class PlayerManager {
   /**
    * @param {Phaser.Scene} scene
@@ -108,6 +110,10 @@ export default class PlayerManager {
     return Promise.resolve();
   }
 
+  canDraw(numCardsToDraw) {
+    return this.playerHand.getNumCards() + numCardsToDraw <= MAX_HAND;
+  }
+
   async attemptCompleteTurn() {
     await this.discardStep();
     emitter.emit(EVENT_NAMES.PLAYER_TURN_COMPLETE);
@@ -120,7 +126,7 @@ export default class PlayerManager {
 
   async discardStep() {
     return new Promise(resolve => {
-      if (this.playerHand.getNumCards() <= 10) {
+      if (this.playerHand.getNumCards() <= MAX_HAND) {
         this.resetEnergy();
         resolve();
       } else if (this.showTooManyCardsMessage) {
