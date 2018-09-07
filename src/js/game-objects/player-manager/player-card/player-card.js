@@ -173,6 +173,9 @@ export default class PlayerCard {
     this.container.setScale(0.9);
     this.container.setAlpha(0.9);
     this.rotation = 0;
+
+    // Kill any focus. TODO: we need a better way to compose and selectively stop tweens
+    this.scene.tweens.killTweensOf(this);
     this.focusOffset = 0;
 
     this.dragOffsetX = (this.x - pointer.x) * this.container.scaleX;
@@ -229,9 +232,8 @@ export default class PlayerCard {
   }
 
   onPointerOver() {
-    this.cardEmitter.emit("pointerover", this);
-
     if (this.state === CARD_STATE.IDLE) {
+      this.cardEmitter.emit("pointerover", this);
       this.state = CARD_STATE.FOCUSED;
       this.scene.tweens.killTweensOf(this);
       this.scene.tweens.add({
@@ -244,9 +246,8 @@ export default class PlayerCard {
   }
 
   onPointerOut() {
-    this.cardEmitter.emit("pointerout", this);
-
     if (this.state === CARD_STATE.FOCUSED) {
+      this.cardEmitter.emit("pointerout", this);
       this.state = CARD_STATE.IDLE;
       this.scene.tweens.killTweensOf(this);
       this.scene.tweens.add({
