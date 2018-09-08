@@ -67,6 +67,8 @@ export default class AttackAction extends Action {
   }
 
   onDragEnd(card) {
+    this.board.defocusBoard();
+
     if (store.isTargetingReclaim) {
       emitter.emit(EVENT_NAMES.PLAYER_CARD_DISCARD);
       return;
@@ -88,12 +90,15 @@ export default class AttackAction extends Action {
 
     const enoughEnergyForAttack = this.playerManager.canUseCard(this.card);
     if (!enoughEnergyForAttack) {
+      this.enemyManager.defocusAllEnemies();
       this.actionRunner.showToast("You don't have enough energy for that.");
       emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
       return;
     }
 
-    this.enemyManager.damageEnemies(enemies, this.damage);
+    this.enemyManager
+      .damageEnemies(enemies, this.damage)
+      .then(() => this.enemyManager.defocusAllEnemies());
     this.playerManager.useEnergy(this.card.getEnergy());
     emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
   }

@@ -106,6 +106,8 @@ export default class ShiftAction extends Action {
   }
 
   onDragEnd(card) {
+    this.board.defocusBoard();
+
     const pointer = this.scene.input.activePointer;
     if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) {
       this.actionRunner.showToast("You can't play that card there.");
@@ -123,11 +125,14 @@ export default class ShiftAction extends Action {
     const enoughEnergyForAttack = this.playerManager.canUseCard(this.card);
     if (!enoughEnergyForAttack) {
       this.actionRunner.showToast("You don't have enough energy for that.");
+      this.enemyManager.defocusAllEnemies();
       emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
       return;
     }
 
-    this.enemyManager.shiftEnemies(enemies, this.direction);
+    this.enemyManager
+      .shiftEnemies(enemies, this.direction)
+      .then(() => this.enemyManager.defocusAllEnemies());
     this.playerManager.useEnergy(this.card.getEnergy());
     emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
   }

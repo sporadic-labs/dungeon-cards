@@ -63,6 +63,8 @@ export default class BlockAction extends Action {
   }
 
   onDragEnd(card) {
+    this.board.defocusBoard();
+
     if (store.isTargetingReclaim) {
       emitter.emit(EVENT_NAMES.PLAYER_CARD_DISCARD);
       return;
@@ -82,7 +84,7 @@ export default class BlockAction extends Action {
       return;
     }
 
-    enemies.forEach(enemy => enemy.setBlocked());
+    enemies.forEach(enemy => enemy.setBlocked()).then(() => this.enemyManager.defocusAllEnemies());
     emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
   }
 
