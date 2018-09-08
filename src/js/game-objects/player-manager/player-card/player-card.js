@@ -11,6 +11,8 @@ const CARD_STATE = {
   RETURNING: "RETURNING"
 };
 
+const DRAG_SCALE = 0.8;
+
 export default class PlayerCard {
   /**
    * @param {Phaser.Scene} scene
@@ -77,7 +79,7 @@ export default class PlayerCard {
           hideCost = true;
         }
         const flip = (newFrame, side, hideCost = false) => {
-          this.scene.tweens.killTweensOf(this);
+          this.scene.tweens.killTweensOf(this.container);
           this.scene.tweens.add({
             targets: this.container,
             scaleX: side,
@@ -92,7 +94,7 @@ export default class PlayerCard {
             }
           });
         };
-        const direction = newFrame.includes("energy") ? -1 : 1;
+        const direction = newFrame.includes("energy") ? -DRAG_SCALE : DRAG_SCALE;
         flip(newFrame, direction, hideCost);
       });
     }
@@ -180,18 +182,17 @@ export default class PlayerCard {
       duration: 200,
       ease: "Quad.easeOut"
     });
-    const targetScale = 0.8;
     this.scene.tweens.killTweensOf(this.container);
     this.scene.tweens.add({
       targets: this.container,
-      scaleX: targetScale,
-      scaleY: targetScale,
+      scaleX: DRAG_SCALE,
+      scaleY: DRAG_SCALE,
       duration: 200,
       ease: "Quad.easeOut"
     });
 
-    this.dragOffsetX = (this.x - pointer.x) * targetScale;
-    this.dragOffsetY = (this.y - pointer.y) * targetScale;
+    this.dragOffsetX = (this.x - pointer.x) * DRAG_SCALE;
+    this.dragOffsetY = (this.y - pointer.y) * DRAG_SCALE;
 
     this.x = pointer.x + this.dragOffsetX;
     this.y = pointer.y + this.dragOffsetY;
