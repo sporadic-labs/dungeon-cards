@@ -18,9 +18,7 @@ export default class DiscardPile {
   constructor(scene, x, y) {
     this.scene = scene;
 
-    this.cardOutline = scene.add.sprite(0, 0, "assets", "cards/card-drop-target").setInteractive();
-    this.reclaim = scene.add.sprite(0, 0, "assets", "cards/card-reclaim");
-    this.container = scene.add.container(x, y, [this.cardOutline, this.reclaim]);
+    this.sprite = scene.add.sprite(x, y, "assets", "cards/card-drop-target").setInteractive();
 
     this.proxy = new EventProxy();
 
@@ -49,9 +47,9 @@ export default class DiscardPile {
   enable() {
     if (!this.isEnabled) {
       this.isEnabled = true;
-      this.scene.tweens.killTweensOf(this.container);
+      this.scene.tweens.killTweensOf(this.sprite);
       this.scene.tweens.add({
-        targets: this.container,
+        targets: this.sprite,
         alpha: 1,
         duration: 200,
         ease: "Quad.easeOut"
@@ -65,9 +63,9 @@ export default class DiscardPile {
     store.setTargetingReclaim(false);
     if (this.isEnabled) {
       this.isEnabled = false;
-      this.scene.tweens.killTweensOf(this.container);
+      this.scene.tweens.killTweensOf(this.sprite);
       this.scene.tweens.add({
-        targets: this.container,
+        targets: this.sprite,
         alpha: 0.25,
         duration: 200,
         ease: "Quad.easeOut"
@@ -79,14 +77,14 @@ export default class DiscardPile {
 
   onCardDrag() {
     const pointer = this.scene.input.activePointer;
-    const isOver = this.container.getBounds().contains(pointer.x, pointer.y);
+    const isOver = this.sprite.getBounds().contains(pointer.x, pointer.y);
     store.setTargetingReclaim(isOver);
   }
 
   focus() {
-    this.scene.tweens.killTweensOf(this.container);
+    this.scene.tweens.killTweensOf(this.sprite);
     this.scene.tweens.add({
-      targets: this.container,
+      targets: this.sprite,
       scaleX: 1.05,
       scaleY: 1.05,
       duration: 200,
@@ -95,9 +93,9 @@ export default class DiscardPile {
   }
 
   defocus() {
-    this.scene.tweens.killTweensOf(this.container);
+    this.scene.tweens.killTweensOf(this.sprite);
     this.scene.tweens.add({
-      targets: this.container,
+      targets: this.sprite,
       scaleX: 1,
       scaleY: 1,
       duration: 200,
@@ -108,7 +106,7 @@ export default class DiscardPile {
   destroy() {
     this.mobProxy.destroy();
     this.proxy.removeAll();
-    this.container.destroy();
+    this.sprite.destroy();
     this.disposers.forEach(fn => fn());
   }
 }
