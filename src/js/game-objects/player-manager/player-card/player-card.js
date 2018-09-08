@@ -169,17 +169,29 @@ export default class PlayerCard {
   onDragStart(pointer) {
     this.state = CARD_STATE.DRAGGING;
 
-    // TODO: tween these without them being interrupted by focus/select tweens
-    this.container.setScale(0.9);
-    this.container.setAlpha(0.9);
-    this.rotation = 0;
+    // TODO: we need a better way to compose and selectively stop tweens
 
-    // Kill any focus. TODO: we need a better way to compose and selectively stop tweens
+    // Zero out rotation & focus and scale down
     this.scene.tweens.killTweensOf(this);
-    this.focusOffset = 0;
+    this.scene.tweens.add({
+      targets: this,
+      rotation: 0,
+      focusOffset: 0,
+      duration: 200,
+      ease: "Quad.easeOut"
+    });
+    const targetScale = 0.9;
+    this.scene.tweens.killTweensOf(this.container);
+    this.scene.tweens.add({
+      targets: this.container,
+      scaleX: targetScale,
+      scaleY: targetScale,
+      duration: 200,
+      ease: "Quad.easeOut"
+    });
 
-    this.dragOffsetX = (this.x - pointer.x) * this.container.scaleX;
-    this.dragOffsetY = (this.y - pointer.y) * this.container.scaleY;
+    this.dragOffsetX = (this.x - pointer.x) * targetScale;
+    this.dragOffsetY = (this.y - pointer.y) * targetScale;
 
     this.x = pointer.x + this.dragOffsetX;
     this.y = pointer.y + this.dragOffsetY;
@@ -201,8 +213,7 @@ export default class PlayerCard {
 
   onDragEnd(pointer) {
     // TODO: tween these without them being interrupted by focus/select tweens
-    this.container.setScale(1);
-    this.container.setAlpha(1);
+    // this.container.setScale(1);
 
     this.x = pointer.x + this.dragOffsetX;
     this.y = pointer.y + this.dragOffsetY;
@@ -226,6 +237,14 @@ export default class PlayerCard {
       duration: durationMs,
       ease: "Quad.easeOut",
       onComplete: () => (this.state = CARD_STATE.IDLE)
+    });
+    this.scene.tweens.killTweensOf(this.container);
+    this.scene.tweens.add({
+      targets: this.container,
+      scaleX: 1,
+      scaleY: 1,
+      duration: durationMs,
+      ease: "Quad.easeOut"
     });
 
     this.hideOutline();
