@@ -1,5 +1,6 @@
 import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import Action from "./action";
+import store from "../../store/index";
 
 export default class DrawCardAction extends Action {
   /** @param {Phaser.Scene} scene */
@@ -17,16 +18,19 @@ export default class DrawCardAction extends Action {
   }
 
   onDragEnd(pointer) {
-    // Drawing 3 and discarding 1
-    if (this.playerManager.canDraw(2)) {
-      this.playerManager.drawCard();
-      this.playerManager.drawCard();
-      this.playerManager.drawCard();
-      emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
+    if (store.isTargetingDropZone) {
+      // Drawing 3 and discarding 1
+      if (this.playerManager.canDraw(2)) {
+        this.playerManager.drawCard();
+        this.playerManager.drawCard();
+        this.playerManager.drawCard();
+        emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
+      } else {
+        this.actionRunner.showToast("You can't draw cards - you'll have too many!");
+        emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
+      }
     } else {
-      this.actionRunner.showToast("You can't draw cards - you'll have too many!");
       emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
-      return;
     }
   }
 

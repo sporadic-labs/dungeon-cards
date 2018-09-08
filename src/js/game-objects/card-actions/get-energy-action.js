@@ -1,5 +1,6 @@
 import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import Action from "./action";
+import store from "../../store/index";
 
 export default class GetEnergyAction extends Action {
   /** @param {Phaser.Scene} scene */
@@ -16,8 +17,12 @@ export default class GetEnergyAction extends Action {
   }
 
   onDragEnd(pointer) {
-    this.playerManager.addEnergy(this.card.getEnergy());
-    emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
+    if (store.isTargetingDropZone) {
+      this.playerManager.addEnergy(this.card.getEnergy());
+      emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
+    } else {
+      emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
+    }
   }
 
   destroy() {
