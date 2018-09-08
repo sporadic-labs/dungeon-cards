@@ -18,7 +18,6 @@ export default class AttackAction extends Action {
     this.proxy = new EventProxy();
     this.playerManager = playerManager;
     this.enemyManager = enemyManager;
-    this.discardPile = playerManager.discardPile;
 
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DRAG, this.onDrag, this);
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DRAG_END, this.onDragEnd, this);

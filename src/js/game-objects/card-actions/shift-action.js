@@ -23,7 +23,6 @@ export default class ShiftAction extends Action {
     this.proxy = new EventProxy();
     this.playerManager = playerManager;
     this.enemyManager = enemyManager;
-    this.discardPile = playerManager.discardPile;
 
     this.showMessage = true; // Any better ideas?
 

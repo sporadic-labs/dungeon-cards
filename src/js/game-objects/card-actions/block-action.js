@@ -13,7 +13,6 @@ export default class BlockAction extends Action {
     this.board = gameBoard;
     this.proxy = new EventProxy();
     this.enemyManager = enemyManager;
-    this.discardPile = playerManager.discardPile;
     this.scene = scene;
 
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DRAG, this.onDrag, this);
