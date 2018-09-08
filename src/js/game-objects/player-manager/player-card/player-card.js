@@ -180,7 +180,7 @@ export default class PlayerCard {
       duration: 200,
       ease: "Quad.easeOut"
     });
-    const targetScale = 0.9;
+    const targetScale = 0.8;
     this.scene.tweens.killTweensOf(this.container);
     this.scene.tweens.add({
       targets: this.container,
