@@ -8,6 +8,7 @@ import DrawCardAction from "./draw-card-action";
 import GetEnergyAction from "./get-energy-action";
 import ShiftAction from "./shift-action";
 import Arrow from "./arrow";
+import HudToast from "../hud/hud-toast";
 
 const attacks = [
   PLAYER_CARD_TYPES.ATTACK_ONE,
@@ -27,24 +28,25 @@ export default class ActionRunner {
     this.gameBoard = gameBoard;
     this.currentAction = null;
     this.proxy = new EventProxy();
+    this.toast = new HudToast(scene);
 
     const { height } = scene.sys.game.config;
     this.endTurnButton = new EndTurnButton(scene, 80, height / 2);
     this.endTurnButton.deactivate();
 
-    const p = { x: 0, y: 0 };
-    this.arrow = new Arrow(scene, p, p).setVisible(false).setDepth(1);
-
     this.proxy.on(scene.events, "shutdown", this.destroy, this);
     this.proxy.on(scene.events, "destroy", this.destroy, this);
+  }
+
+  showToast(text) {
+    this.toast.setMessage(text);
   }
 
   async runActions() {
     this.playerManager.enableSelecting();
     this.endTurnButton.activate();
 
-    this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_SELECT, this.onPlayerCardSelect, this);
-    this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DESELECT, this.killCurrentAction, this);
+    this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DRAG_START, this.onPlayerCardSelect, this);
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DISCARD, this.killCurrentAction, this);
     this.proxy.on(emitter, EVENT_NAMES.ACTION_COMPLETE, this.onComplete, this);
     this.proxy.on(emitter, EVENT_NAMES.ACTION_UNSUCCESSFUL, this.killCurrentAction, this);
@@ -104,6 +106,7 @@ export default class ActionRunner {
   }
 
   destroy() {
+    this.toast.destroy();
     this.killCurrentAction();
     this.proxy.removeAll();
   }

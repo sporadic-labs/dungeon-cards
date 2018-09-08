@@ -2,43 +2,35 @@ import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import Action from "./action";
 
 export default class DrawCardAction extends Action {
+  /** @param {Phaser.Scene} scene */
   constructor(actionRunner, scene, card, playerManager, gameBoard, enemyManager) {
     super();
 
+    this.actionRunner = actionRunner;
     this.scene = scene;
     this.card = card;
     this.proxy = new EventProxy();
     this.playerManager = playerManager;
     this.scroll = playerManager.scroll;
 
-    this.proxy.on(scene.input, "pointermove", this.onPointerMove, this);
-    this.proxy.on(scene.input, "pointerup", this.onPointerUp, this);
-
-    const p = card.getPosition(0.5, 0.1);
-    this.arrow = actionRunner.arrow
-      .setStartPoint(p)
-      .setEndPoint(p)
-      .setColor(0x9e2828, 0x7c2323)
-      .setVisible(true);
+    this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DRAG_END, this.onDragEnd, this);
   }
 
-  onPointerMove(pointer) {
-    const isOverValidTarget = this.scroll.isInBounds(pointer.x, pointer.y);
-    this.arrow.setEndPoint(pointer);
-    this.arrow.setHighlighted(isOverValidTarget);
-  }
-
-  onPointerUp(pointer) {
-    if (this.card.isInBounds(pointer.x, pointer.y)) {
+  onDragEnd(pointer) {
+    // Drawing 3 and discarding 1
+    if (this.playerManager.canDraw(2)) {
       this.playerManager.drawCard();
       this.playerManager.drawCard();
       this.playerManager.drawCard();
       emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
+    } else {
+      this.actionRunner.showToast("You can't draw cards - you'll have too many!");
+      emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
+      return;
     }
   }
 
   destroy() {
-    this.arrow.setVisible(false);
     this.proxy.removeAll();
   }
 }

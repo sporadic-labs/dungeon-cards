@@ -61,9 +61,9 @@ export default class EventProxy {
   }
 
   off(eventEmitter, eventName, listener, context) {
-    this.listeners = this.listeners.filter(listener => {
-      if (listener.doesMatch(eventEmitter, eventName, listener, context)) {
-        listener.destroy();
+    this.listeners = this.listeners.filter(eventListener => {
+      if (eventListener.doesMatch(eventEmitter, eventName, listener, context)) {
+        eventListener.destroy();
         return false;
       }
       return true;

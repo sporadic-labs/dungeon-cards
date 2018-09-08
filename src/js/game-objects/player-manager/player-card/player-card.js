@@ -1,78 +1,103 @@
 import { PLAYER_CARD_INFO } from "./player-card-info";
-import { emitter, EVENT_NAMES } from "../../events";
 import Phaser from "phaser";
+import { EventProxy } from "../../events/index";
+import { observe } from "mobx";
+import store from "../../../store/index";
+
+const CARD_STATE = {
+  IDLE: "IDLE",
+  FOCUSED: "FOCUSED",
+  DRAGGING: "DRAGGING",
+  RETURNING: "RETURNING"
+};
+
+const DRAG_SCALE = 0.8;
 
 export default class PlayerCard {
   /**
    * @param {Phaser.Scene} scene
    * @param {PLAYER_CARD_TYPES} type
    */
-  constructor(scene, type, x, y) {
+  constructor(scene, type, x, y, cardEmitter) {
     scene.lifecycle.add(this);
 
     this.type = type;
     this.cardInfo = PLAYER_CARD_INFO[type];
+    this.key = PLAYER_CARD_INFO[type].key;
     this.scene = scene;
+    this.cardEmitter = cardEmitter;
 
+    this.focusOffset = 0;
+    this.eventProxy = new EventProxy();
+    this.state = CARD_STATE.IDLE;
     this.x = x;
     this.y = y;
-    this.xShake = 0;
-    this.yOffset = 0;
-    this.scale = 1;
+    this.rotation = 0;
+
+    // Target position for the card within the hand
+    this.targetHandX = x;
+    this.targetHandY = y;
+    this.targetHandRotation = 0;
 
     this.cardShadow = scene.add.sprite(0, 0, "assets", "cards/card-shadow");
     this.card = scene.add.sprite(0, 0, "assets", "cards/card");
-
-    const key = PLAYER_CARD_INFO[type].key;
-    this.cardContents = scene.add.sprite(0, 0, "assets", key).setInteractive();
+    this.cardContents = scene.add.sprite(0, 0, "assets", this.key);
 
     // TODO(rex): Outline needs to be offset slightly for placement.  Fix this in the sprite.
-    this.outline = scene.add.sprite(1, 1, "assets", `cards/card-outline`);
-    this.outline.setAlpha(0);
+    this.outline = scene.add.sprite(1, 1, "assets", `cards/card-outline`).setAlpha(0);
 
     const cost = this.getCost();
     this.costDisplay = scene.add.sprite(0, 0, "assets", `cards/card-contents-cost-${cost}`);
 
-    this.container = scene.add.container(x + this.card.width / 2, y + this.card.height / 2, [
-      this.cardShadow,
-      this.outline,
-      this.card,
-      this.cardContents,
-      this.costDisplay
-    ]);
+    this.container = scene.add
+      .container(x + this.card.width / 2, y + this.card.height / 2, [
+        this.cardShadow,
+        this.outline,
+        this.card,
+        this.cardContents,
+        this.costDisplay
+      ])
+      .setSize(this.cardContents.width, this.cardContents.height)
+      .setInteractive();
 
-    this.selected = false;
-    this.focused = false;
+    this.isFocusEnabled = true;
+    this.disableFocusing();
 
-    // TODO: Only be enabled after the card is tweened into position. It shouldn't start enabled.
-    this.enableFocusing();
-  }
+    this.isDragEnabled = true;
+    this.disableDrag();
 
-  isInBounds(x, y) {
-    const bounds = this.container.getBounds();
-    const x1 = bounds.x;
-    const x2 = bounds.x + bounds.width;
-    const y1 = bounds.y;
-    const y2 = bounds.y + bounds.height;
-    return x >= x1 && x <= x2 && y >= y1 && y <= y2;
-  }
-
-  shake() {
-    this.scene.tweens.killTweensOf(this);
-    this.timeline = this.scene.tweens.timeline({
-      targets: this,
-      ease: Phaser.Math.Easing.Quadratic.InOut,
-      duration: 60,
-      tweens: [
-        { xShake: -1 },
-        { xShake: +2 },
-        { xShake: -4 },
-        { xShake: +4 },
-        { xShake: -4 },
-        { xShake: 2 },
-        { xShake: -1 }
-      ]
-    });
+    // Giant hack just to get a feel for what flipping could be like
+    if (this.cardInfo.energy > 0 && type.startsWith("ATTACK")) {
+      observe(store, "isTargetingReclaim", change => {
+        if (store.activeCard !== this) return;
+        const isTargetingReclaim = change.newValue;
+        let newFrame = this.key;
+        let hideCost = false;
+        if (isTargetingReclaim) {
+          if (this.cardInfo.energy === 3) newFrame = "cards/card-contents-energy-3";
+          else newFrame = "cards/card-contents-energy";
+          hideCost = true;
+        }
+        const flip = (newFrame, side, hideCost = false) => {
+          this.scene.tweens.killTweensOf(this.container);
+          this.scene.tweens.add({
+            targets: this.container,
+            scaleX: side,
+            duration: 200,
+            ease: "Quad.easeOut",
+            onUpdate: ({ progress }) => {
+              if (progress > 0.5) {
+                this.cardContents.setTexture("assets", newFrame);
+                this.costDisplay.setVisible(!hideCost);
+                if (side < 0) this.cardContents.scaleX = -1; // Flip back to normal shadow
+              }
+            }
+          });
+        };
+        const direction = newFrame.includes("energy") ? -DRAG_SCALE : DRAG_SCALE;
+        flip(newFrame, direction, hideCost);
+      });
+    }
   }
 
   getEnergy() {
@@ -83,9 +108,17 @@ export default class PlayerCard {
     return PLAYER_CARD_INFO[this.type].cost;
   }
 
-  setPosition(x, y) {
-    this.x = x + this.card.width / 2;
-    this.y = y + this.card.height / 2;
+  // Center of card, rotation in radians
+  setTargetHandPlacement(x, y, rotation) {
+    this.targetHandX = x;
+    this.targetHandY = y;
+    this.targetHandRotation = rotation;
+
+    if (![CARD_STATE.RETURNING, CARD_STATE.DRAGGING].includes(this.state)) {
+      this.x = x;
+      this.y = y;
+      this.rotation = rotation;
+    }
   }
 
   /**
@@ -100,87 +133,157 @@ export default class PlayerCard {
   }
 
   enableFocusing() {
-    this.cardContents.on("pointerover", this.onPointerOver);
-    this.cardContents.on("pointerout", this.onPointerOut);
+    if (!this.isFocusEnabled) {
+      this.isFocusEnabled = true;
+      this.eventProxy.on(this.container, "pointerover", this.onPointerOver, this);
+      this.eventProxy.on(this.container, "pointerout", this.onPointerOut, this);
+    }
   }
 
   disableFocusing() {
-    this.cardContents.off("pointerover", this.onPointerOver);
-    this.cardContents.off("pointerout", this.onPointerOut);
+    if (this.isFocusEnabled) {
+      this.isFocusEnabled = false;
+      this.eventProxy.off(this.container, "pointerover", this.onPointerOver, this);
+      this.eventProxy.off(this.container, "pointerout", this.onPointerOut, this);
+    }
   }
 
-  enableSelecting() {
-    this.cardContents.on("pointerdown", this.onPointerDown);
-    this.scene.input.off("pointerup", this.onPointerRelease);
+  enableDrag() {
+    if (!this.isDragEnabled) {
+      this.isDragEnabled = true;
+      this.scene.input.setDraggable(this.container, true);
+      this.eventProxy.on(this.container, "dragstart", this.onDragStart, this);
+      this.eventProxy.on(this.container, "drag", this.onDrag, this);
+      this.eventProxy.on(this.container, "dragend", this.onDragEnd, this);
+    }
   }
 
-  disableSelecting() {
-    this.cardContents.off("pointerdown", this.onPointerDown);
-    this.scene.input.off("pointerup", this.onPointerRelease);
+  disableDrag() {
+    if (this.isDragEnabled) {
+      this.isDragEnabled = false;
+      this.scene.input.setDraggable(this.container, false);
+      this.eventProxy.off(this.container, "dragstart", this.onDragStart, this);
+      this.eventProxy.off(this.container, "drag", this.onDrag, this);
+      this.eventProxy.off(this.container, "dragend", this.onDragEnd, this);
+    }
   }
 
-  onPointerOver = () => emitter.emit(EVENT_NAMES.PLAYER_CARD_FOCUS, this);
+  onDragStart(pointer) {
+    this.state = CARD_STATE.DRAGGING;
 
-  onPointerOut = () => emitter.emit(EVENT_NAMES.PLAYER_CARD_DEFOCUS, this);
+    // TODO: we need a better way to compose and selectively stop tweens
 
-  onPointerDown = () => {
-    const { PLAYER_CARD_SELECT } = EVENT_NAMES;
-    emitter.emit(PLAYER_CARD_SELECT, this);
-    this.scene.input.once("pointerup", this.onPointerRelease);
-  };
+    // Zero out rotation & focus and scale down
+    this.scene.tweens.killTweensOf(this);
+    this.scene.tweens.add({
+      targets: this,
+      rotation: 0,
+      focusOffset: 0,
+      duration: 200,
+      ease: "Quad.easeOut"
+    });
+    this.scene.tweens.killTweensOf(this.container);
+    this.scene.tweens.add({
+      targets: this.container,
+      scaleX: DRAG_SCALE,
+      scaleY: DRAG_SCALE,
+      duration: 200,
+      ease: "Quad.easeOut"
+    });
 
-  onPointerRelease = () => {
-    const { PLAYER_CARD_DESELECT } = EVENT_NAMES;
-    emitter.emit(PLAYER_CARD_DESELECT, this);
-  };
+    this.dragOffsetX = (this.x - pointer.x) * DRAG_SCALE;
+    this.dragOffsetY = (this.y - pointer.y) * DRAG_SCALE;
+
+    this.x = pointer.x + this.dragOffsetX;
+    this.y = pointer.y + this.dragOffsetY;
+
+    // Allow pointer events to pass through to other objects
+    this.container.disableInteractive();
+
+    this.cardEmitter.emit("dragstart", this);
+
+    this.showOutline();
+  }
+
+  onDrag(pointer) {
+    this.x = pointer.x + this.dragOffsetX;
+    this.y = pointer.y + this.dragOffsetY;
+
+    this.cardEmitter.emit("drag", this);
+  }
+
+  onDragEnd(pointer) {
+    // TODO: tween these without them being interrupted by focus/select tweens
+    // this.container.setScale(1);
+
+    this.x = pointer.x + this.dragOffsetX;
+    this.y = pointer.y + this.dragOffsetY;
+
+    this.container.setInteractive();
+
+    this.cardEmitter.emit("dragend", this);
+
+    this.state = CARD_STATE.RETURNING;
+
+    const speed = 1500 / 1000; // px/s => px/ms
+    const { x, y, targetHandX, targetHandY, targetHandRotation } = this;
+    const distance = Phaser.Math.Distance.Between(x, y, targetHandX, targetHandY);
+    const durationMs = distance / speed;
+    this.scene.tweens.killTweensOf(this);
+    this.scene.tweens.add({
+      targets: this,
+      x: targetHandX,
+      y: targetHandY,
+      rotation: targetHandRotation,
+      duration: durationMs,
+      ease: "Quad.easeOut",
+      onComplete: () => (this.state = CARD_STATE.IDLE)
+    });
+    this.scene.tweens.killTweensOf(this.container);
+    this.scene.tweens.add({
+      targets: this.container,
+      scaleX: 1,
+      scaleY: 1,
+      duration: durationMs,
+      ease: "Quad.easeOut"
+    });
+
+    this.hideOutline();
+  }
+
+  onPointerOver() {
+    if (this.state === CARD_STATE.IDLE) {
+      this.cardEmitter.emit("pointerover", this);
+      this.state = CARD_STATE.FOCUSED;
+      this.scene.tweens.killTweensOf(this);
+      this.scene.tweens.add({
+        targets: this,
+        focusOffset: -20,
+        duration: 200,
+        ease: "Quad.easeOut"
+      });
+    }
+  }
+
+  onPointerOut() {
+    if (this.state === CARD_STATE.FOCUSED) {
+      this.cardEmitter.emit("pointerout", this);
+      this.state = CARD_STATE.IDLE;
+      this.scene.tweens.killTweensOf(this);
+      this.scene.tweens.add({
+        targets: this,
+        focusOffset: 0,
+        duration: 200,
+        ease: "Quad.easeOut"
+      });
+    }
+  }
 
   setDepth(depth) {
     this.container.setDepth(depth);
   }
 
-  setRotation(radians) {
-    this.container.rotation = radians;
-  }
-
-  focus() {
-    if (this.focused) return;
-    this.focused = true;
-    this.scene.tweens.killTweensOf(this);
-    this.scene.tweens.add({
-      targets: this.container,
-      scale: 1,
-      duration: 200,
-      ease: "Quad.easeOut"
-    });
-    this.scene.tweens.add({
-      targets: this,
-      yOffset: -20,
-      duration: 200,
-      ease: "Quad.easeOut"
-    });
-  }
-
-  defocus() {
-    if (!this.focused) return;
-    this.focused = false;
-    this.scene.tweens.killTweensOf(this);
-    this.scene.tweens.add({
-      targets: this.container,
-      scale: 1,
-      duration: 200,
-      ease: "Quad.easeOut"
-    });
-    this.scene.tweens.add({
-      targets: this,
-      yOffset: 0,
-      duration: 200,
-      ease: "Quad.easeOut"
-    });
-  }
-
-  select() {
-    if (this.selected) return;
-    this.selected = true;
+  showOutline() {
     this.scene.tweens.killTweensOf(this.outline);
     this.scene.tweens.add({
       targets: this.outline,
@@ -190,9 +293,7 @@ export default class PlayerCard {
     });
   }
 
-  deselect() {
-    if (!this.selected) return;
-    this.selected = false;
+  hideOutline() {
     this.scene.tweens.killTweensOf(this.outline);
     this.scene.tweens.add({
       targets: this.outline,
@@ -203,17 +304,20 @@ export default class PlayerCard {
   }
 
   postUpdate() {
-    this.container.x = this.x + this.xShake;
-    this.container.y = this.y + this.yOffset;
-  }
-
-  moveTo() {
-    // Animate and move to world pixel positions
+    let focusOffsetX = 0;
+    let focusOffsetY = 0;
+    if (this.focusOffset !== 0) {
+      focusOffsetX = Math.cos(this.rotation - Math.PI / 2) * -this.focusOffset;
+      focusOffsetY = Math.sin(this.rotation - Math.PI / 2) * -this.focusOffset;
+    }
+    this.container.x = this.x + focusOffsetX;
+    this.container.y = this.y + focusOffsetY;
+    this.container.rotation = this.rotation;
   }
 
   destroy() {
+    this.eventProxy.removeAll();
     this.scene.lifecycle.remove(this);
-    this.scene.input.off("pointerup", this.onPointerRelease);
     this.scene.tweens.killTweensOf(this.container);
     this.container.destroy();
   }

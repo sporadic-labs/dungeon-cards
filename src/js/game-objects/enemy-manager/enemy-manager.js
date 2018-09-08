@@ -163,9 +163,7 @@ export default class EnemyManager {
   /**
    * Move enemies in their natural movement pattern (probably down).
    */
-  async moveEnemies() {
-    await this.defocusAllEnemies();
-
+  moveEnemies() {
     const sortedEnemies = this.sortEnemies(this.enemies);
     let delay = 0;
     const movePromises = sortedEnemies.map(enemy => {
@@ -197,7 +195,7 @@ export default class EnemyManager {
       }
     });
 
-    await Promise.all(movePromises);
+    return Promise.all(movePromises);
   }
 
   /**
@@ -207,37 +205,26 @@ export default class EnemyManager {
    * @param {*} enemies
    * @param {*} direction
    */
-  async shiftEnemies(enemies, direction) {
-    await this.defocusAllEnemies();
-
+  shiftEnemies(enemies, direction) {
     // Sort the enemy group based on the direction you are shifting.
     const sortedEnemies = this.sortRow(enemies, direction === SHIFT_DIRECTIONS.RIGHT);
 
     // Move the enemy cards!
     let delay = 0;
     const movePromises = sortedEnemies.map(enemy => {
-      const boardPosition = this.gameBoard.findPositionOf(enemy);
-      // Check if there's room left on the board to shift the enemy over
-      if (!this.gameBoard.isInBounds(boardPosition.x + direction, boardPosition.y)) {
-        // TODO(rex): Animate enemy before removing it.
-        this.removeEnemy(enemy);
-      } else if (
-        !enemy.isBlocked() &&
-        this.gameBoard.isEmpty(boardPosition.x + direction, boardPosition.y)
-      ) {
-        const { x, y } = this.gameBoard.getWorldPosition(
-          boardPosition.x + direction,
-          boardPosition.y
-        );
-        const promise = enemy.moveTo(x, y, delay);
-        this.gameBoard.removeAt(boardPosition.x, boardPosition.y);
-        this.gameBoard.putAt(boardPosition.x + direction, boardPosition.y, enemy);
-        delay += 50;
-        return promise;
-      }
+      const boardPos = this.gameBoard.findPositionOf(enemy);
+      const nextBoardPos = { x: boardPos.x + direction, y: boardPos.y };
+      const nextWorldPos = this.gameBoard.getWorldPosition(nextBoardPos.x, nextBoardPos.y);
+      const isNextOpen = this.gameBoard.isEmpty(nextBoardPos.x, nextBoardPos.y);
+      const promise = enemy.moveTo(nextWorldPos.x, nextWorldPos.y, delay);
+      this.gameBoard.removeAt(boardPos.x, boardPos.y);
+      if (!isNextOpen) promise.then(() => this.removeEnemy(enemy));
+      else if (!enemy.isBlocked()) this.gameBoard.putAt(nextBoardPos.x, nextBoardPos.y, enemy);
+      delay += 50;
+      return promise;
     });
 
-    await Promise.all(movePromises);
+    return Promise.all(movePromises);
   }
 
   /**
