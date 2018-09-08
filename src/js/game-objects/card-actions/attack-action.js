@@ -81,13 +81,6 @@ export default class AttackAction extends Action {
       return;
     }
 
-    const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
-    if (!enemies.length) {
-      this.actionRunner.showToast("No enemy cards in range.");
-      emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
-      return;
-    }
-
     const enoughEnergyForAttack = this.playerManager.canUseCard(this.card);
     if (!enoughEnergyForAttack) {
       this.enemyManager.defocusAllEnemies();
@@ -96,6 +89,7 @@ export default class AttackAction extends Action {
       return;
     }
 
+    const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
     this.enemyManager
       .damageEnemies(enemies, this.damage)
       .then(() => this.enemyManager.defocusAllEnemies());

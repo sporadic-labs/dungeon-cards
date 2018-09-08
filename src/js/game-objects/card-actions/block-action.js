@@ -78,13 +78,8 @@ export default class BlockAction extends Action {
     }
 
     const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
-    if (!enemies.length) {
-      this.actionRunner.showToast("No enemy cards in range.");
-      emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
-      return;
-    }
-
-    enemies.forEach(enemy => enemy.setBlocked()).then(() => this.enemyManager.defocusAllEnemies());
+    enemies.forEach(enemy => enemy.setBlocked());
+    this.enemyManager.defocusAllEnemies();
     emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
   }
 

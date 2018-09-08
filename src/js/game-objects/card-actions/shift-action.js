@@ -115,13 +115,6 @@ export default class ShiftAction extends Action {
       return;
     }
 
-    const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
-    if (!enemies.length) {
-      this.actionRunner.showToast("No enemy cards in range.");
-      emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
-      return;
-    }
-
     const enoughEnergyForAttack = this.playerManager.canUseCard(this.card);
     if (!enoughEnergyForAttack) {
       this.actionRunner.showToast("You don't have enough energy for that.");
@@ -130,6 +123,7 @@ export default class ShiftAction extends Action {
       return;
     }
 
+    const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
     this.enemyManager
       .shiftEnemies(enemies, this.direction)
       .then(() => this.enemyManager.defocusAllEnemies());
