@@ -163,9 +163,7 @@ export default class EnemyManager {
   /**
    * Move enemies in their natural movement pattern (probably down).
    */
-  async moveEnemies() {
-    await this.defocusAllEnemies();
-
+  moveEnemies() {
     const sortedEnemies = this.sortEnemies(this.enemies);
     let delay = 0;
     const movePromises = sortedEnemies.map(enemy => {
@@ -197,7 +195,7 @@ export default class EnemyManager {
       }
     });
 
-    await Promise.all(movePromises);
+    return Promise.all(movePromises);
   }
 
   /**
@@ -207,9 +205,7 @@ export default class EnemyManager {
    * @param {*} enemies
    * @param {*} direction
    */
-  async shiftEnemies(enemies, direction) {
-    await this.defocusAllEnemies();
-
+  shiftEnemies(enemies, direction) {
     // Sort the enemy group based on the direction you are shifting.
     const sortedEnemies = this.sortRow(enemies, direction === SHIFT_DIRECTIONS.RIGHT);
 
@@ -228,7 +224,7 @@ export default class EnemyManager {
       return promise;
     });
 
-    await Promise.all(movePromises);
+    return Promise.all(movePromises);
   }
 
   /**
