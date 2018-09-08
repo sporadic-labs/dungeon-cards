@@ -36,7 +36,7 @@ export default class AttackAction extends Action {
     const pointer = this.scene.input.activePointer;
     const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
     const isOverBoard = this.board.isWorldPointInBoard(pointer.x, pointer.y);
-    const isOverValidTarget = enemies.length > 0 || store.isTargetingReclaim;
+    const isOverValidTarget = enemies.length > 0 || store.isTargetingDropZone;
 
     // TODO: do something to the card
 
@@ -68,7 +68,7 @@ export default class AttackAction extends Action {
   onDragEnd(card) {
     this.board.defocusBoard();
 
-    if (store.isTargetingReclaim) {
+    if (store.isTargetingDropZone) {
       emitter.emit(EVENT_NAMES.PLAYER_CARD_DISCARD);
       return;
     }

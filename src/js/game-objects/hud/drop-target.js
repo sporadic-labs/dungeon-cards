@@ -3,12 +3,13 @@ import store from "../../store";
 import { autorun, observe } from "mobx";
 import { EventProxy } from "../events/index";
 import MobXProxy from "../../helpers/mobx-proxy";
+import { PLAYER_CARD_TYPES } from "../player-manager/player-card";
 
 /**
  * @export
- * @class DiscardPile
+ * @class DropTarget
  */
-export default class DiscardPile {
+export default class DropTarget {
   /**
    *
    * @param {Phaser.Scene} scene
@@ -28,14 +29,16 @@ export default class DiscardPile {
     this.mobProxy = new MobXProxy();
     this.mobProxy.observe(store, "activePlayerCard", change => {
       const card = change.newValue;
-      const isReclaimable = card && card.cardInfo.energy > 0;
-      if (isReclaimable) this.enable();
+      // TODO: clean this logic up and put it into PLAYER_CARD_INFO
+      const isDroppable =
+        card && (card.cardInfo.energy > 0 || card.type == PLAYER_CARD_TYPES.DRAW_THREE);
+      if (isDroppable) this.enable();
       else this.disable();
     });
-    this.mobProxy = observe(store, "isTargetingReclaim", change => {
-      const isTargetingReclaim = change.newValue;
+    this.mobProxy = observe(store, "isTargetingDropZone", change => {
+      const isTargetingDropZone = change.newValue;
       if (this.isEnabled) {
-        if (isTargetingReclaim) this.focus();
+        if (isTargetingDropZone) this.focus();
         else this.defocus();
       }
     });
@@ -60,7 +63,7 @@ export default class DiscardPile {
   }
 
   disable() {
-    store.setTargetingReclaim(false);
+    store.setTargetingDropZone(false);
     if (this.isEnabled) {
       this.isEnabled = false;
       this.scene.tweens.killTweensOf(this.sprite);
@@ -78,7 +81,7 @@ export default class DiscardPile {
   onCardDrag() {
     const pointer = this.scene.input.activePointer;
     const isOver = this.sprite.getBounds().contains(pointer.x, pointer.y);
-    store.setTargetingReclaim(isOver);
+    store.setTargetingDropZone(isOver);
   }
 
   focus() {

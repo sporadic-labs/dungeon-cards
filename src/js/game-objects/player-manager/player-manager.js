@@ -1,6 +1,6 @@
 import PlayerHand from "./player-hand";
 import { EventProxy, emitter, EVENT_NAMES } from "../events";
-import { DeckDisplay, DiscardPile, EnergyDisplay, PopupText } from "../hud";
+import { DeckDisplay, DropTarget, EnergyDisplay, PopupText } from "../hud";
 
 import { getFontString } from "../../font";
 import Scroll from "../hud/scroll";
@@ -31,7 +31,7 @@ export default class PlayerManager {
     this.showTooManyCardsMessage = true; // Any better ideas?
 
     const { width, height } = scene.sys.game.config;
-    this.discardPile = new DiscardPile(scene, 60, height - 150);
+    this.dropTarget = new DropTarget(scene, 60, height - 150);
     this.playerHandCount = scene.add
       .text(width / 2, height - 24, this.playerHand.getNumCards(), style)
       .setOrigin(0.5, 0.5);

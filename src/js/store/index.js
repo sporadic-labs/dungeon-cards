@@ -4,7 +4,7 @@ const maxMenuHistory = 3;
 
 class GameStore {
   @observable
-  isTargetingReclaim = false;
+  isTargetingDropZone = false;
 
   @observable
   activePlayerCard = null;
@@ -53,8 +53,8 @@ class GameStore {
   }
 
   @action
-  setTargetingReclaim(isTargeting) {
-    this.isTargetingReclaim = isTargeting;
+  setTargetingDropZone(isTargeting) {
+    this.isTargetingDropZone = isTargeting;
   }
 
   @action

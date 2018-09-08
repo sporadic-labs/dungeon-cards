@@ -68,12 +68,12 @@ export default class PlayerCard {
 
     // Giant hack just to get a feel for what flipping could be like
     if (this.cardInfo.energy > 0 && type.startsWith("ATTACK")) {
-      observe(store, "isTargetingReclaim", change => {
+      observe(store, "isTargetingDropZone", change => {
         if (store.activeCard !== this) return;
-        const isTargetingReclaim = change.newValue;
+        const isTargetingDropZone = change.newValue;
         let newFrame = this.key;
         let hideCost = false;
-        if (isTargetingReclaim) {
+        if (isTargetingDropZone) {
           if (this.cardInfo.energy === 3) newFrame = "cards/card-contents-energy-3";
           else newFrame = "cards/card-contents-energy";
           hideCost = true;
