@@ -141,6 +141,8 @@ export default class EnemyManager {
    * @param {*} damage
    */
   async damageEnemies(enemies, damage) {
+    if (!enemies || !enemies.length) return;
+
     let delay = 0;
 
     const sortedEnemies = this.sortEnemies(enemies);
@@ -206,6 +208,8 @@ export default class EnemyManager {
    * @param {*} direction
    */
   shiftEnemies(enemies, direction) {
+    if (!enemies || !enemies.length) return Promise.resolve();
+
     // Sort the enemy group based on the direction you are shifting.
     const sortedEnemies = this.sortRow(enemies, direction === SHIFT_DIRECTIONS.RIGHT);
 
