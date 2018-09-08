@@ -17,12 +17,7 @@ export default class EnemyManager {
     this.proxy = new EventProxy();
 
     const { width, height } = this.scene.sys.game.config;
-    this.deckDisplay = new DeckDisplay(
-      scene,
-      width - 60,
-      height * 0.25,
-      this.deck.getNumCardsRemaining()
-    );
+    this.deckDisplay = new DeckDisplay(scene, width - 60, 70, this.deck.getNumCardsRemaining());
 
     this.enemies = [];
     this.selectingEnabled = false;

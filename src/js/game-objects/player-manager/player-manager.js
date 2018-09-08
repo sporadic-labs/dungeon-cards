@@ -38,7 +38,7 @@ export default class PlayerManager {
     this.deckDisplay = new DeckDisplay(
       scene,
       width - 60,
-      height * 0.75,
+      height - 70,
       this.deck.getNumCardsRemaining()
     );
     this.energyDisplay = new EnergyDisplay(scene, 45, height - 45);
