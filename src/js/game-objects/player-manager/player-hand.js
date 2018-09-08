@@ -1,7 +1,7 @@
 import { autorun } from "mobx";
 import PlayerCard from "./player-card";
 import { EventProxy, emitter, EVENT_NAMES } from "../events";
-import store from "../../store/index";
+import store from "../../store";
 import EmitterWithLogging from "../../helpers/emitter-with-logging";
 import { Events } from "phaser";
 
@@ -39,10 +39,6 @@ export default class PlayerHand {
     this.proxy.once(scene.events, "destroy", this.destroy, this);
 
     this.dispose = autorun(() => {
-      // TODO: clean this up. These are ref'd so that mobx knows which props we are observing
-      const activeCard = store.activePlayerCard;
-      const playerCard = store.focusedPlayerCard;
-
       if (store.activePlayerCard) {
         this.cards.forEach(card => {
           if (card !== store.activePlayerCard) {
