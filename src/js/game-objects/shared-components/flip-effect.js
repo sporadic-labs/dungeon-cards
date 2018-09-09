@@ -17,9 +17,12 @@ export default class FlipEffect {
     this.backScale = backScale;
     this.flipTween = null;
 
-    /** 1 is the front, -1 is the back */
-    this.flipProgress = 1;
-    this.setToFront();
+    /**
+     * flipProgress is a value between 1 (front facing up) and -1 (back facing up). It starts in a
+     * neutral state so that the effect doesn't actually manipulate the game objects until the user
+     * tells it to.
+     */
+    this.flipProgress = 0;
 
     /** Emits flip events for "start" & "complete" */
     this.events = new Phaser.Events.EventEmitter();

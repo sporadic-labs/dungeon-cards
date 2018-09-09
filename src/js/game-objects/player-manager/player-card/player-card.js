@@ -86,34 +86,27 @@ export default class PlayerCard {
 
     // Giant hack just to get a feel for what flipping could be like
     if (this.cardInfo.energy > 0 && type.startsWith("ATTACK")) {
+      const energy = this.cardInfo.energy;
+      const energyKey = `cards/card-contents-energy${energy === 3 ? "-3" : ""}`;
+      this.reclaimBack = scene.add
+        .container(x, y, [
+          scene.add.sprite(0, 0, "assets", "cards/card-shadow"),
+          scene.add.sprite(0, 0, "assets", "cards/card"),
+          scene.add.sprite(1, 1, "assets", "cards/card-outline"),
+          scene.add.sprite(0, 0, "assets", energyKey)
+        ])
+        .setScale(DRAG_SCALE, DRAG_SCALE);
+
+      this.reclaimFlip = new FlipEffect(scene, this.cardFront, this.reclaimBack, {
+        frontScale: DRAG_SCALE,
+        backScale: DRAG_SCALE
+      }).setToFront();
+
       observe(store, "isTargetingDropZone", change => {
         if (store.activeCard !== this) return;
         const isTargetingDropZone = change.newValue;
-        let newFrame = this.key;
-        let hideCost = false;
-        if (isTargetingDropZone) {
-          if (this.cardInfo.energy === 3) newFrame = "cards/card-contents-energy-3";
-          else newFrame = "cards/card-contents-energy";
-          hideCost = true;
-        }
-        const flip = (newFrame, side, hideCost = false) => {
-          this.scene.tweens.killTweensOf(this.cardFront);
-          this.scene.tweens.add({
-            targets: this.cardFront,
-            scaleX: side,
-            duration: 200,
-            ease: "Quad.easeOut",
-            onUpdate: ({ progress }) => {
-              if (progress > 0.5) {
-                this.cardContents.setTexture("assets", newFrame);
-                this.costDisplay.setVisible(!hideCost);
-                if (side < 0) this.cardContents.scaleX = -1; // Flip back to normal shadow
-              }
-            }
-          });
-        };
-        const direction = newFrame.includes("energy") ? -DRAG_SCALE : DRAG_SCALE;
-        flip(newFrame, direction, hideCost);
+        if (isTargetingDropZone) this.reclaimFlip.flipToBack();
+        else this.reclaimFlip.flipToFront();
       });
     }
   }
@@ -318,6 +311,8 @@ export default class PlayerCard {
 
   setDepth(depth) {
     this.cardFront.setDepth(depth);
+    if (this.cardBack) this.cardBack.setDepth(depth);
+    if (this.reclaimBack) this.reclaimBack.setDepth(depth);
   }
 
   showOutline() {
@@ -355,9 +350,16 @@ export default class PlayerCard {
       this.cardBack.y = this.cardFront.y;
       this.cardBack.rotation = this.cardFront.rotation;
     }
+    if (this.reclaimBack) {
+      this.reclaimBack.x = this.cardFront.x;
+      this.reclaimBack.y = this.cardFront.y;
+      this.reclaimBack.rotation = this.cardFront.rotation;
+    }
   }
 
   destroy() {
+    if (this.reclaimBack) this.reclaimBack.destroy();
+    if (this.reclaimFlip) this.reclaimFlip.destroy();
     this.eventProxy.removeAll();
     this.scene.lifecycle.remove(this);
     this.scene.tweens.killTweensOf(this.cardFront);
