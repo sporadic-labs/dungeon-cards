@@ -121,15 +121,13 @@ export default class PlayerCard {
 
   // Center of card, rotation in radians
   setTargetHandPlacement(x, y, rotation) {
+    const needsUpdate = this.x !== x || this.y !== y || this.rotation !== rotation;
+
     this.targetHandX = x;
     this.targetHandY = y;
     this.targetHandRotation = rotation;
 
-    if (![CARD_STATE.RETURNING, CARD_STATE.DRAGGING, CARD_STATE.DRAWING].includes(this.state)) {
-      this.x = x;
-      this.y = y;
-      this.rotation = rotation;
-    } else if (this.state === CARD_STATE.DRAWING) this.moveToHand();
+    if (needsUpdate) this.moveToHand();
   }
 
   moveToHand() {
