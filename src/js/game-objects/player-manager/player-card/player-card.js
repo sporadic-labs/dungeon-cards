@@ -3,6 +3,7 @@ import Phaser from "phaser";
 import { EventProxy } from "../../events/index";
 import { observe } from "mobx";
 import store from "../../../store/index";
+import FlipEffect from "../../shared-components/flip-effect";
 
 const CARD_STATE = {
   DRAWING: "DRAWING",
@@ -66,28 +67,13 @@ export default class PlayerCard {
       scene.add.sprite(0, 0, "assets", "cards/card-back")
     ]);
 
-    // Initial flip. Note: this would be nicer in a Hearthstone-style where the card flips =>
-    // magnifies & hangs for a sec => moves to your hand
-    this.scene.tweens.add({
-      targets: { value: 0 },
-      value: 1,
-      duration: 200,
-      ease: "Quad.easeOut",
-      onUpdate: ({ progress }) => {
-        if (progress < 0.5) {
-          this.cardBack.scaleX = 1 - 2 * progress;
-          this.cardBack.setVisible(true);
-          this.cardFront.setVisible(false);
-        } else {
-          this.cardFront.scaleX = 2 * (progress - 0.5);
-          this.cardBack.setVisible(false);
-          this.cardFront.setVisible(true);
-        }
-      },
-      onComplete: () => {
-        this.cardBack.destroy();
-        this.cardBack = undefined;
-      }
+    this.initialFlip = new FlipEffect(scene, this.cardFront, this.cardBack)
+      .setToBack()
+      .flipToFront();
+    this.eventProxy.once(this.initialFlip.events, "complete", () => {
+      this.cardBack.destroy();
+      this.cardBack = undefined;
+      this.initialFlip.destroy();
     });
 
     this.isFocusEnabled = true;
@@ -376,5 +362,6 @@ export default class PlayerCard {
     this.scene.lifecycle.remove(this);
     this.scene.tweens.killTweensOf(this.cardFront);
     this.cardFront.destroy();
+    this.initialFlip.destroy();
   }
 }

@@ -111,11 +111,12 @@ export default class PlayerHand {
     return this.cards.length;
   }
 
-  drawCard() {
+  async drawCard() {
     if (!this.deck.anyCardsRemaining()) return;
+    const position = this.deckDisplay.getPosition();
     // Tell a card to animate from deck position to hand
     const cardId = this.deck.draw();
-    const card = new PlayerCard(this.scene, cardId, 0, 0, this.cardEmitter);
+    const card = new PlayerCard(this.scene, cardId, position.x, position.y, this.cardEmitter);
     this.cards.push(card);
     if (this.selectingEnabled) {
       card.enableDrag();
