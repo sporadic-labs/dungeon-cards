@@ -21,8 +21,18 @@ export default class Scroll {
   constructor(scene, x, y) {
     this.scene = scene;
 
-    this.scrollBackground = scene.add.sprite(0, 0, "assets", "scroll/scroll").setInteractive();
+    const openFrames = scene.anims.generateFrameNames("assets", {
+      prefix: "scroll/scroll-",
+      end: 11,
+      zeroPad: 5
+    });
+    const closeFrames = openFrames.slice().reverse();
+
+    this.scrollBackground = scene.add.sprite(0, 0, "assets", openFrames[0].frame).setInteractive();
     this.text = scene.add.text(0, 0, "", style).setOrigin(0.5, 0.5);
+
+    scene.anims.create({ key: "scroll-open", frames: openFrames, frameRate: 30 });
+    scene.anims.create({ key: "scroll-close", frames: closeFrames, frameRate: 30 });
 
     this.container = scene.add.container(
       x + this.scrollBackground.width / 2,
@@ -32,7 +42,7 @@ export default class Scroll {
 
     // Debounce, wait this long before showing instructions on hover.
     this.debounceTimer = null;
-    const debounceTime = 720;
+    const debounceTime = 250;
 
     // Hide, wait this long with no change before hiding the instructions.
     this.hideTimer = null;
@@ -65,11 +75,13 @@ export default class Scroll {
   hideInstructions() {
     // TODO(rex): Animate the instructions scroll.
     this.text.setText("");
+    this.scrollBackground.play("scroll-close", false);
   }
 
   showInstructions(card) {
     // TODO(rex): Animate the instructions scroll.
     this.text.setText(card.cardInfo.description);
+    this.scrollBackground.play("scroll-open", false);
   }
 
   clearTimers() {

@@ -340,6 +340,30 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">assets/scroll/scroll-00000.png</key>
+            <key type="filename">assets/scroll/scroll-00001.png</key>
+            <key type="filename">assets/scroll/scroll-00002.png</key>
+            <key type="filename">assets/scroll/scroll-00003.png</key>
+            <key type="filename">assets/scroll/scroll-00004.png</key>
+            <key type="filename">assets/scroll/scroll-00005.png</key>
+            <key type="filename">assets/scroll/scroll-00006.png</key>
+            <key type="filename">assets/scroll/scroll-00007.png</key>
+            <key type="filename">assets/scroll/scroll-00008.png</key>
+            <key type="filename">assets/scroll/scroll-00009.png</key>
+            <key type="filename">assets/scroll/scroll-00010.png</key>
+            <key type="filename">assets/scroll/scroll-00011.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>44,62,88,123</rect>
+                <key>scale9Paddings</key>
+                <rect>44,62,88,123</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">assets/scroll/scroll.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
