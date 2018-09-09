@@ -5,6 +5,7 @@ import { observe } from "mobx";
 import store from "../../../store/index";
 
 const CARD_STATE = {
+  DRAWING: "DRAWING",
   IDLE: "IDLE",
   FOCUSED: "FOCUSED",
   DRAGGING: "DRAGGING",
@@ -60,11 +61,42 @@ export default class PlayerCard {
       .setSize(this.cardContents.width, this.cardContents.height)
       .setInteractive();
 
+    this.cardBack = scene.add.container(x, y, [
+      scene.add.sprite(0, 0, "assets", "cards/card-shadow"),
+      scene.add.sprite(0, 0, "assets", "cards/card-back")
+    ]);
+
+    // Initial flip. Note: this would be nicer in a Hearthstone-style where the card flips =>
+    // magnifies & hangs for a sec => moves to your hand
+    this.scene.tweens.add({
+      targets: { value: 0 },
+      value: 1,
+      duration: 200,
+      ease: "Quad.easeOut",
+      onUpdate: ({ progress }) => {
+        if (progress < 0.5) {
+          this.cardBack.scaleX = 1 - 2 * progress;
+          this.cardBack.setVisible(true);
+          this.cardFront.setVisible(false);
+        } else {
+          this.cardFront.scaleX = 2 * (progress - 0.5);
+          this.cardBack.setVisible(false);
+          this.cardFront.setVisible(true);
+        }
+      },
+      onComplete: () => {
+        this.cardBack.destroy();
+        this.cardBack = undefined;
+      }
+    });
+
     this.isFocusEnabled = true;
     this.disableFocusing();
 
     this.isDragEnabled = true;
     this.disableDrag();
+
+    this.state = CARD_STATE.DRAWING;
 
     // Giant hack just to get a feel for what flipping could be like
     if (this.cardInfo.energy > 0 && type.startsWith("ATTACK")) {
@@ -114,11 +146,30 @@ export default class PlayerCard {
     this.targetHandY = y;
     this.targetHandRotation = rotation;
 
-    if (![CARD_STATE.RETURNING, CARD_STATE.DRAGGING].includes(this.state)) {
+    if (![CARD_STATE.RETURNING, CARD_STATE.DRAGGING, CARD_STATE.DRAWING].includes(this.state)) {
       this.x = x;
       this.y = y;
       this.rotation = rotation;
-    }
+    } else if (this.state === CARD_STATE.DRAWING) this.moveToHand();
+  }
+
+  moveToHand() {
+    const speed = 1000 / 1000; // px/s => px/ms
+    const { x, y, targetHandX, targetHandY, targetHandRotation } = this;
+    const distance = Phaser.Math.Distance.Between(x, y, targetHandX, targetHandY);
+    const durationMs = distance / speed;
+    this.scene.tweens.killTweensOf(this);
+    this.scene.tweens.add({
+      targets: this,
+      x: targetHandX,
+      y: targetHandY,
+      rotation: targetHandRotation,
+      duration: durationMs,
+      ease: "Quad.easeOut",
+      onComplete: () => {
+        this.state = CARD_STATE.IDLE;
+      }
+    });
   }
 
   /**
