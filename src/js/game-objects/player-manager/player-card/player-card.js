@@ -49,8 +49,8 @@ export default class PlayerCard {
     const cost = this.getCost();
     this.costDisplay = scene.add.sprite(0, 0, "assets", `cards/card-contents-cost-${cost}`);
 
-    this.container = scene.add
-      .container(x + this.card.width / 2, y + this.card.height / 2, [
+    this.cardFront = scene.add
+      .container(x, y, [
         this.cardShadow,
         this.outline,
         this.card,
@@ -79,9 +79,9 @@ export default class PlayerCard {
           hideCost = true;
         }
         const flip = (newFrame, side, hideCost = false) => {
-          this.scene.tweens.killTweensOf(this.container);
+          this.scene.tweens.killTweensOf(this.cardFront);
           this.scene.tweens.add({
-            targets: this.container,
+            targets: this.cardFront,
             scaleX: side,
             duration: 200,
             ease: "Quad.easeOut",
@@ -128,43 +128,43 @@ export default class PlayerCard {
   getPosition(originX = 0.5, originY = 0.5) {
     const x = originX * this.card.displayWidth - this.card.displayWidth / 2;
     const y = originY * this.card.displayHeight - this.card.displayHeight / 2;
-    const p = this.container.localTransform.transformPoint(x, y);
+    const p = this.cardFront.localTransform.transformPoint(x, y);
     return p;
   }
 
   enableFocusing() {
     if (!this.isFocusEnabled) {
       this.isFocusEnabled = true;
-      this.eventProxy.on(this.container, "pointerover", this.onPointerOver, this);
-      this.eventProxy.on(this.container, "pointerout", this.onPointerOut, this);
+      this.eventProxy.on(this.cardFront, "pointerover", this.onPointerOver, this);
+      this.eventProxy.on(this.cardFront, "pointerout", this.onPointerOut, this);
     }
   }
 
   disableFocusing() {
     if (this.isFocusEnabled) {
       this.isFocusEnabled = false;
-      this.eventProxy.off(this.container, "pointerover", this.onPointerOver, this);
-      this.eventProxy.off(this.container, "pointerout", this.onPointerOut, this);
+      this.eventProxy.off(this.cardFront, "pointerover", this.onPointerOver, this);
+      this.eventProxy.off(this.cardFront, "pointerout", this.onPointerOut, this);
     }
   }
 
   enableDrag() {
     if (!this.isDragEnabled) {
       this.isDragEnabled = true;
-      this.scene.input.setDraggable(this.container, true);
-      this.eventProxy.on(this.container, "dragstart", this.onDragStart, this);
-      this.eventProxy.on(this.container, "drag", this.onDrag, this);
-      this.eventProxy.on(this.container, "dragend", this.onDragEnd, this);
+      this.scene.input.setDraggable(this.cardFront, true);
+      this.eventProxy.on(this.cardFront, "dragstart", this.onDragStart, this);
+      this.eventProxy.on(this.cardFront, "drag", this.onDrag, this);
+      this.eventProxy.on(this.cardFront, "dragend", this.onDragEnd, this);
     }
   }
 
   disableDrag() {
     if (this.isDragEnabled) {
       this.isDragEnabled = false;
-      this.scene.input.setDraggable(this.container, false);
-      this.eventProxy.off(this.container, "dragstart", this.onDragStart, this);
-      this.eventProxy.off(this.container, "drag", this.onDrag, this);
-      this.eventProxy.off(this.container, "dragend", this.onDragEnd, this);
+      this.scene.input.setDraggable(this.cardFront, false);
+      this.eventProxy.off(this.cardFront, "dragstart", this.onDragStart, this);
+      this.eventProxy.off(this.cardFront, "drag", this.onDrag, this);
+      this.eventProxy.off(this.cardFront, "dragend", this.onDragEnd, this);
     }
   }
 
@@ -182,9 +182,9 @@ export default class PlayerCard {
       duration: 200,
       ease: "Quad.easeOut"
     });
-    this.scene.tweens.killTweensOf(this.container);
+    this.scene.tweens.killTweensOf(this.cardFront);
     this.scene.tweens.add({
-      targets: this.container,
+      targets: this.cardFront,
       scaleX: DRAG_SCALE,
       scaleY: DRAG_SCALE,
       duration: 200,
@@ -198,7 +198,7 @@ export default class PlayerCard {
     this.y = pointer.y + this.dragOffsetY;
 
     // Allow pointer events to pass through to other objects
-    this.container.disableInteractive();
+    this.cardFront.disableInteractive();
 
     this.cardEmitter.emit("dragstart", this);
 
@@ -214,12 +214,12 @@ export default class PlayerCard {
 
   onDragEnd(pointer) {
     // TODO: tween these without them being interrupted by focus/select tweens
-    // this.container.setScale(1);
+    // this.cardFront.setScale(1);
 
     this.x = pointer.x + this.dragOffsetX;
     this.y = pointer.y + this.dragOffsetY;
 
-    this.container.setInteractive();
+    this.cardFront.setInteractive();
 
     this.cardEmitter.emit("dragend", this);
 
@@ -239,9 +239,9 @@ export default class PlayerCard {
       ease: "Quad.easeOut",
       onComplete: () => (this.state = CARD_STATE.IDLE)
     });
-    this.scene.tweens.killTweensOf(this.container);
+    this.scene.tweens.killTweensOf(this.cardFront);
     this.scene.tweens.add({
-      targets: this.container,
+      targets: this.cardFront,
       scaleX: 1,
       scaleY: 1,
       duration: durationMs,
@@ -280,7 +280,7 @@ export default class PlayerCard {
   }
 
   setDepth(depth) {
-    this.container.setDepth(depth);
+    this.cardFront.setDepth(depth);
   }
 
   showOutline() {
@@ -310,15 +310,20 @@ export default class PlayerCard {
       focusOffsetX = Math.cos(this.rotation - Math.PI / 2) * -this.focusOffset;
       focusOffsetY = Math.sin(this.rotation - Math.PI / 2) * -this.focusOffset;
     }
-    this.container.x = this.x + focusOffsetX;
-    this.container.y = this.y + focusOffsetY;
-    this.container.rotation = this.rotation;
+    this.cardFront.x = this.x + focusOffsetX;
+    this.cardFront.y = this.y + focusOffsetY;
+    this.cardFront.rotation = this.rotation;
+    if (this.cardBack) {
+      this.cardBack.x = this.cardFront.x;
+      this.cardBack.y = this.cardFront.y;
+      this.cardBack.rotation = this.cardFront.rotation;
+    }
   }
 
   destroy() {
     this.eventProxy.removeAll();
     this.scene.lifecycle.remove(this);
-    this.scene.tweens.killTweensOf(this.container);
-    this.container.destroy();
+    this.scene.tweens.killTweensOf(this.cardFront);
+    this.cardFront.destroy();
   }
 }
