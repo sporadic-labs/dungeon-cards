@@ -4,6 +4,7 @@ import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import store from "../../store";
 import EmitterWithLogging from "../../helpers/emitter-with-logging";
 import { Events } from "phaser";
+import MobXProxy from "../../helpers/mobx-proxy";
 
 export default class PlayerHand {
   /**
@@ -38,7 +39,9 @@ export default class PlayerHand {
     this.proxy.once(scene.events, "shutdown", this.destroy, this);
     this.proxy.once(scene.events, "destroy", this.destroy, this);
 
-    this.dispose = autorun(() => {
+    this.mobProxy = new MobXProxy();
+
+    this.mobProxy.observe(store, "activePlayerCard", () => {
       if (store.activePlayerCard) {
         this.cards.forEach(card => {
           if (card !== store.activePlayerCard) {
@@ -52,7 +55,10 @@ export default class PlayerHand {
           card.enableDrag();
         });
       }
+      this.depthSort();
+    });
 
+    this.mobProxy.observe(store, "focusedPlayerCard", () => {
       this.depthSort();
     });
   }
@@ -171,7 +177,7 @@ export default class PlayerHand {
   }
 
   destroy() {
-    this.dispose();
+    this.mobProxy.destroy();
     this.proxy.removeAll();
     this.cardEmitter.destroy();
   }
