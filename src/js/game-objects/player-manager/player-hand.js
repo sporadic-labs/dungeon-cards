@@ -12,9 +12,10 @@ export default class PlayerHand {
    * @param {Deck} deck
    * @memberof PlayerCard
    */
-  constructor(scene, deck) {
+  constructor(scene, deck, deckDisplay) {
     this.scene = scene;
     this.deck = deck;
+    this.deckDisplay = deckDisplay;
     this.cards = [];
     this.selectingEnabled = false;
 

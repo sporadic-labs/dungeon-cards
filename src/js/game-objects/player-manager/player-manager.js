@@ -25,22 +25,24 @@ export default class PlayerManager {
     this.proxy = new EventProxy();
 
     this.energy = 0;
-    this.playerHand = new PlayerHand(scene, this.deck);
-    this.playerHand.drawCards(6);
-
-    this.showTooManyCardsMessage = true; // Any better ideas?
 
     const { width, height } = scene.sys.game.config;
-    this.dropTarget = new DropTarget(scene, 60, height - 150);
-    this.playerHandCount = scene.add
-      .text(width / 2, height - 24, this.playerHand.getNumCards(), style)
-      .setOrigin(0.5, 0.5);
     this.deckDisplay = new DeckDisplay(
       scene,
       width - 60,
       height - 70,
       this.deck.getNumCardsRemaining()
     );
+
+    this.playerHand = new PlayerHand(scene, this.deck, this.deckDisplay);
+    this.playerHand.drawCards(6);
+
+    this.showTooManyCardsMessage = true; // Any better ideas?
+
+    this.dropTarget = new DropTarget(scene, 60, height - 150);
+    this.playerHandCount = scene.add
+      .text(width / 2, height - 24, this.playerHand.getNumCards(), style)
+      .setOrigin(0.5, 0.5);
     this.energyDisplay = new EnergyDisplay(scene, 45, height - 45);
     this.scroll = new Scroll(scene, width - 185, height / 2 - 90);
 
