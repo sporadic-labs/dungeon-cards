@@ -131,7 +131,7 @@ export default class PlayerHand {
   }
 
   depthSort() {
-    this.cards.forEach((c, i) => c.setDepth(i));
+    this.cards.forEach((c, i) => c.setDepth(this.cards.length - 1 - i));
 
     // Place focused card on top of the selected card, so that the player can still see other cards
     // while one is selected
@@ -148,20 +148,22 @@ export default class PlayerHand {
     const cx = width / 2;
     const cy = height - 104;
 
-    // Cards are placed along a circle. The bigger radius, the closer the cards are to a straight
-    // line.
+    // Cards placed along a circle, where the bigger the radius, the closer the cards are to
+    // straight line
     const radius = 600;
     const angularStep = 5 * (Math.PI / 180);
     const circleX = cx;
     const circleY = cy + radius;
 
-    const startingAngularPosition = Math.PI / 2 - ((this.cards.length - 1) / 2) * angularStep;
-    const startingRotation = (this.cards.length / 2) * angularStep;
+    // Leftmost card has the biggest angle (0 degrees on a circle is directly right). This way the
+    // cards array is drawn from left-to-right on the screen starting with index 0
+    const leftCardAngularPosition = Math.PI / 2 + ((this.cards.length - 1) / 2) * angularStep;
+    const leftCardRotation = -(this.cards.length / 2) * angularStep;
     this.cards.forEach((card, i) => {
-      const angle = startingAngularPosition + i * angularStep;
+      const angle = leftCardAngularPosition - i * angularStep;
       const x = circleX + radius * Math.cos(angle);
       const y = circleY - radius * Math.sin(angle);
-      const a = startingRotation - i * angularStep;
+      const a = leftCardRotation + i * angularStep;
       card.setTargetHandPlacement(x, y, a);
     });
   }
