@@ -1,5 +1,6 @@
 import { getFontString } from "../../font";
 import store from "../../store/index";
+import Phaser from "phaser";
 import MobXProxy from "../../helpers/mobx-proxy";
 
 const style = {
@@ -21,6 +22,11 @@ export default class Scroll {
   constructor(scene, x, y) {
     this.scene = scene;
 
+    const maskOpenFrames = scene.anims.generateFrameNames("assets", {
+      prefix: "scroll/scroll-body-",
+      end: 11,
+      zeroPad: 5
+    });
     const openFrames = scene.anims.generateFrameNames("assets", {
       prefix: "scroll/scroll-",
       end: 11,
@@ -28,17 +34,26 @@ export default class Scroll {
     });
     const closeFrames = openFrames.slice().reverse();
 
-    this.scrollBackground = scene.add.sprite(0, 0, "assets", openFrames[0].frame).setInteractive();
-    this.text = scene.add.text(0, 0, "", style).setOrigin(0.5, 0.5);
-
     scene.anims.create({ key: "scroll-open", frames: openFrames, frameRate: 30 });
     scene.anims.create({ key: "scroll-close", frames: closeFrames, frameRate: 30 });
+    scene.anims.create({ key: "scroll-mask-open", frames: maskOpenFrames, frameRate: 30 });
 
-    this.container = scene.add.container(
-      x + this.scrollBackground.width / 2,
-      y + this.scrollBackground.height / 2,
-      [this.scrollBackground, this.text]
-    );
+    this.scroll = scene.add.sprite(0, 0, "assets", openFrames[0].frame);
+    this.text = scene.add.text(0, 0, "", style).setOrigin(0.5, 0.5);
+    this.scroll.setPosition(x + this.scroll.width / 2, y + this.scroll.height / 2);
+    this.text.setPosition(this.scroll.x, this.scroll.y);
+
+    // Note: an element inside of a container cannot be masked, so scroll and text must be separate
+    // objects that are manually aligned
+    this.maskSprite = scene.make.sprite({
+      x: x + this.scroll.width / 2,
+      y: y + this.scroll.height / 2,
+      key: "assets",
+      frame: maskOpenFrames[0].frame,
+      add: false
+    });
+    const mask = new Phaser.Display.Masks.BitmapMask(scene, this.maskSprite);
+    this.text.setMask(mask);
 
     // Debounce, wait this long before showing instructions on hover.
     this.debounceTimer = null;
@@ -73,15 +88,14 @@ export default class Scroll {
   }
 
   hideInstructions() {
-    // TODO(rex): Animate the instructions scroll.
     this.text.setText("");
-    this.scrollBackground.play("scroll-close", false);
+    this.scroll.play("scroll-close");
   }
 
   showInstructions(card) {
-    // TODO(rex): Animate the instructions scroll.
     this.text.setText(card.cardInfo.description);
-    this.scrollBackground.play("scroll-open", false);
+    this.scroll.play("scroll-open");
+    this.maskSprite.play("scroll-mask-open");
   }
 
   clearTimers() {

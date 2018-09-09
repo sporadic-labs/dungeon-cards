@@ -352,6 +352,18 @@
             <key type="filename">assets/scroll/scroll-00009.png</key>
             <key type="filename">assets/scroll/scroll-00010.png</key>
             <key type="filename">assets/scroll/scroll-00011.png</key>
+            <key type="filename">assets/scroll/scroll-body-00000.png</key>
+            <key type="filename">assets/scroll/scroll-body-00001.png</key>
+            <key type="filename">assets/scroll/scroll-body-00002.png</key>
+            <key type="filename">assets/scroll/scroll-body-00003.png</key>
+            <key type="filename">assets/scroll/scroll-body-00004.png</key>
+            <key type="filename">assets/scroll/scroll-body-00005.png</key>
+            <key type="filename">assets/scroll/scroll-body-00006.png</key>
+            <key type="filename">assets/scroll/scroll-body-00007.png</key>
+            <key type="filename">assets/scroll/scroll-body-00008.png</key>
+            <key type="filename">assets/scroll/scroll-body-00009.png</key>
+            <key type="filename">assets/scroll/scroll-body-00010.png</key>
+            <key type="filename">assets/scroll/scroll-body-00011.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
