@@ -74,7 +74,7 @@ export default class ShiftAction extends Action {
         const enemy = this.board.getAt(position.x, position.y);
         if (enemy) {
           this.shiftPreviews[i]
-            .setPosition(enemy.container.x + offsetX, enemy.container.y)
+            .setPosition(enemy.cardFront.x + offsetX, enemy.cardFront.y)
             .setVisible(true);
           if (this.direction === SHIFT_DIRECTIONS.LEFT && i === 0) {
             this.xPreview

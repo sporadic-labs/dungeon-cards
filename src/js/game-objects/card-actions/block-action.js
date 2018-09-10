@@ -47,7 +47,7 @@ export default class BlockAction extends Action {
       positions.map((position, i) => {
         const enemy = this.board.getAt(position.x, position.y);
         if (enemy) {
-          this.previews[i].setPosition(enemy.container.x, enemy.container.y).setVisible(true);
+          this.previews[i].setPosition(enemy.cardFront.x, enemy.cardFront.y).setVisible(true);
         } else {
           const worldPos = this.board.getWorldPosition(position.x, position.y);
           this.previews[i]
