@@ -29,6 +29,7 @@ export default class PlayScene extends Scene {
     this.initGame();
 
     this.proxy.on(emitter, EVENT_NAMES.GAME_OVER, win => {
+      store.setGameStarted(false);
       store.setPaused(true);
       store.setMenuState(win ? MENU_STATES.GAME_OVER_WON : MENU_STATES.GAME_OVER_LOST);
     });
@@ -47,6 +48,8 @@ export default class PlayScene extends Scene {
       store.setPaused(true);
       store.setMenuState(MENU_STATES.DEBUG);
     });
+
+    store.setGameStarted(true);
 
     run(this.playerManager, this.enemyManager, this.actionRunner);
   }

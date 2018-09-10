@@ -99,7 +99,7 @@ class Menu extends Component {
     return (
       <div id="hud" style={{ width: `${width}px`, height: `${height}px` }}>
         {activeMenu}
-        {gameStore.gameStarted ? (
+        {gameStore.hasGameStarted ? (
           <PauseButton
             {...commonProps}
             isPaused={gameStore.isPaused}
