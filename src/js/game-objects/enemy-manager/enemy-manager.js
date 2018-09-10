@@ -162,6 +162,7 @@ export default class EnemyManager {
    */
   moveEnemies() {
     const sortedEnemies = this.sortEnemies(this.enemies);
+    const cellSize = this.gameBoard.getCellSize();
     let delay = 0;
     const movePromises = sortedEnemies.map(enemy => {
       const boardPosition = this.gameBoard.findPositionOf(enemy);
@@ -178,7 +179,7 @@ export default class EnemyManager {
       // Move
       if (this.gameBoard.isEmpty(boardPosition.x, boardPosition.y + 1)) {
         const { x, y } = this.gameBoard.getWorldPosition(boardPosition.x, boardPosition.y + 1);
-        const promise = enemy.moveTo(x, y, delay);
+        const promise = enemy.moveTo(x + cellSize.width / 2, y + cellSize.height / 2, delay);
         this.gameBoard.removeAt(boardPosition.x, boardPosition.y);
         this.gameBoard.putAt(boardPosition.x, boardPosition.y + 1, enemy);
         delay += 50;
@@ -205,6 +206,8 @@ export default class EnemyManager {
   shiftEnemies(enemies, direction) {
     if (!enemies || !enemies.length) return Promise.resolve();
 
+    const cellSize = this.gameBoard.getCellSize();
+
     // Sort the enemy group based on the direction you are shifting.
     const sortedEnemies = this.sortRow(enemies, direction === SHIFT_DIRECTIONS.RIGHT);
 
@@ -215,7 +218,11 @@ export default class EnemyManager {
       const nextBoardPos = { x: boardPos.x + direction, y: boardPos.y };
       const nextWorldPos = this.gameBoard.getWorldPosition(nextBoardPos.x, nextBoardPos.y);
       const isNextOpen = this.gameBoard.isEmpty(nextBoardPos.x, nextBoardPos.y);
-      const promise = enemy.moveTo(nextWorldPos.x, nextWorldPos.y, delay);
+      const promise = enemy.moveTo(
+        nextWorldPos.x + cellSize.width / 2,
+        nextWorldPos.y + cellSize.height / 2,
+        delay
+      );
       this.gameBoard.removeAt(boardPos.x, boardPos.y);
       if (!isNextOpen) promise.then(() => this.removeEnemy(enemy));
       else if (!enemy.isBlocked()) this.gameBoard.putAt(nextBoardPos.x, nextBoardPos.y, enemy);
@@ -239,6 +246,7 @@ export default class EnemyManager {
 
     let spawnDelay = 0;
     const spawnPromises = locations.map(async location => {
+    const cellSize = this.gameBoard.getCellSize();
       const enemyType = this.deck.draw();
 
       this.deckDisplay.setValue(this.deck.getNumCardsRemaining());
@@ -252,11 +260,13 @@ export default class EnemyManager {
       await enemy.fadeIn(spawnDelay);
 
       if (enemy.type !== ENEMY_CARD_TYPES.BLANK) {
+      const cx = x + cellSize.width / 2;
+      const cy = y + cellSize.height / 2;
         this.enemies.push(enemy);
         this.gameBoard.putAt(location.x, location.y, enemy);
-        return enemy.moveTo(x, y, spawnDelay);
       } else {
         return enemy.die(spawnDelay);
+        return enemy.moveTo(cx, cy, delay);
       }
     });
 

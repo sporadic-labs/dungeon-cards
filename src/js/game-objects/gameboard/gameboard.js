@@ -29,6 +29,10 @@ export class GameBoard {
     }
   }
 
+  getCellSize() {
+    return { width: this.cellWidth, height: this.cellHeight };
+  }
+
   focusPositions(positions) {
     this.defocusBoard();
     if (!Array.isArray(positions)) positions = [positions];

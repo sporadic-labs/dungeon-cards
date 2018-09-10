@@ -82,12 +82,6 @@ export default class EnemyCard {
     return { x: this.card.x, y: this.card.y };
   }
 
-  // Set via top left
-  setPosition(x, y) {
-    this.x = x + this.card.width / 2;
-    this.y = y + this.card.height / 2;
-  }
-
   enableSelecting() {
     this.card.on("pointerdown", this.onPointerDown);
   }
@@ -187,14 +181,14 @@ export default class EnemyCard {
     return this.fadeOut(delay);
   }
 
-  // Move via top left
+  // Move via center
   moveTo(x, y, delay = 0) {
     this.scene.tweens.killTweensOf(this.container);
     return new Promise(resolve => {
       this.scene.tweens.add({
         targets: this.container,
-        x: x + this.card.width / 2,
-        y: y + this.card.height / 2,
+        x: x,
+        y: y,
         delay: delay,
         duration: 200,
         ease: "Quad.easeOut",
