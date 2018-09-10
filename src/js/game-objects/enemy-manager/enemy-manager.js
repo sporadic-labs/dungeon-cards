@@ -2,6 +2,7 @@ import EnemyCard, { ENEMY_CARD_TYPES } from "./enemy-card";
 import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import { DeckDisplay } from "../hud";
 import { SHIFT_DIRECTIONS } from "../card-actions";
+import BlankCard from "./enemy-card/blank-card";
 
 export default class EnemyManager {
   /**
@@ -244,29 +245,34 @@ export default class EnemyManager {
     const locations = this.gameBoard.getOpenSpawnLocations().slice(0, cardsRemaining);
     if (locations.length === 0) return;
 
-    let spawnDelay = 0;
-    const spawnPromises = locations.map(async location => {
     const cellSize = this.gameBoard.getCellSize();
+    const spawnPosition = this.deckDisplay.getPosition();
+    const spawnPromises = locations.map(async (location, i) => {
       const enemyType = this.deck.draw();
-
       this.deckDisplay.setValue(this.deck.getNumCardsRemaining());
-
-      spawnDelay += 124;
-
       const { x, y } = this.gameBoard.getWorldPosition(location.x, location.y);
-      const startingYOffset = -72;
-
-      const enemy = new EnemyCard(this.scene, enemyType, x, y + startingYOffset);
-      await enemy.fadeIn(spawnDelay);
-
-      if (enemy.type !== ENEMY_CARD_TYPES.BLANK) {
       const cx = x + cellSize.width / 2;
       const cy = y + cellSize.height / 2;
+      const delay = i * 124;
+
+      if (enemyType === ENEMY_CARD_TYPES.BLANK) {
+        const blank = new BlankCard(this.scene, spawnPosition.x, spawnPosition.y);
+        return blank
+          .fadeIn(delay)
+          .then(() => blank.moveTo(cx, spawnPosition.y))
+          .then(() => blank.moveTo(cx, cy))
+          .then(() => blank.flip())
+          .then(() => blank.fadeOut())
+          .then(() => blank.destroy());
+      } else {
+        const enemy = new EnemyCard(this.scene, enemyType, spawnPosition.x, spawnPosition.y);
         this.enemies.push(enemy);
         this.gameBoard.putAt(location.x, location.y, enemy);
-      } else {
-        return enemy.die(spawnDelay);
-        return enemy.moveTo(cx, cy, delay);
+        return enemy
+          .fadeIn(delay)
+          .then(() => enemy.moveTo(cx, spawnPosition.y))
+          .then(() => enemy.moveTo(cx, cy))
+          .then(() => enemy.flip());
       }
     });
 

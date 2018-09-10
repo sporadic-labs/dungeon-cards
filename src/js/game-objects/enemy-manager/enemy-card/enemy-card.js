@@ -1,5 +1,7 @@
 import { ENEMY_CARD_INFO } from "./enemy-card-types";
 import { emitter, EVENT_NAMES } from "../../events";
+import FlipEffect from "../../shared-components/flip-effect";
+import { EventProxy } from "../../events/index";
 
 export default class EnemyCard {
   /**
@@ -18,26 +20,26 @@ export default class EnemyCard {
 
     this.cardShadow = scene.add.sprite(0, 0, "assets", "cards/card-shadow");
     this.card = scene.add.sprite(0, 0, "assets", "cards/card");
-
     const key = ENEMY_CARD_INFO[type].key;
-    if (key) {
-      this.cardContents = scene.add.sprite(0, 0, "assets", key).setInteractive();
-    }
+    this.cardContents = scene.add.sprite(0, 0, "assets", key).setInteractive();
+    const healthFrame = `cards/card-contents-enemy-health-${this.health}`;
+    this.healthDisplay = scene.add.sprite(0, 0, "assets", healthFrame);
 
-    if (this.health) {
-      const healthFrame = `cards/card-contents-enemy-health-${this.health}`;
-      this.healthDisplay = scene.add.sprite(0, 0, "assets", healthFrame);
-    }
+    this.cardBack = scene.add.container(x, y, [
+      scene.add.sprite(0, 0, "assets", "cards/card-shadow"),
+      scene.add.sprite(0, 0, "assets", "cards/card-back")
+    ]);
 
-    const spriteList = [this.cardShadow, this.card];
-    if (this.cardContents) spriteList.push(this.cardContents);
-    if (this.healthDisplay) spriteList.push(this.healthDisplay);
+    this.cardFront = scene.add.container(x, y, [
+      this.cardShadow,
+      this.card,
+      this.cardContents,
+      this.healthDisplay
+    ]);
 
-    this.container = scene.add.container(
-      x + this.card.width / 2,
-      y + this.card.height / 2,
-      spriteList
-    );
+    this.eventProxy = new EventProxy();
+
+    this.flipEffect = new FlipEffect(scene, this.cardFront, this.cardBack).setToBack();
 
     this.selected = false;
     this.focused = false;
@@ -55,7 +57,7 @@ export default class EnemyCard {
     if (this.blocked) {
       if (!this.blockedOverlay) {
         this.blockedOverlay = this.scene.add.sprite(0, 0, "assets", "attacks/block");
-        this.container.add(this.blockedOverlay);
+        this.cardFront.add(this.blockedOverlay);
       }
       this.blockedOverlay.visible = true;
       emitter.once(EVENT_NAMES.ENEMY_TURN_END, () => this.setBlocked(false));
@@ -97,10 +99,10 @@ export default class EnemyCard {
   onPointerDown = () => emitter.emit(EVENT_NAMES.ENEMY_CARD_SELECT, this);
 
   shake() {
-    this.scene.tweens.killTweensOf(this.container);
-    const { x, y, angle } = this.container;
+    this.scene.tweens.killTweensOf(this.cardFront);
+    const { x, y, angle } = this.cardFront;
     this.timeline = this.scene.tweens.timeline({
-      targets: this.container,
+      targets: this.cardFront,
       ease: Phaser.Math.Easing.Quadratic.InOut,
       loop: -1,
       duration: 40,
@@ -117,10 +119,10 @@ export default class EnemyCard {
     if (this.focused) return;
     this.focused = true;
 
-    this.scene.tweens.killTweensOf(this.container);
+    this.scene.tweens.killTweensOf(this.cardFront);
     return new Promise(resolve => {
       this.scene.tweens.add({
-        targets: this.container,
+        targets: this.cardFront,
         scaleX: 1.1,
         scaleY: 1.1,
         duration: 200,
@@ -134,10 +136,10 @@ export default class EnemyCard {
     if (!this.focused) return;
     this.focused = false;
 
-    this.scene.tweens.killTweensOf(this.container);
+    this.scene.tweens.killTweensOf(this.cardFront);
     return new Promise(resolve => {
       this.scene.tweens.add({
-        targets: this.container,
+        targets: this.cardFront,
         scaleX: 1,
         scaleY: 1,
         duration: 200,
@@ -148,14 +150,14 @@ export default class EnemyCard {
   }
 
   fadeIn(delay) {
-    this.scene.tweens.killTweensOf(this.container);
-    this.container.alpha = 0;
+    this.scene.tweens.killTweensOf([this.cardFront, this.cardBack]);
+    this.cardFront.alpha = 0;
     return new Promise(resolve => {
       this.scene.tweens.add({
-        targets: this.container,
+        targets: [this.cardFront, this.cardBack],
         alpha: 1,
         delay: delay,
-        duration: 200,
+        duration: 350,
         ease: "Quad.easeOut",
         onComplete: resolve
       });
@@ -163,13 +165,13 @@ export default class EnemyCard {
   }
 
   fadeOut(delay) {
-    this.scene.tweens.killTweensOf(this.container);
+    this.scene.tweens.killTweensOf([this.cardFront, this.cardBack]);
     return new Promise(resolve => {
       this.scene.tweens.add({
-        targets: this.container,
+        targets: [this.cardFront, this.cardBack],
         alpha: 0,
         delay: delay,
-        duration: 200,
+        duration: 350,
         ease: "Quad.easeOut",
         onComplete: resolve
       });
@@ -183,17 +185,24 @@ export default class EnemyCard {
 
   // Move via center
   moveTo(x, y, delay = 0) {
-    this.scene.tweens.killTweensOf(this.container);
+    this.scene.tweens.killTweensOf([this.cardFront, this.cardBack]);
     return new Promise(resolve => {
       this.scene.tweens.add({
-        targets: this.container,
+        targets: [this.cardFront, this.cardBack],
         x: x,
         y: y,
         delay: delay,
-        duration: 200,
+        duration: 350,
         ease: "Quad.easeOut",
         onComplete: resolve
       });
+    });
+  }
+
+  flip() {
+    return new Promise(resolve => {
+      this.eventProxy.once(this.flipEffect.events, "complete", resolve);
+      this.flipEffect.flipToFront();
     });
   }
 
@@ -205,8 +214,11 @@ export default class EnemyCard {
   }
 
   destroy() {
+    this.eventProxy.destroy();
     this.scene.lifecycle.remove(this);
-    this.scene.tweens.killTweensOf(this.container);
-    this.container.destroy();
+    this.scene.tweens.killTweensOf([this.cardFront, this.cardBack]);
+    this.cardFront.destroy();
+    this.cardBack.destroy();
+    this.flipEffect.destroy();
   }
 }
