@@ -254,7 +254,7 @@ export default class EnemyCard {
   }
 
   destroy() {
-    this.eventProxy.destroy();
+    this.eventProxy.removeAll();
     this.scene.lifecycle.remove(this);
     this.scene.tweens.killTweensOf([this.cardFront, this.cardBack]);
     this.cardFront.destroy();
