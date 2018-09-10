@@ -19,6 +19,9 @@ class GameStore {
   focusedPlayerCard = null;
 
   @observable
+  focusedEnemyCard = null;
+
+  @observable
   isPaused = false;
 
   @observable
@@ -65,6 +68,11 @@ class GameStore {
   @action
   setFocusedPlayerCard(card) {
     this.focusedPlayerCard = card;
+  }
+
+  @action
+  setFocusedEnemyCard(card) {
+    this.focusedEnemyCard = card;
   }
 
   @action

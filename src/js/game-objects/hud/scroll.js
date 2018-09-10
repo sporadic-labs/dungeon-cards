@@ -77,6 +77,13 @@ export default class Scroll {
       }, debounceTime);
     });
 
+    // When an enemy card has been focused, show the instructions.
+    // NOTE(rex): Favor the enemy card over the player card, if both are focused at the same time.
+    mobProxy.observe(store, "focusedEnemyCard", change => {
+      const card = change.newValue;
+      if (card) console.log("focusedEnemyCard");
+    });
+
     // When a card has been played, hide the instructions.
     mobProxy.observe(store, "activePlayerCard", change => {
       const card = change.newValue;

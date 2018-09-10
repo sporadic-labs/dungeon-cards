@@ -3,6 +3,8 @@ import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import { DeckDisplay } from "../hud";
 import { SHIFT_DIRECTIONS } from "../card-actions";
 import BlankCard from "./enemy-card/blank-card";
+import store from "../../store/index";
+import { Events } from "phaser";
 
 export default class EnemyManager {
   /**
@@ -17,28 +19,35 @@ export default class EnemyManager {
 
     this.proxy = new EventProxy();
 
-    const { width, height } = this.scene.sys.game.config;
+    // Local emitter that is only for manager ⟷ card interaction
+    this.cardEmitter = new Events.EventEmitter();
+
+    const { width, _ } = this.scene.sys.game.config;
     this.deckDisplay = new DeckDisplay(scene, width - 60, 70, this.deck.getNumCardsRemaining());
 
     this.enemies = [];
     this.selectingEnabled = false;
 
-    this.proxy.on(emitter, EVENT_NAMES.ENEMY_CARD_SELECT, card => {
+    this.cardEmitter.on(EVENT_NAMES.ENEMY_CARD_SELECT, card => {
       // TODO(rex): Do something useful here.
     });
 
-    this.proxy.on(emitter, EVENT_NAMES.ENEMY_CARD_FOCUS, card => {
+    this.cardEmitter.on(EVENT_NAMES.ENEMY_CARD_SOFT_FOCUS, card => {
+      console.log("focusing enemy from enemy manager");
       this.enemies.forEach(c => c.defocus());
       card.focus();
+      store.setFocusedEnemyCard(card);
     });
 
-    this.proxy.on(emitter, EVENT_NAMES.ENEMY_CARD_DEFOCUS, card => {
+    this.cardEmitter.on(EVENT_NAMES.ENEMY_CARD_SOFT_DEFOCUS, card => {
       this.enemies.forEach(c => c.defocus());
+      if (store.focusedEnemyCard === card) store.setFocusedEnemyCard(null);
     });
 
     scene.events.on("shutdown", () => {
       this.removeAllEnemies();
       this.proxy.removeAll();
+      this.cardEmitter.destroy();
     });
   }
 

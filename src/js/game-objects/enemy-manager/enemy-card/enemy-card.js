@@ -8,7 +8,7 @@ export default class EnemyCard {
    * @param {Phaser.Scene} scene
    * @param {*} type
    */
-  constructor(scene, type, x, y) {
+  constructor(scene, type, x, y, emitter) {
     scene.lifecycle.add(this);
 
     this.scene = scene;
@@ -17,6 +17,8 @@ export default class EnemyCard {
 
     this.x = x;
     this.y = y;
+
+    this.cardEmitter = emitter;
 
     this.cardShadow = scene.add.sprite(0, 0, "assets", "cards/card-shadow");
     this.card = scene.add.sprite(0, 0, "assets", "cards/card");
@@ -30,12 +32,10 @@ export default class EnemyCard {
       scene.add.sprite(0, 0, "assets", "cards/card-back")
     ]);
 
-    this.cardFront = scene.add.container(x, y, [
-      this.cardShadow,
-      this.card,
-      this.cardContents,
-      this.healthDisplay
-    ]);
+    this.cardFront = scene.add
+      .container(x, y, [this.cardShadow, this.card, this.cardContents, this.healthDisplay])
+      .setSize(this.cardContents.width, this.cardContents.height)
+      .setInteractive();
 
     this.eventProxy = new EventProxy();
 
@@ -45,6 +45,8 @@ export default class EnemyCard {
     this.focused = false;
     this.blocked = false;
     this.turnsBlocked = null;
+
+    this.enableSoftFocus();
   }
 
   setBlocked(shouldBeBlocked = true) {
@@ -85,18 +87,50 @@ export default class EnemyCard {
   }
 
   enableSelecting() {
-    this.card.on("pointerdown", this.onPointerDown);
+    console.log("enable selecting");
+    this.cardFront.on("pointerdown", this.onPointerDown, this);
   }
 
   disableSelecting() {
-    this.card.off("pointerdown", this.onPointerDown);
+    console.log("disable selecting");
+    this.cardFront.off("pointerdown", this.onPointerDown, this);
   }
 
-  onPointerOver = () => emitter.emit(EVENT_NAMES.ENEMY_CARD_FOCUS, this);
+  enableSoftFocus() {
+    console.log("enable softFocus");
+    console.log(this.cardFront.on);
+    this.cardFront.on("pointerover", this.onPointerOver, this);
+    this.cardFront.on(
+      "mouseover",
+      () => {
+        console.log("wat?");
+      },
+      this
+    );
+    this.cardFront.on("pointerout", this.onPointerOut, this);
+  }
 
-  onPointerOut = () => emitter.emit(EVENT_NAMES.ENEMY_CARD_DEFOCUS, this);
+  disableSoftFocus() {
+    console.log("disable softFocus");
+    this.cardFront.off("pointerover", this.onPointerOver, this);
+    this.cardFront.off("pointerout", this.onPointerOut, this);
+  }
 
-  onPointerDown = () => emitter.emit(EVENT_NAMES.ENEMY_CARD_SELECT, this);
+  onPointerOver() {
+    console.log("check?");
+    // emitter.emit(EVENT_NAMES.ENEMY_CARD_FOCUS, this);
+    this.cardEmitter.emit(EVENT_NAMES.ENEMY_CARD_SOFT_FOCUS, this);
+  }
+
+  onPointerOut() {
+    // emitter.emit(EVENT_NAMES.ENEMY_CARD_DEFOCUS, this)
+    this.cardEmitter.emit(EVENT_NAMES.ENEMY_CARD_SOFT_DEFOCUS, this);
+  }
+
+  onPointerDown() {
+    // emitter.emit(EVENT_NAMES.ENEMY_CARD_SELECT, this)
+    this.cardEmitter.emit(EVENT_NAMES.ENEMY_CARD_SELECT, this);
+  }
 
   shake() {
     this.scene.tweens.killTweensOf(this.cardFront);
@@ -120,6 +154,9 @@ export default class EnemyCard {
     this.focused = true;
 
     this.scene.tweens.killTweensOf(this.cardFront);
+    // this.cardEmitter.emit("pointerover", this);
+
+    // this.scene.tweens.killTweensOf(this.container);
     return new Promise(resolve => {
       this.scene.tweens.add({
         targets: this.cardFront,
@@ -137,6 +174,9 @@ export default class EnemyCard {
     this.focused = false;
 
     this.scene.tweens.killTweensOf(this.cardFront);
+    // this.cardEmitter.emit("pointerout", this);
+
+    // this.scene.tweens.killTweensOf(this.container);
     return new Promise(resolve => {
       this.scene.tweens.add({
         targets: this.cardFront,
