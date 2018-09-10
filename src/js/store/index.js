@@ -28,7 +28,7 @@ class GameStore {
   skipMenu = true;
 
   @observable
-  noAudio = true;
+  noAudio = false;
 
   @computed
   get gameStarted() {
