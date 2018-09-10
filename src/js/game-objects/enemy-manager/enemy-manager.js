@@ -34,14 +34,14 @@ export default class EnemyManager {
 
     this.cardEmitter.on(EVENT_NAMES.ENEMY_CARD_SOFT_FOCUS, card => {
       console.log("focusing enemy from enemy manager");
-      this.enemies.forEach(c => c.defocus());
-      card.focus();
-      store.setFocusedEnemyCard(card);
+      // this.enemies.forEach(c => c.defocus());
+      // card.focus();
+      // store.setFocusedEnemyCard(card);
     });
 
     this.cardEmitter.on(EVENT_NAMES.ENEMY_CARD_SOFT_DEFOCUS, card => {
       this.enemies.forEach(c => c.defocus());
-      if (store.focusedEnemyCard === card) store.setFocusedEnemyCard(null);
+      // if (store.focusedEnemyCard === card) store.setFocusedEnemyCard(null);
     });
 
     scene.events.on("shutdown", () => {
