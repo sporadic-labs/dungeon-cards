@@ -147,7 +147,7 @@ export default class PlayerHand {
 
     // Where to place the center of the hand, e.g. the middle card if the num cards is odd
     const cx = width / 2;
-    const cy = height - 104;
+    const cy = height - 90;
 
     // Cards placed along a circle, where the bigger the radius, the closer the cards are to
     // straight line

@@ -39,12 +39,12 @@ export default class PlayerManager {
 
     this.showTooManyCardsMessage = true; // Any better ideas?
 
-    this.dropTarget = new DropTarget(scene, 60, height - 150);
+    this.dropTarget = new DropTarget(scene, width / 2, height - 196);
     this.playerHandCount = scene.add
-      .text(width / 2, height - 24, this.playerHand.getNumCards(), style)
+      .text(width / 2, height - 16, this.playerHand.getNumCards(), style)
       .setOrigin(0.5, 0.5);
     this.energyDisplay = new EnergyDisplay(scene, 45, height - 45);
-    this.scroll = new Scroll(scene, width - 185, height / 2 - 90);
+    this.scroll = new Scroll(scene, width - 185, height / 2 - 148);
 
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DISCARD, this.discardSelectedCard, this);
     this.proxy.on(

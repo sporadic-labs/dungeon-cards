@@ -4,6 +4,7 @@ import { autorun, observe } from "mobx";
 import { EventProxy } from "../events/index";
 import MobXProxy from "../../helpers/mobx-proxy";
 import { PLAYER_CARD_TYPES } from "../player-manager/player-card";
+import { Math } from "phaser";
 
 /**
  * @export
@@ -20,6 +21,7 @@ export default class DropTarget {
     this.scene = scene;
 
     this.sprite = scene.add.sprite(x, y, "assets", "cards/card-drop-target").setInteractive();
+    this.sprite.rotation = Math.PI2 / 4;
 
     this.proxy = new EventProxy();
 
