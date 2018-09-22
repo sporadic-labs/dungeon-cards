@@ -37,7 +37,7 @@ export default class DropTarget {
       if (isDroppable) this.enable();
       else this.disable();
     });
-    this.mobProxy = observe(store, "isTargetingDropZone", change => {
+    this.mobProxy.observe(store, "isTargetingDropZone", change => {
       const isTargetingDropZone = change.newValue;
       if (this.isEnabled) {
         if (isTargetingDropZone) this.focus();
@@ -112,6 +112,5 @@ export default class DropTarget {
     this.mobProxy.destroy();
     this.proxy.removeAll();
     this.sprite.destroy();
-    this.disposers.forEach(fn => fn());
   }
 }
