@@ -59,21 +59,18 @@ export default class Scroll {
     this.debounceTimer = null;
     const debounceTime = 250;
 
-    // Hide, wait this long with no change before hiding the instructions.
-    this.hideTimer = null;
-    const hideTime = 10000;
-
     // When a card has been focused, show the instructions (after the debounce, of course!)
     const mobProxy = new MobXProxy();
     mobProxy.observe(store, "focusedPlayerCard", change => {
       this.clearTimers();
       this.debounceTimer = setTimeout(() => {
         const card = change.newValue;
-        if (card) this.showInstructions(card);
-        this.debounceTimer = null;
-        this.hideTimer = setTimeout(() => {
+        if (card) {
+          this.showInstructions(card);
+        } else {
           this.hideInstructions();
-        }, hideTime);
+        }
+        this.debounceTimer = null;
       }, debounceTime);
     });
 
@@ -109,10 +106,6 @@ export default class Scroll {
     if (this.debounceTimer) {
       clearTimeout(this.debounceTimer);
       this.debounceTimer = null;
-    }
-    if (this.hideTimer) {
-      clearTimeout(this.hideTimer);
-      this.hideTimer = null;
     }
   }
 
