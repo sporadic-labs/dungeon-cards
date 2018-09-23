@@ -15,6 +15,14 @@ export default class TweenManager {
     this.tweens = new Map();
   }
 
+  get(key) {
+    return this.tweens.get(key);
+  }
+
+  has(key) {
+    return this.tweens.has(key);
+  }
+
   /**
    * Add a tween under the given key. This will override (but not stop) any existing tween with the
    * same key.
