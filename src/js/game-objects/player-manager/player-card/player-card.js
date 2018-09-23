@@ -4,6 +4,7 @@ import { EventProxy } from "../../events/index";
 import { observe } from "mobx";
 import store from "../../../store/index";
 import FlipEffect from "../../shared-components/flip-effect";
+import TweenManager from "../../shared-components/tween-manager";
 
 const CARD_STATE = {
   DRAWING: "DRAWING",
@@ -31,6 +32,7 @@ export default class PlayerCard {
 
     this.focusOffset = 0;
     this.eventProxy = new EventProxy();
+    this.tweenManager = new TweenManager(scene);
     this.state = CARD_STATE.IDLE;
     this.x = x;
     this.y = y;
@@ -130,22 +132,22 @@ export default class PlayerCard {
     if (needsUpdate) this.moveToHand();
   }
 
-  moveToHand() {
-    const speed = 1000 / 1000; // px/s => px/ms
+  /**
+   * @param {number} [speed=1] Speed in pixels / ms
+   */
+  moveToHand(speed = 1) {
     const { x, y, targetHandX, targetHandY, targetHandRotation } = this;
     const distance = Phaser.Math.Distance.Between(x, y, targetHandX, targetHandY);
     const durationMs = distance / speed;
-    this.scene.tweens.killTweensOf(this);
-    this.scene.tweens.add({
+    this.tweenManager.stop("handTween");
+    this.tweenManager.add("handTween", {
       targets: this,
       x: targetHandX,
       y: targetHandY,
       rotation: targetHandRotation,
       duration: durationMs,
       ease: "Quad.easeOut",
-      onComplete: () => {
-        this.state = CARD_STATE.IDLE;
-      }
+      onComplete: () => (this.state = CARD_STATE.IDLE)
     });
   }
 
@@ -202,16 +204,15 @@ export default class PlayerCard {
     // TODO: we need a better way to compose and selectively stop tweens
 
     // Zero out rotation & focus and scale down
-    this.scene.tweens.killTweensOf(this);
-    this.scene.tweens.add({
+    this.tweenManager.stopAll();
+    this.tweenManager.add("dragStartZero", {
       targets: this,
       rotation: 0,
       focusOffset: 0,
       duration: 200,
       ease: "Quad.easeOut"
     });
-    this.scene.tweens.killTweensOf(this.cardFront);
-    this.scene.tweens.add({
+    this.tweenManager.add("dragStartScale", {
       targets: this.cardFront,
       scaleX: DRAG_SCALE,
       scaleY: DRAG_SCALE,
@@ -228,9 +229,9 @@ export default class PlayerCard {
     // Allow pointer events to pass through to other objects
     this.cardFront.disableInteractive();
 
-    this.cardEmitter.emit("dragstart", this);
-
     this.showOutline();
+
+    this.cardEmitter.emit("dragstart", this);
   }
 
   onDrag(pointer) {
@@ -241,50 +242,34 @@ export default class PlayerCard {
   }
 
   onDragEnd(pointer) {
-    // TODO: tween these without them being interrupted by focus/select tweens
-    // this.cardFront.setScale(1);
-
     this.x = pointer.x + this.dragOffsetX;
     this.y = pointer.y + this.dragOffsetY;
 
     this.cardFront.setInteractive();
 
-    this.cardEmitter.emit("dragend", this);
-
     this.state = CARD_STATE.RETURNING;
 
-    const speed = 1500 / 1000; // px/s => px/ms
-    const { x, y, targetHandX, targetHandY, targetHandRotation } = this;
-    const distance = Phaser.Math.Distance.Between(x, y, targetHandX, targetHandY);
-    const durationMs = distance / speed;
-    this.scene.tweens.killTweensOf(this);
-    this.scene.tweens.add({
-      targets: this,
-      x: targetHandX,
-      y: targetHandY,
-      rotation: targetHandRotation,
-      duration: durationMs,
-      ease: "Quad.easeOut",
-      onComplete: () => (this.state = CARD_STATE.IDLE)
-    });
-    this.scene.tweens.killTweensOf(this.cardFront);
-    this.scene.tweens.add({
+    this.tweenManager.stopAll();
+    this.tweenManager.add("dragEndScale", {
       targets: this.cardFront,
       scaleX: 1,
       scaleY: 1,
-      duration: durationMs,
+      duration: 200,
       ease: "Quad.easeOut"
     });
 
+    this.moveToHand(1500 / 1000); // px/s => px/ms
     this.hideOutline();
+
+    this.cardEmitter.emit("dragend", this);
   }
 
   onPointerOver() {
     if (this.state === CARD_STATE.IDLE) {
       this.cardEmitter.emit("pointerover", this);
       this.state = CARD_STATE.FOCUSED;
-      this.scene.tweens.killTweensOf(this);
-      this.scene.tweens.add({
+      this.tweenManager.stop("focus");
+      this.tweenManager.add("focus", {
         targets: this,
         focusOffset: -20,
         duration: 200,
@@ -297,8 +282,8 @@ export default class PlayerCard {
     if (this.state === CARD_STATE.FOCUSED) {
       this.cardEmitter.emit("pointerout", this);
       this.state = CARD_STATE.IDLE;
-      this.scene.tweens.killTweensOf(this);
-      this.scene.tweens.add({
+      this.tweenManager.stop("focus");
+      this.tweenManager.add("focus", {
         targets: this,
         focusOffset: 0,
         duration: 200,
@@ -314,8 +299,8 @@ export default class PlayerCard {
   }
 
   showOutline() {
-    this.scene.tweens.killTweensOf(this.outline);
-    this.scene.tweens.add({
+    this.tweenManager.stop("outline");
+    this.tweenManager.add("outline", {
       targets: this.outline,
       alpha: 1,
       duration: 200,
@@ -324,8 +309,8 @@ export default class PlayerCard {
   }
 
   hideOutline() {
-    this.scene.tweens.killTweensOf(this.outline);
-    this.scene.tweens.add({
+    this.tweenManager.stop("outline");
+    this.tweenManager.add("outline", {
       targets: this.outline,
       alpha: 0,
       duration: 200,
@@ -356,11 +341,12 @@ export default class PlayerCard {
   }
 
   destroy() {
+    this.eventProxy.removeAll();
     if (this.reclaimBack) this.reclaimBack.destroy();
     if (this.reclaimFlip) this.reclaimFlip.destroy();
-    this.eventProxy.removeAll();
     this.scene.lifecycle.remove(this);
     this.scene.tweens.killTweensOf(this.cardFront);
+    this.tweenManager.destroy();
     this.cardFront.destroy();
     this.initialFlip.destroy();
   }
