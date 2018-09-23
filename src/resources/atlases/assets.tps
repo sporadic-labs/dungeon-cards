@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>4.3.3</string>
         <key>fileName</key>
-        <string>C:/Users/mikewesthad/Documents/GitHub/dungeon-cards/src/resources/atlases/assets.tps</string>
+        <string>C:/Users/Michael Hadley/Documents/GitHub/dungeon-cards/src/resources/atlases/assets.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -340,18 +340,6 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">assets/scroll/scroll-00000.png</key>
-            <key type="filename">assets/scroll/scroll-00001.png</key>
-            <key type="filename">assets/scroll/scroll-00002.png</key>
-            <key type="filename">assets/scroll/scroll-00003.png</key>
-            <key type="filename">assets/scroll/scroll-00004.png</key>
-            <key type="filename">assets/scroll/scroll-00005.png</key>
-            <key type="filename">assets/scroll/scroll-00006.png</key>
-            <key type="filename">assets/scroll/scroll-00007.png</key>
-            <key type="filename">assets/scroll/scroll-00008.png</key>
-            <key type="filename">assets/scroll/scroll-00009.png</key>
-            <key type="filename">assets/scroll/scroll-00010.png</key>
-            <key type="filename">assets/scroll/scroll-00011.png</key>
             <key type="filename">assets/scroll/scroll-body-00000.png</key>
             <key type="filename">assets/scroll/scroll-body-00001.png</key>
             <key type="filename">assets/scroll/scroll-body-00002.png</key>
@@ -364,6 +352,18 @@
             <key type="filename">assets/scroll/scroll-body-00009.png</key>
             <key type="filename">assets/scroll/scroll-body-00010.png</key>
             <key type="filename">assets/scroll/scroll-body-00011.png</key>
+            <key type="filename">assets/scroll/scroll-rollers-00000.png</key>
+            <key type="filename">assets/scroll/scroll-rollers-00001.png</key>
+            <key type="filename">assets/scroll/scroll-rollers-00002.png</key>
+            <key type="filename">assets/scroll/scroll-rollers-00003.png</key>
+            <key type="filename">assets/scroll/scroll-rollers-00004.png</key>
+            <key type="filename">assets/scroll/scroll-rollers-00005.png</key>
+            <key type="filename">assets/scroll/scroll-rollers-00006.png</key>
+            <key type="filename">assets/scroll/scroll-rollers-00007.png</key>
+            <key type="filename">assets/scroll/scroll-rollers-00008.png</key>
+            <key type="filename">assets/scroll/scroll-rollers-00009.png</key>
+            <key type="filename">assets/scroll/scroll-rollers-00010.png</key>
+            <key type="filename">assets/scroll/scroll-rollers-00011.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -373,19 +373,6 @@
                 <rect>44,62,88,123</rect>
                 <key>scale9Paddings</key>
                 <rect>44,62,88,123</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">assets/scroll/scroll.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>44,44,88,88</rect>
-                <key>scale9Paddings</key>
-                <rect>44,44,88,88</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

@@ -22,37 +22,34 @@ export default class Scroll {
   constructor(scene, x, y) {
     this.scene = scene;
 
-    const maskOpenFrames = scene.anims.generateFrameNames("assets", {
+    const bodyOpenFrames = scene.anims.generateFrameNames("assets", {
       prefix: "scroll/scroll-body-",
       end: 11,
       zeroPad: 5
     });
-    const openFrames = scene.anims.generateFrameNames("assets", {
-      prefix: "scroll/scroll-",
+    const bodyCloseFrames = bodyOpenFrames.slice().reverse();
+    const rollerOpenFrames = scene.anims.generateFrameNames("assets", {
+      prefix: "scroll/scroll-rollers-",
       end: 11,
       zeroPad: 5
     });
-    const closeFrames = openFrames.slice().reverse();
+    const rollerCloseFrames = rollerOpenFrames.slice().reverse();
 
-    scene.anims.create({ key: "scroll-open", frames: openFrames, frameRate: 30 });
-    scene.anims.create({ key: "scroll-close", frames: closeFrames, frameRate: 30 });
-    scene.anims.create({ key: "scroll-mask-open", frames: maskOpenFrames, frameRate: 30 });
+    scene.anims.create({ key: "scroll-rollers-open", frames: rollerOpenFrames, frameRate: 30 });
+    scene.anims.create({ key: "scroll-rollers-close", frames: rollerCloseFrames, frameRate: 30 });
+    scene.anims.create({ key: "scroll-body-open", frames: bodyOpenFrames, frameRate: 30 });
+    scene.anims.create({ key: "scroll-body-close", frames: bodyCloseFrames, frameRate: 30 });
 
-    this.scroll = scene.add.sprite(0, 0, "assets", openFrames[0].frame);
+    this.scrollBody = scene.add.sprite(0, 0, "assets", bodyOpenFrames[0].frame);
+    this.scrollRollers = scene.add.sprite(0, 0, "assets", rollerOpenFrames[0].frame);
     this.text = scene.add.text(0, 0, "", style).setOrigin(0.5, 0.5);
-    this.scroll.setPosition(x + this.scroll.width / 2, y + this.scroll.height / 2);
-    this.text.setPosition(this.scroll.x, this.scroll.y);
+    const cx = x + this.scrollRollers.width / 2;
+    const cy = y + this.scrollRollers.height / 2;
+    this.scrollRollers.setPosition(cx, cy);
+    this.scrollBody.setPosition(cx, cy);
+    this.text.setPosition(cx, cy);
 
-    // Note: an element inside of a container cannot be masked, so scroll and text must be separate
-    // objects that are manually aligned
-    this.maskSprite = scene.make.sprite({
-      x: x + this.scroll.width / 2,
-      y: y + this.scroll.height / 2,
-      key: "assets",
-      frame: maskOpenFrames[0].frame,
-      add: false
-    });
-    const mask = new Phaser.Display.Masks.BitmapMask(scene, this.maskSprite);
+    const mask = new Phaser.Display.Masks.BitmapMask(scene, this.scrollBody);
     this.text.setMask(mask);
 
     // Debounce, wait this long before showing instructions on hover.
@@ -93,13 +90,14 @@ export default class Scroll {
 
   hideInstructions() {
     this.text.setText("");
-    this.scroll.play("scroll-close");
+    this.scrollBody.play("scroll-body-close");
+    this.scrollRollers.play("scroll-rollers-close");
   }
 
   showInstructions(card) {
     this.text.setText(card.cardInfo.description);
-    this.scroll.play("scroll-open");
-    this.maskSprite.play("scroll-mask-open");
+    this.scrollBody.play("scroll-body-open");
+    this.scrollRollers.play("scroll-rollers-open");
   }
 
   clearTimers() {
@@ -112,6 +110,8 @@ export default class Scroll {
   destroy() {
     this.clearTimers();
     this.mobProxy.destroy();
-    this.container.destroy();
+    this.scrollRollers.destroy();
+    this.scrollBody.destroy();
+    this.text.destroy();
   }
 }
