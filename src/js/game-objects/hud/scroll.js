@@ -2,6 +2,7 @@ import { getFontString } from "../../font";
 import store from "../../store/index";
 import Phaser from "phaser";
 import MobXProxy from "../../helpers/mobx-proxy";
+import { EventProxy } from "../events/index";
 
 const style = {
   font: getFontString("Chivo", { size: "12px", weight: 600 }),
@@ -56,6 +57,8 @@ export default class Scroll {
     this.debounceTimer = null;
     const debounceTime = 250;
 
+    this.eventProxy = new EventProxy();
+
     // When a card has been focused, show the instructions (after the debounce, of course!)
     const mobProxy = new MobXProxy();
     mobProxy.observe(store, "focusedPlayerCard", change => {
@@ -89,15 +92,20 @@ export default class Scroll {
   }
 
   hideInstructions() {
-    this.text.setText("");
     this.scrollBody.play("scroll-body-close");
     this.scrollRollers.play("scroll-rollers-close");
+    this.eventProxy.once(this.scrollBody, "animationcomplete", this.onClose, this);
   }
 
   showInstructions(card) {
+    this.eventProxy.off(this.scrollBody, "animationcomplete", this.onClose, this);
     this.text.setText(card.cardInfo.description);
     this.scrollBody.play("scroll-body-open");
     this.scrollRollers.play("scroll-rollers-open");
+  }
+
+  onClose() {
+    this.text.setText("");
   }
 
   clearTimers() {
@@ -110,6 +118,7 @@ export default class Scroll {
   destroy() {
     this.clearTimers();
     this.mobProxy.destroy();
+    this.eventProxy.removeAll();
     this.scrollRollers.destroy();
     this.scrollBody.destroy();
     this.text.destroy();
