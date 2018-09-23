@@ -12,12 +12,6 @@ import store from "../store/index";
 import { autorun } from "mobx";
 
 export default class PlayScene extends Scene {
-  gameBoard;
-  enemyManager;
-  playerManager;
-  actionRunner;
-  proxy;
-
   create() {
     const { width, height } = this.sys.game.config;
     this.add.tileSprite(0, 0, 10 * width, 10 * height, "assets", "background");
