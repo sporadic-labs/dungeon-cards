@@ -62,8 +62,8 @@ export default class Scroll {
     this.eventProxy = new EventProxy();
 
     // When a card has been focused, show the instructions (after the debounce, of course!)
-    const mobProxy = new MobXProxy();
-    mobProxy.observe(store, "focusedPlayerCard", change => {
+    this.mobProxy = new MobXProxy();
+    this.mobProxy.observe(store, "focusedPlayerCard", change => {
       this.clearTimers();
       this.debounceTimer = setTimeout(() => {
         const card = change.newValue;
@@ -78,13 +78,13 @@ export default class Scroll {
 
     // When an enemy card has been focused, show the instructions.
     // NOTE(rex): Favor the enemy card over the player card, if both are focused at the same time.
-    mobProxy.observe(store, "focusedEnemyCard", change => {
+    this.mobProxy.observe(store, "focusedEnemyCard", change => {
       const card = change.newValue;
       if (card) console.log("focusedEnemyCard");
     });
 
     // When a card has been played, hide the instructions.
-    mobProxy.observe(store, "activePlayerCard", change => {
+    this.mobProxy.observe(store, "activePlayerCard", change => {
       const card = change.newValue;
       if (!card) {
         this.hideInstructions();
@@ -104,6 +104,9 @@ export default class Scroll {
       this.state = frame.isLast ? STATE.OPEN : STATE.CLOSED;
       this.emitter.emit(this.state);
     });
+
+    this.eventProxy.once(scene.events, "shutdown", this.destroy, this);
+    this.eventProxy.once(scene.events, "destroy", this.destroy, this);
   }
 
   hideInstructions() {
@@ -142,10 +145,10 @@ export default class Scroll {
   }
 
   destroy() {
-    this.emitter.destroy();
-    this.clearTimers();
     this.mobProxy.destroy();
     this.eventProxy.removeAll();
+    this.emitter.destroy();
+    this.clearTimers();
     this.scrollRollers.destroy();
     this.scrollBody.destroy();
     this.text.destroy();
