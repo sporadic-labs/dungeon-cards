@@ -9,6 +9,12 @@ const style = {
   fill: "#000",
   wordWrap: { width: 100 }
 };
+const STATE = {
+  OPEN: "OPEN",
+  CLOSED: "CLOSED",
+  CLOSING: "CLOSING",
+  OPENING: "OPENING"
+};
 
 /**
  * @export
@@ -23,26 +29,22 @@ export default class Scroll {
   constructor(scene, x, y) {
     this.scene = scene;
 
-    const bodyOpenFrames = scene.anims.generateFrameNames("assets", {
+    const bodyFrames = scene.anims.generateFrameNames("assets", {
       prefix: "scroll/scroll-body-",
       end: 11,
       zeroPad: 5
     });
-    const bodyCloseFrames = bodyOpenFrames.slice().reverse();
-    const rollerOpenFrames = scene.anims.generateFrameNames("assets", {
+    const rollerFrames = scene.anims.generateFrameNames("assets", {
       prefix: "scroll/scroll-rollers-",
       end: 11,
       zeroPad: 5
     });
-    const rollerCloseFrames = rollerOpenFrames.slice().reverse();
 
-    scene.anims.create({ key: "scroll-rollers-open", frames: rollerOpenFrames, frameRate: 30 });
-    scene.anims.create({ key: "scroll-rollers-close", frames: rollerCloseFrames, frameRate: 30 });
-    scene.anims.create({ key: "scroll-body-open", frames: bodyOpenFrames, frameRate: 30 });
-    scene.anims.create({ key: "scroll-body-close", frames: bodyCloseFrames, frameRate: 30 });
+    scene.anims.create({ key: "rollers-open", frames: rollerFrames, frameRate: 40 });
+    scene.anims.create({ key: "body-open", frames: bodyFrames, frameRate: 40 });
 
-    this.scrollBody = scene.add.sprite(0, 0, "assets", bodyOpenFrames[0].frame);
-    this.scrollRollers = scene.add.sprite(0, 0, "assets", rollerOpenFrames[0].frame);
+    this.scrollBody = scene.add.sprite(0, 0, "assets", bodyFrames[0].frame);
+    this.scrollRollers = scene.add.sprite(0, 0, "assets", rollerFrames[0].frame);
     this.text = scene.add.text(0, 0, "", style).setOrigin(0.5, 0.5);
     const cx = x + this.scrollRollers.width / 2;
     const cy = y + this.scrollRollers.height / 2;
@@ -89,23 +91,47 @@ export default class Scroll {
         this.clearTimers();
       }
     });
+
+    // Internal emitter for responding to state changes
+    this.emitter = new Phaser.Events.EventEmitter();
+    // Hook state into the animation stages
+    this.state = STATE.CLOSED;
+    this.eventProxy.on(this.scrollBody, "animationstart", (anim, frame) => {
+      this.state = this.scrollBody.anims.forward ? STATE.OPENING : STATE.CLOSING;
+      this.emitter.emit(this.state);
+    });
+    this.eventProxy.on(this.scrollBody, "animationcomplete", (anim, frame) => {
+      this.state = frame.isLast ? STATE.OPEN : STATE.CLOSED;
+      this.emitter.emit(this.state);
+    });
   }
 
   hideInstructions() {
-    this.scrollBody.play("scroll-body-close");
-    this.scrollRollers.play("scroll-rollers-close");
-    this.eventProxy.once(this.scrollBody, "animationcomplete", this.onClose, this);
+    if (this.state === STATE.CLOSED || this.state === STATE.CLOSING) return;
+
+    if (this.state === STATE.OPENING) {
+      // Reverse in place
+      this.scrollBody.anims.reverse("body-open");
+      this.scrollRollers.anims.reverse("rollers-open");
+    } else if (this.state === STATE.OPEN) {
+      // Play from start
+      this.scrollBody.anims.playReverse("body-open");
+      this.scrollRollers.anims.playReverse("rollers-open");
+    }
+
+    this.emitter.once(STATE.CLOSED, () => this.text.setText(""));
   }
 
   showInstructions(card) {
-    this.eventProxy.off(this.scrollBody, "animationcomplete", this.onClose, this);
-    this.text.setText(card.cardInfo.description);
-    this.scrollBody.play("scroll-body-open");
-    this.scrollRollers.play("scroll-rollers-open");
-  }
-
-  onClose() {
-    this.text.setText("");
+    if (this.state === STATE.CLOSED) {
+      this.text.setText(card.cardInfo.description);
+      this.scrollBody.anims.play("body-open");
+      this.scrollRollers.anims.play("rollers-open");
+    } else {
+      // Close and then show
+      this.hideInstructions();
+      this.emitter.once(STATE.CLOSED, () => this.showInstructions(card));
+    }
   }
 
   clearTimers() {
@@ -116,6 +142,7 @@ export default class Scroll {
   }
 
   destroy() {
+    this.emitter.destroy();
     this.clearTimers();
     this.mobProxy.destroy();
     this.eventProxy.removeAll();
