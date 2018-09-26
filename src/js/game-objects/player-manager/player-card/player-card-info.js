@@ -1,6 +1,7 @@
 const PLAYER_CARD_INFO = {
   ATTACK_ONE: {
     key: "cards/card-contents-attack-1",
+    title: "Single Attack",
     description: "Attack a single enemy.",
     energy: 0,
     cost: 0,
@@ -8,6 +9,7 @@ const PLAYER_CARD_INFO = {
   },
   ATTACK_THREE_HORIZONTAL: {
     key: "cards/card-contents-attack-3-horizontal",
+    title: "Horizontal Attack",
     description: "Attack up to 3 enemies in any row.",
     energy: 1,
     cost: 1,
@@ -15,6 +17,7 @@ const PLAYER_CARD_INFO = {
   },
   ATTACK_THREE_VERTICAL: {
     key: "cards/card-contents-attack-3-vertical",
+    title: "Vertical Attack",
     description: "Attack up to 3 enemies in any column.",
     energy: 1,
     cost: 1,
@@ -22,6 +25,7 @@ const PLAYER_CARD_INFO = {
   },
   ATTACK_GRID: {
     key: "cards/card-contents-attack-9",
+    title: "Grid Attack",
     description: "Attack up to 9 enemies in a grid.",
     energy: 3,
     cost: 3,
@@ -39,6 +43,7 @@ const PLAYER_CARD_INFO = {
   },
   BLOCK: {
     key: "cards/card-contents-block",
+    title: "Block",
     description:
       "Block an enemy from moving for 1 turn. Any enemies behind the block will also be unable to move.",
     energy: 0,
@@ -47,18 +52,21 @@ const PLAYER_CARD_INFO = {
   },
   DRAW_THREE: {
     key: "cards/card-contents-draw",
+    title: "Draw 3",
     description: "Add 3 additional cards to your hand.",
     energy: 0,
     cost: 0
   },
   ENERGY: {
     key: "cards/card-contents-energy",
+    title: "Energy",
     description: "Add 1 to your energy pool.",
     energy: 1,
     cost: 0
   },
   SHIFT_LEFT: {
     key: "cards/card-contents-shift-left",
+    title: "Shift Left",
     description:
       "Shift the selected row to the left by 1 position. Enemies that are moved off the board will be destroyed!",
     energy: 0,
@@ -76,6 +84,7 @@ const PLAYER_CARD_INFO = {
   },
   SHIFT_RIGHT: {
     key: "cards/card-contents-shift-right",
+    title: "Shift Right",
     description:
       "Shift the selected row to the right by 1 position. Enemies that are moved off the board will be destroyed!",
     energy: 0,
