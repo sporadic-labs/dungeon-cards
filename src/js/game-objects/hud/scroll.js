@@ -62,16 +62,26 @@ export default class Scroll {
     this.cx = cx;
     this.cy = cy;
     this.textSpacing = 12;
+    // Card description
     this.descriptionText = scene.add.text(cx, cy, "", descriptionStyle).setOrigin(0.5, 0.5);
+    // Card title
     this.titleText = scene.add.text(0, 0, "", titleStyle).setOrigin(0.5, 1);
-    this.titleText.setPosition(
-      cx,
-      cy - this.textSpacing - this.descriptionText.getBounds().height / 2
-    );
+    const titleOffset = this.textSpacing - this.descriptionText.getBounds().height / 2;
+    this.titleText.setPosition(cx, cy + titleOffset);
+    // Card cost value
+    this.costText = scene.add.text(0, 0, "", descriptionStyle).setOrigin(0.5, 0);
+    const costOffset = this.textSpacing + this.descriptionText.getBounds().height / 2;
+    this.costText.setPosition(cx, cy + costOffset);
+    // Energy value
+    this.energyText = scene.add.text(0, 0, "", descriptionStyle).setOrigin(0.5, 0);
+    const energyOffset = this.textSpacing + this.costText.getBounds().height / 2;
+    this.energyText.setPosition(cx, cy + costOffset + energyOffset);
 
     const mask = new Phaser.Display.Masks.BitmapMask(scene, this.scrollBody);
     this.titleText.setMask(mask);
     this.descriptionText.setMask(mask);
+    this.costText.setMask(mask);
+    this.energyText.setMask(mask);
 
     // Debounce, wait this long before showing instructions on hover.
     this.debounceTimer = null;
@@ -159,11 +169,27 @@ export default class Scroll {
     this.titleText.setText(card.cardInfo.title);
     this.descriptionText.setText(card.cardInfo.description);
     this.titleText.y = this.cy - this.textSpacing - this.descriptionText.getBounds().height / 2;
+    if (card.cardInfo.cost !== null) {
+      const cost = card.cardInfo.cost;
+      this.costText.setText(`Cost to play: ${cost} `);
+      this.costText.y = this.cy + this.textSpacing + this.descriptionText.getBounds().height / 2;
+    }
+    if (card.cardInfo.energy !== null) {
+      const energy = card.cardInfo.energy;
+      this.energyText.setText(`Reclaim energy: ${energy}`);
+      this.energyText.y =
+        this.cy +
+        this.textSpacing * 2 +
+        this.descriptionText.getBounds().height / 2 +
+        this.costText.getBounds().height / 2;
+    }
   }
 
   clearText() {
     this.titleText.setText("");
     this.descriptionText.setText("");
+    this.energyText.setText("");
+    this.costText.setText("");
   }
 
   clearTimers() {
@@ -178,8 +204,13 @@ export default class Scroll {
     this.eventProxy.removeAll();
     this.emitter.destroy();
     this.clearTimers();
+    // Scroll sprites.
     this.scrollRollers.destroy();
     this.scrollBody.destroy();
-    this.text.destroy();
+    // Text objects.
+    this.titleText.destroy();
+    this.descriptionText.destroy();
+    this.energyText.destroy();
+    this.costText.destroy();
   }
 }
