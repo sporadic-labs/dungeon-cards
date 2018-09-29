@@ -61,27 +61,24 @@ export default class Scroll {
 
     this.cx = cx;
     this.cy = cy;
-    this.textSpacing = 12;
-    // Card description
-    this.descriptionText = scene.add.text(cx, cy, "", descriptionStyle).setOrigin(0.5, 0.5);
-    // Card title
-    this.titleText = scene.add.text(0, 0, "", titleStyle).setOrigin(0.5, 1);
-    const titleOffset = this.textSpacing - this.descriptionText.getBounds().height / 2;
-    this.titleText.setPosition(cx, cy + titleOffset);
-    // Card cost value
+    this.spacing = 8;
+
+    this.image = scene.add.image(0, 0).setOrigin(0.5, 0);
+    this.titleText = scene.add.text(0, 0, "", titleStyle).setOrigin(0.5, 0);
+    this.descriptionText = scene.add.text(0, 0, "", descriptionStyle).setOrigin(0.5, 0);
     this.costText = scene.add.text(0, 0, "", descriptionStyle).setOrigin(0.5, 0);
-    const costOffset = this.textSpacing + this.descriptionText.getBounds().height / 2;
-    this.costText.setPosition(cx, cy + costOffset);
-    // Energy value
     this.energyText = scene.add.text(0, 0, "", descriptionStyle).setOrigin(0.5, 0);
-    const energyOffset = this.textSpacing + this.costText.getBounds().height / 2;
-    this.energyText.setPosition(cx, cy + costOffset + energyOffset);
+    this.container = scene.add.container(0, 0, [
+      this.image,
+      this.titleText,
+      this.descriptionText,
+      this.costText,
+      this.energyText
+    ]);
+    this.container.setVisible(false);
 
     const mask = new Phaser.Display.Masks.BitmapMask(scene, this.scrollBody);
-    this.titleText.setMask(mask);
-    this.descriptionText.setMask(mask);
-    this.costText.setMask(mask);
-    this.energyText.setMask(mask);
+    this.container.setMask(mask);
 
     // Debounce, wait this long before showing instructions on hover.
     this.debounceTimer = null;
@@ -166,23 +163,23 @@ export default class Scroll {
   }
 
   updateText(card) {
-    this.titleText.setText(card.cardInfo.title);
-    this.descriptionText.setText(card.cardInfo.description);
-    this.titleText.y = this.cy - this.textSpacing - this.descriptionText.getBounds().height / 2;
-    if (card.cardInfo.cost !== null) {
-      const cost = card.cardInfo.cost;
-      this.costText.setText(`Cost to play: ${cost} `);
-      this.costText.y = this.cy + this.textSpacing + this.descriptionText.getBounds().height / 2;
-    }
-    if (card.cardInfo.energy !== null) {
-      const energy = card.cardInfo.energy;
-      this.energyText.setText(`Reclaim energy: ${energy}`);
-      this.energyText.y =
-        this.cy +
-        this.textSpacing * 2 +
-        this.descriptionText.getBounds().height / 2 +
-        this.costText.getBounds().height / 2;
-    }
+    this.container.setVisible(true);
+
+    const { key, title, description, cost, energy } = card.cardInfo;
+    this.image.setTexture("assets", key + "-scroll");
+    this.titleText.setText(title);
+    this.descriptionText.setText(description);
+    this.costText.setText(cost !== null ? `Cost to play: ${cost}` : "");
+    this.energyText.setText(energy !== null ? `Reclaim energy: ${energy}` : "");
+
+    this.titleText.setPosition(0, 0);
+    this.image.setPosition(0, this.titleText.getBottomLeft().y + this.spacing);
+    this.descriptionText.setPosition(0, this.image.getBottomLeft().y + this.spacing);
+    this.costText.setPosition(0, this.descriptionText.getBottomLeft().y + this.spacing);
+    this.energyText.setPosition(0, this.costText.getBottomLeft().y + this.spacing / 8);
+
+    const bounds = this.container.getBounds();
+    this.container.setPosition(this.cx, this.cy - bounds.height / 2);
   }
 
   clearText() {
