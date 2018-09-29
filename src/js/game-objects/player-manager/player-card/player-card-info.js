@@ -2,33 +2,37 @@ const PLAYER_CARD_INFO = {
   ATTACK_ONE: {
     key: "cards/card-contents-attack-1",
     title: "Single Attack",
-    description: "Attack a single enemy.",
+    description: "Attack a single enemy. Does 1 damage to each enemy that is hit.",
     energy: 0,
     cost: 0,
+    damagePerCell: 1,
     cells: [{ x: 0, y: 0 }]
   },
   ATTACK_THREE_HORIZONTAL: {
     key: "cards/card-contents-attack-3-horizontal",
     title: "Horizontal Attack",
-    description: "Attack up to 3 enemies in any row.",
+    description: "Attack up to 3 enemies in any row. Does 1 damage to each enemy that is hit.",
     energy: 1,
     cost: 1,
+    damagePerCell: 1,
     cells: [{ x: 0, y: 0 }, { x: -1, y: 0 }, { x: 1, y: 0 }]
   },
   ATTACK_THREE_VERTICAL: {
     key: "cards/card-contents-attack-3-vertical",
     title: "Vertical Attack",
-    description: "Attack up to 3 enemies in any column.",
+    description: "Attack up to 3 enemies in any column. Does 1 damage to each enemy that is hit.",
     energy: 1,
     cost: 1,
+    damagePerCell: 1,
     cells: [{ x: 0, y: 0 }, { x: 0, y: -1 }, { x: 0, y: 1 }]
   },
   ATTACK_GRID: {
     key: "cards/card-contents-attack-9",
     title: "Grid Attack",
-    description: "Attack up to 9 enemies in a grid.",
+    description: "Attack up to 9 enemies in a grid. Does 1 damage to each enemy that is hit.",
     energy: 3,
     cost: 3,
+    damagePerCell: 1,
     cells: [
       { x: 0, y: -1 },
       { x: -1, y: -1 },
@@ -55,14 +59,14 @@ const PLAYER_CARD_INFO = {
     title: "Draw 3",
     description: "Add 3 additional cards to your hand.",
     energy: 0,
-    cost: 0
+    cost: 0,
   },
   ENERGY: {
     key: "cards/card-contents-energy",
     title: "Energy",
     description: "Add 1 to your energy pool.",
     energy: 1,
-    cost: 0
+    cost: 0,
   },
   SHIFT_LEFT: {
     key: "cards/card-contents-shift-left",
