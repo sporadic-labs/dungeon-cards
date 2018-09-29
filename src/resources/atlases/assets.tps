@@ -252,6 +252,10 @@
                 <false/>
             </struct>
             <key type="filename">assets/attacks/x.png</key>
+            <key type="filename">assets/cards/card-contents-attack-1-scroll.png</key>
+            <key type="filename">assets/cards/card-contents-attack-9-scroll.png</key>
+            <key type="filename">assets/cards/card-contents-block-scroll.png</key>
+            <key type="filename">assets/cards/card-contents-energy-scroll.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -313,6 +317,45 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">assets/cards/card-contents-attack-3-horizontal-scroll.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>23,10,46,20</rect>
+                <key>scale9Paddings</key>
+                <rect>23,10,46,20</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/cards/card-contents-attack-3-vertical-scroll.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>5,10,9,20</rect>
+                <key>scale9Paddings</key>
+                <rect>5,10,9,20</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/cards/card-contents-draw-scroll.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,10,25,20</rect>
+                <key>scale9Paddings</key>
+                <rect>12,10,25,20</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">assets/cards/card-contents-energy-3.png</key>
             <key type="filename">assets/cards/card-drop-target.png</key>
             <struct type="IndividualSpriteSettings">
@@ -324,6 +367,20 @@
                 <rect>21,27,42,54</rect>
                 <key>scale9Paddings</key>
                 <rect>21,27,42,54</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/cards/card-contents-shift-left-scroll.png</key>
+            <key type="filename">assets/cards/card-contents-shift-right-scroll.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>14,10,28,20</rect>
+                <key>scale9Paddings</key>
+                <rect>14,10,28,20</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
