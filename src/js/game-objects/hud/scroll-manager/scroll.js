@@ -25,7 +25,7 @@ export default class Scroll {
    * @param {number} x
    * @param {number} y
    */
-  constructor(scene, x, y, rotation, cardInfo) {
+  constructor(scene, x, y, cardInfo) {
     this.scene = scene;
 
     const bodyFrames = scene.anims.generateFrameNames("assets", {
@@ -47,8 +47,8 @@ export default class Scroll {
 
     const cx = x + this.scrollRollers.width / 2;
     const cy = y + this.scrollRollers.height / 2;
-    this.scrollRollers.setPosition(cx, cy).setRotation(rotation);
-    this.scrollBody.setPosition(cx, cy).setRotation(rotation);
+    this.scrollRollers.setPosition(cx, cy);
+    this.scrollBody.setPosition(cx, cy);
 
     this.cx = cx;
     this.cy = cy;
@@ -70,7 +70,6 @@ export default class Scroll {
       this.costText,
       this.energyText
     ]);
-    this.container.setRotation(rotation);
 
     // Position everything and then center the container
     this.titleText.setPosition(0, 0);
@@ -92,7 +91,19 @@ export default class Scroll {
     this.eventProxy.once(scene.events, "destroy", this.destroy, this);
   }
 
+  fadeOut() {
+    this.tween = this.scene.tweens.add({
+      targets: [this.container, this.scrollBody, this.scrollRollers],
+      alpha: 0,
+      duration: 250,
+      ease: "Quad.easeOut",
+      onComplete: this.destroy,
+      callbackScope: this
+    });
+  }
+
   destroy() {
+    if (this.tween) this.tween.stop();
     this.eventProxy.removeAll();
     this.container.destroy();
     this.scrollBody.destroy();
