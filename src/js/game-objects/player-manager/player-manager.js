@@ -3,7 +3,7 @@ import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import { DeckDisplay, DropTarget, EnergyDisplay, PopupText } from "../hud";
 
 import { getFontString } from "../../font";
-import Scroll from "../hud/scroll";
+import ScrollManager from "../hud/scroll-manager";
 
 const style = {
   font: getFontString("Chivo", { size: "24px", weight: 600 }),
@@ -44,7 +44,7 @@ export default class PlayerManager {
       .text(width / 2, height - 16, this.playerHand.getNumCards(), style)
       .setOrigin(0.5, 0.5);
     this.energyDisplay = new EnergyDisplay(scene, 45, height - 45);
-    this.scroll = new Scroll(scene, width - 185, height / 2 - 148);
+    this.scroll = new ScrollManager(scene, width - 185, height / 2 - 148);
 
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DISCARD, this.discardSelectedCard, this);
     this.proxy.on(
@@ -132,7 +132,7 @@ export default class PlayerManager {
       } else if (this.showTooManyCardsMessage) {
         this.showTooManyCardsMessage = false;
         // Some UI to indicate player can't end turn yet.
-        const { width, height } = this.scene.sys.game.config;
+        const { width } = this.scene.sys.game.config;
         new PopupText(
           this.scene,
           "You must have 10 cards or less to continue!",
