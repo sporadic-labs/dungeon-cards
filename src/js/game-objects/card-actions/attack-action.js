@@ -3,6 +3,7 @@ import Action from "./action";
 import logger from "../../helpers/logger";
 import { PopupText } from "../hud";
 import store from "../../store";
+import PlayerAttackAnimation from "../player-manager/player-attack-animation";
 
 export default class AttackAction extends Action {
   /** @param {Phaser.Scene} scene */
@@ -65,7 +66,7 @@ export default class AttackAction extends Action {
     }
   }
 
-  onDragEnd(card) {
+  async onDragEnd(card) {
     this.board.defocusBoard();
 
     if (store.isTargetingDropZone) {
@@ -88,7 +89,12 @@ export default class AttackAction extends Action {
       return;
     }
 
+    // Get a list of enemies affected by this attack.
     const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
+
+    this.previews.map(preview => preview.setVisible(false));
+
+    // Damage the enemies, use the energy, and cleanup.
     this.enemyManager
       .damageEnemies(enemies, this.damage)
       .then(() => this.enemyManager.defocusAllEnemies());

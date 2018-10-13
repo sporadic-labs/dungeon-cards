@@ -4,6 +4,7 @@ import { DeckDisplay } from "../hud";
 import { SHIFT_DIRECTIONS } from "../card-actions";
 import BlankCard from "./enemy-card/blank-card";
 import store from "../../store/index";
+import PlayerAttackAnimation from "../player-manager/player-attack-animation";
 import { Events } from "phaser";
 
 export default class EnemyManager {
@@ -34,14 +35,10 @@ export default class EnemyManager {
 
     this.cardEmitter.on(EVENT_NAMES.ENEMY_CARD_SOFT_FOCUS, card => {
       console.log("focusing enemy from enemy manager");
-      // this.enemies.forEach(c => c.defocus());
-      // card.focus();
-      // store.setFocusedEnemyCard(card);
     });
 
     this.cardEmitter.on(EVENT_NAMES.ENEMY_CARD_SOFT_DEFOCUS, card => {
       this.enemies.forEach(c => c.defocus());
-      // if (store.focusedEnemyCard === card) store.setFocusedEnemyCard(null);
     });
 
     scene.events.on("shutdown", () => {
@@ -154,8 +151,19 @@ export default class EnemyManager {
 
     const deathPromises = sortedEnemies.map(enemy => {
       enemy.takeDamage(damage);
+
+      // Play the Player Attach Animation.
+      const attackAnim = new PlayerAttackAnimation(
+        this.scene,
+        enemy.cardFront.x,
+        enemy.cardFront.y
+      );
+      attackAnim.fadeout(delay).then(() => attackAnim.destroy());
+      delay += 200;
+
+      // Then play the Enemy Death animation.
       if (enemy.health <= 0) {
-        delay += 50;
+        delay += 100;
         return enemy.die(delay).then(() => this.removeEnemy(enemy));
       }
     });
