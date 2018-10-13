@@ -83,7 +83,7 @@ export default class EnemyCard {
   }
 
   getPosition() {
-    return { x: this.card.x, y: this.card.y };
+    return { x: this.cardFront.x, y: this.cardFront.y };
   }
 
   enableSelecting() {
