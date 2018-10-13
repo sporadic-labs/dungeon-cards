@@ -34,7 +34,7 @@ export default class EnemyCard {
 
     this.cardFront = scene.add
       .container(x, y, [this.cardShadow, this.card, this.cardContents, this.healthDisplay])
-      .setSize(this.cardContents.width, this.cardContents.height)
+      .setSize(this.card.width, this.card.height)
       .setInteractive();
 
     this.eventProxy = new EventProxy();
