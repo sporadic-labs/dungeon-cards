@@ -150,8 +150,6 @@ export default class EnemyManager {
     const sortedEnemies = this.sortEnemies(enemies);
 
     const deathPromises = sortedEnemies.map(enemy => {
-      enemy.takeDamage(damage);
-
       // Play the Player Attach Animation.
       const attackAnim = new PlayerAttackAnimation(
         this.scene,
@@ -160,6 +158,8 @@ export default class EnemyManager {
       );
       attackAnim.fadeout(delay).then(() => attackAnim.destroy());
       delay += 200;
+
+      enemy.takeDamage(damage);
 
       // Then play the Enemy Death animation.
       if (enemy.health <= 0) {
