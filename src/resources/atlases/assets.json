@@ -56,7 +56,7 @@
 	"spriteSourceSize": {"x":0,"y":1,"w":48,"h":47},
 	"sourceSize": {"w":48,"h":49}
 },
-"background":
+"background-vector":
 {
 	"frame": {"x":1,"y":1,"w":342,"h":344},
 	"rotated": false,
@@ -607,6 +607,6 @@
 	"format": "RGBA8888",
 	"size": {"w":492,"h":1603},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:f21852cec4274c92e89c9fa6e83832f0:10ef3874e92d5bd74c279540075e6bab:a759b6bbc8381ac9c472b28f589ad0d6$"
+	"smartupdate": "$TexturePacker:SmartUpdate:5b3566b5651db0d2dcd940a4ee5a980f:e15889a38311cc125581811a7b12dcc9:a759b6bbc8381ac9c472b28f589ad0d6$"
 }
 }
