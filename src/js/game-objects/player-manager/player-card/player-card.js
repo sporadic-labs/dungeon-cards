@@ -56,10 +56,10 @@ export default class PlayerCard {
     this.cardFront = scene.add
       .container(x, y, [
         this.cardShadow,
-        this.outline,
         this.card,
         this.cardContents,
-        this.costDisplay
+        this.costDisplay,
+        this.outline
       ])
       .setSize(this.card.width, this.card.height)
       .setInteractive();

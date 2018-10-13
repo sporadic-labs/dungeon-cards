@@ -21,7 +21,6 @@ export default class DropTarget {
     this.scene = scene;
 
     this.sprite = scene.add.sprite(x, y, "assets", "cards/card-drop-target").setInteractive();
-    this.sprite.rotation = Math.PI2 / 4;
 
     this.proxy = new EventProxy();
 
