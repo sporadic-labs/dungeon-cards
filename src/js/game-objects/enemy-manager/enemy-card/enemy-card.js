@@ -87,48 +87,32 @@ export default class EnemyCard {
   }
 
   enableSelecting() {
-    console.log("enable selecting");
     this.cardFront.on("pointerdown", this.onPointerDown, this);
   }
 
   disableSelecting() {
-    console.log("disable selecting");
     this.cardFront.off("pointerdown", this.onPointerDown, this);
   }
 
   enableSoftFocus() {
-    console.log("enable softFocus");
-    console.log(this.cardFront.on);
     this.cardFront.on("pointerover", this.onPointerOver, this);
-    this.cardFront.on(
-      "mouseover",
-      () => {
-        console.log("wat?");
-      },
-      this
-    );
     this.cardFront.on("pointerout", this.onPointerOut, this);
   }
 
   disableSoftFocus() {
-    console.log("disable softFocus");
     this.cardFront.off("pointerover", this.onPointerOver, this);
     this.cardFront.off("pointerout", this.onPointerOut, this);
   }
 
   onPointerOver() {
-    console.log("check?");
-    // emitter.emit(EVENT_NAMES.ENEMY_CARD_FOCUS, this);
     this.cardEmitter.emit(EVENT_NAMES.ENEMY_CARD_SOFT_FOCUS, this);
   }
 
   onPointerOut() {
-    // emitter.emit(EVENT_NAMES.ENEMY_CARD_DEFOCUS, this)
     this.cardEmitter.emit(EVENT_NAMES.ENEMY_CARD_SOFT_DEFOCUS, this);
   }
 
   onPointerDown() {
-    // emitter.emit(EVENT_NAMES.ENEMY_CARD_SELECT, this)
     this.cardEmitter.emit(EVENT_NAMES.ENEMY_CARD_SELECT, this);
   }
 

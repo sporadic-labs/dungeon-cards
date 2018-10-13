@@ -57,7 +57,6 @@ export default class TweenManager {
   }
 
   destroy() {
-    console.log("destroyed");
     this.stopAll();
     this.scene = undefined;
   }
