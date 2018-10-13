@@ -9,6 +9,7 @@ import run from "../game-objects/game-runner";
 import Logger from "../helpers/logger";
 import { MENU_STATES } from "../menu/menu-states";
 import store from "../store/index";
+import HudToast from "../game-objects/hud/hud-toast";
 import { autorun } from "mobx";
 
 export default class PlayScene extends Scene {
@@ -17,6 +18,8 @@ export default class PlayScene extends Scene {
     this.add.tileSprite(0, 0, 10 * width, 10 * height, "assets", "background-vector");
 
     this.gameBoard = new GameBoard(this, 5, 4);
+
+    this.toast = new HudToast(this);
 
     this.proxy = new EventProxy();
 
@@ -81,6 +84,7 @@ export default class PlayScene extends Scene {
   }
 
   shutdown() {
+    this.toast.destroy();
     this.storeUnsubscribe();
   }
 }

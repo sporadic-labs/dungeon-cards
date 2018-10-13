@@ -8,7 +8,6 @@ import DrawCardAction from "./draw-card-action";
 import GetEnergyAction from "./get-energy-action";
 import ShiftAction from "./shift-action";
 import Arrow from "./arrow";
-import HudToast from "../hud/hud-toast";
 
 const attacks = [
   PLAYER_CARD_TYPES.ATTACK_ONE,
@@ -28,7 +27,8 @@ export default class ActionRunner {
     this.gameBoard = gameBoard;
     this.currentAction = null;
     this.proxy = new EventProxy();
-    this.toast = new HudToast(scene);
+
+    this.toast = scene.toast;
 
     const { height } = scene.sys.game.config;
     this.endTurnButton = new EndTurnButton(scene, 80, height / 2 - 16);
@@ -106,7 +106,6 @@ export default class ActionRunner {
   }
 
   destroy() {
-    this.toast.destroy();
     this.killCurrentAction();
     this.proxy.removeAll();
   }
