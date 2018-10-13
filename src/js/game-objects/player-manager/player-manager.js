@@ -1,6 +1,6 @@
 import PlayerHand from "./player-hand";
 import { EventProxy, emitter, EVENT_NAMES } from "../events";
-import { DeckDisplay, DropTarget, EnergyDisplay, PopupText } from "../hud";
+import { DeckDisplay, DropTarget, EnergyDisplay } from "../hud";
 
 import { getFontString } from "../../font";
 import ScrollManager from "../hud/scroll-manager";
@@ -37,7 +37,7 @@ export default class PlayerManager {
     this.playerHand = new PlayerHand(scene, this.deck, this.deckDisplay);
     this.playerHand.drawCards(6);
 
-    this.showTooManyCardsMessage = true; // Any better ideas?
+    this.toast = this.scene.toast;
 
     this.dropTarget = new DropTarget(scene, width / 2, height - 196);
     this.playerHandCount = scene.add
@@ -129,22 +129,14 @@ export default class PlayerManager {
       if (this.playerHand.getNumCards() <= MAX_HAND) {
         this.resetEnergy();
         resolve();
-      } else if (this.showTooManyCardsMessage) {
-        this.showTooManyCardsMessage = false;
-        // Some UI to indicate player can't end turn yet.
-        const { width } = this.scene.sys.game.config;
-        new PopupText(
-          this.scene,
-          "You must have 10 cards or less to continue!",
-          width / 4,
-          20,
-          null,
-          () => {
-            this.showTooManyCardsMessage = true;
-          }
-        );
+      } else {
+        this.showToast("You must have 10 cards or less to continue!");
       }
     });
+  }
+
+  showToast(text) {
+    this.toast.setMessage(text);
   }
 
   destroy() {
