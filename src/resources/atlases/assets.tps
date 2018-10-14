@@ -268,41 +268,57 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">assets/background.png</key>
+            <key type="filename">assets/background-vector.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>375,375,750,750</rect>
+                <rect>86,86,171,172</rect>
                 <key>scale9Paddings</key>
-                <rect>375,375,750,750</rect>
+                <rect>86,86,171,172</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">assets/cards/card-back-scroll.png</key>
             <key type="filename">assets/cards/card-back.png</key>
             <key type="filename">assets/cards/card-contents-attack-1.png</key>
             <key type="filename">assets/cards/card-contents-attack-3-horizontal.png</key>
             <key type="filename">assets/cards/card-contents-attack-3-vertical.png</key>
             <key type="filename">assets/cards/card-contents-attack-9.png</key>
             <key type="filename">assets/cards/card-contents-block.png</key>
+            <key type="filename">assets/cards/card-contents-cost-0-scroll.png</key>
             <key type="filename">assets/cards/card-contents-cost-0.png</key>
+            <key type="filename">assets/cards/card-contents-cost-1-scroll.png</key>
             <key type="filename">assets/cards/card-contents-cost-1.png</key>
+            <key type="filename">assets/cards/card-contents-cost-2-scroll.png</key>
             <key type="filename">assets/cards/card-contents-cost-2.png</key>
+            <key type="filename">assets/cards/card-contents-cost-3-scroll.png</key>
             <key type="filename">assets/cards/card-contents-cost-3.png</key>
+            <key type="filename">assets/cards/card-contents-cost-background-scroll.png</key>
             <key type="filename">assets/cards/card-contents-cost-background.png</key>
             <key type="filename">assets/cards/card-contents-draw.png</key>
+            <key type="filename">assets/cards/card-contents-enemy-big-scroll.png</key>
             <key type="filename">assets/cards/card-contents-enemy-big.png</key>
+            <key type="filename">assets/cards/card-contents-enemy-health-1-scroll.png</key>
             <key type="filename">assets/cards/card-contents-enemy-health-1.png</key>
+            <key type="filename">assets/cards/card-contents-enemy-health-2-scroll.png</key>
             <key type="filename">assets/cards/card-contents-enemy-health-2.png</key>
+            <key type="filename">assets/cards/card-contents-enemy-health-scroll.png</key>
             <key type="filename">assets/cards/card-contents-enemy-health.png</key>
+            <key type="filename">assets/cards/card-contents-enemy-small-scroll.png</key>
             <key type="filename">assets/cards/card-contents-enemy-small.png</key>
             <key type="filename">assets/cards/card-contents-energy.png</key>
             <key type="filename">assets/cards/card-contents-shift-left.png</key>
             <key type="filename">assets/cards/card-contents-shift-right.png</key>
+            <key type="filename">assets/cards/card-drop-target-scroll.png</key>
+            <key type="filename">assets/cards/card-empty-scroll.png</key>
             <key type="filename">assets/cards/card-empty.png</key>
+            <key type="filename">assets/cards/card-outline-scroll.png</key>
             <key type="filename">assets/cards/card-outline.png</key>
+            <key type="filename">assets/cards/card-scroll.png</key>
+            <key type="filename">assets/cards/card-shadow-scroll.png</key>
             <key type="filename">assets/cards/card-shadow.png</key>
             <key type="filename">assets/cards/card.png</key>
             <struct type="IndividualSpriteSettings">
@@ -356,6 +372,19 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">assets/cards/card-contents-energy-3-scroll.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>14,5,28,10</rect>
+                <key>scale9Paddings</key>
+                <rect>14,5,28,10</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">assets/cards/card-contents-energy-3.png</key>
             <key type="filename">assets/cards/card-drop-target.png</key>
             <struct type="IndividualSpriteSettings">
@@ -381,6 +410,19 @@
                 <rect>14,10,28,20</rect>
                 <key>scale9Paddings</key>
                 <rect>14,10,28,20</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/cards/card-reclaim-scroll.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>18,23,36,46</rect>
+                <key>scale9Paddings</key>
+                <rect>18,23,36,46</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
