@@ -142,12 +142,16 @@ export class GameBoard {
    * @memberof GameBoard
    */
   getBoardPosition(worldX, worldY, checkBounds = true) {
+    // Inclusive on the lower bound and exclusive on the upper bound for XY so that the math for
+    // finding relative XY works
     if (
       checkBounds &&
-      (worldX < this.worldX ||
-        worldX > this.worldX + this.boardWidth ||
-        worldY < this.worldY ||
-        worldY > this.worldY + this.boardHeight)
+      !(
+        worldX >= this.worldX &&
+        worldX < this.worldX + this.boardWidth &&
+        worldY >= this.worldY &&
+        worldY < this.worldY + this.boardHeight
+      )
     ) {
       return null;
     }
