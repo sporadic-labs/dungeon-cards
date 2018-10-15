@@ -22,22 +22,30 @@ export default class HudToast {
   }
 
   setMessage(text) {
-    const message = this.scene.add
-      .text(this.x, this.y, text, style)
-      .setOrigin(0.5, 1)
-      .setDepth();
-    this.messages.push(message);
+    const textObject = this.scene.add.text(0, 0, text, style).setOrigin(0.5, 1);
+    const { width: w, height: h } = textObject;
+
+    const textShadow = this.scene.add.graphics();
+    const shadowOffset = 5;
+    textShadow.fillStyle(0x474643, 0.2);
+    textShadow.fillRect(-w / 2 + shadowOffset, -h + shadowOffset, w, h); // Match text origin
+
+    // XY of container is the (middle, bottom) of the text
+    const container = this.scene.add.container(this.x, this.y, [textShadow, textObject]);
+
+    this.messages.push(container);
     this.messages.forEach((m, i) => m.setDepth(1000 + i));
     this.tweenToast();
     this.tweenLastToastOut();
   }
 
   tweenToast() {
+    // Note: getBounds() doesn't factor in the graphics object (shadow), which is what we want
     const message = this.messages[this.messages.length - 1];
     this.timeline = this.scene.tweens.timeline({
       targets: message,
       tweens: [
-        { y: message.height, duration: 200, ease: Phaser.Math.Easing.Cubic.Out },
+        { y: message.getBounds().height, duration: 200, ease: Phaser.Math.Easing.Cubic.Out },
         { y: 0, duration: 200, ease: Phaser.Math.Easing.Cubic.In, delay: 4000 }
       ],
       onComplete: () => this.onTweenComplete(message)
