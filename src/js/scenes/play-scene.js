@@ -14,7 +14,6 @@ import { autorun } from "mobx";
 
 export default class PlayScene extends Scene {
   create() {
-    console.log("create new scene!");
     const { width, height } = this.sys.game.config;
     this.add.tileSprite(0, 0, 10 * width, 10 * height, "assets", "background-vector");
 
@@ -30,10 +29,13 @@ export default class PlayScene extends Scene {
       store.setGameStarted(false);
       store.setPaused(true);
       store.setMenuState(win ? MENU_STATES.GAME_OVER_WON : MENU_STATES.GAME_OVER_LOST);
+
+      this.shutdown();
     });
 
     this.proxy.on(emitter, EVENT_NAMES.GAME_START, () => {
-      this.proxy.removeAll();
+      this.shutdown();
+
       this.scene.restart();
       store.setPaused(false);
     });
@@ -41,7 +43,6 @@ export default class PlayScene extends Scene {
     const camera = this.cameras.main;
     this.storeUnsubscribe = autorun(() => {
       if (store.isGamePaused) {
-        console.log("pausing");
         camera.pan(
           1200,
           400,
@@ -56,7 +57,6 @@ export default class PlayScene extends Scene {
           this
         );
       } else {
-        console.log("resuming");
         this.scene.resume();
 
         camera.pan(
@@ -119,8 +119,9 @@ export default class PlayScene extends Scene {
   }
 
   shutdown() {
-    this.proxy.removeAll();
+    this.input.keyboard.removeAllListeners();
     this.toast.destroy();
     this.storeUnsubscribe();
+    this.proxy.removeAll();
   }
 }
