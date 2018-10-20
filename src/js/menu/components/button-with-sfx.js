@@ -10,7 +10,7 @@ export default class ButtonWithSfx extends Component {
   render() {
     const { children, sfxPlayer, ...otherProps } = this.props;
     return (
-      <button {...otherProps} onClick={this.onClick}>
+      <button className="button button-gray" {...otherProps} onClick={this.onClick}>
         {children}
       </button>
     );
