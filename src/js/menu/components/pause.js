@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import ButtonWithSfx from "./button-with-sfx";
+import Menu from "./menu";
 
 export default class PauseMenu extends Component {
   render() {
     const { onResume, onMainMenu, onOptions, sfxPlayer } = this.props;
 
     return (
-      <div id="pause-menu" className="menu">
-        <div className="menu-title">Game Paused</div>
+      <Menu id="pause-menu" title="Game Paused">
         <ButtonWithSfx sfxPlayer={sfxPlayer} onClick={onMainMenu}>
           Main Menu
         </ButtonWithSfx>
@@ -17,7 +17,7 @@ export default class PauseMenu extends Component {
         <ButtonWithSfx sfxPlayer={sfxPlayer} onClick={onResume}>
           Resume Game
         </ButtonWithSfx>
-      </div>
+      </Menu>
     );
   }
 }

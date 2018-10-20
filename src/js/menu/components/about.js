@@ -4,6 +4,7 @@ import Logo from "../../../images/sporadicLabs-logo-color-64.png";
 import Website from "../../../images/sporadicLabs-logo-white-32.png";
 import Github from "../../../images/GitHub-Mark-Light-32px.png";
 import ButtonWithSfx from "./button-with-sfx";
+import Menu from "./menu";
 
 export default class AboutMenu extends Component {
   render() {

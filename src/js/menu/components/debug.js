@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { observer } from "mobx-react";
 import ButtonWithSfx from "./button-with-sfx";
+import Menu from "./menu";
 
 @observer
 export default class DebugMenu extends Component {

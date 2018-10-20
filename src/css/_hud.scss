@@ -1,4 +1,41 @@
 @import "variables";
+
+.menu {
+  position: relative;
+  min-width: 65%;
+  padding: 20px;
+  pointer-events: initial;
+  cursor: default;
+}
+
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: black;
+  opacity: 0.25;
+  z-index: -2;
+}
+
+.menu-scroll {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+}
+
+.menu-title {
+  margin: 0 auto 20px auto;
+  padding: 12px 50px;
+  font-size: 32px;
+  font-weight: 900;
+  text-align: center;
+  color: $text-dark-color;
+}
+
 .button {
   display: block;
   margin: 24px auto;
@@ -92,23 +129,6 @@
   }
 
   .menu {
-    min-width: 65%;
-    padding: 20px;
-    position: relative;
-    border-radius: 10px;
-    pointer-events: initial;
-    cursor: default;
-    background-color: #dedcd6;
-
-    .menu-title {
-      margin: 0 auto 20px auto;
-      padding: 12px 50px;
-      font-size: 32px;
-      font-weight: 600;
-      text-align: center;
-      text-shadow: 2px 2px rgb(64, 64, 64);
-    }
-
     .final-score {
       margin: 6px auto;
       padding: 6px;

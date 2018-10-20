@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-
 import ButtonWithSfx from "./button-with-sfx";
+import Menu from "./menu";
 
 export default class GameOverMenu extends Component {
   render() {
