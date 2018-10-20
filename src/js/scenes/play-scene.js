@@ -14,6 +14,7 @@ import { autorun } from "mobx";
 
 export default class PlayScene extends Scene {
   create() {
+    console.log("create new scene!");
     const { width, height } = this.sys.game.config;
     this.add.tileSprite(0, 0, 10 * width, 10 * height, "assets", "background-vector");
 
@@ -37,8 +38,42 @@ export default class PlayScene extends Scene {
       store.setPaused(false);
     });
 
+    const camera = this.cameras.main;
     this.storeUnsubscribe = autorun(() => {
-      store.isGamePaused ? this.scene.pause() : this.scene.resume();
+      if (store.isGamePaused) {
+        console.log("pausing");
+        camera.pan(
+          1200,
+          400,
+          600,
+          "Expo",
+          false,
+          (camera, progress, x, y) => {
+            if (progress === 1) {
+              this.scene.pause();
+            }
+          },
+          this
+        );
+      } else {
+        console.log("resuming");
+        this.scene.resume();
+
+        camera.pan(
+          400,
+          400,
+          600,
+          "Expo",
+          false,
+          (camera, progress, x, y) => {
+            if (progress === 1) {
+              // TODO(rex): Is there an easy way to pause/resume interactivity for a scene?
+              console.log("resume pan done");
+            }
+          },
+          this
+        );
+      }
     });
 
     this.input.keyboard.on("keydown_E", event => {
@@ -84,6 +119,7 @@ export default class PlayScene extends Scene {
   }
 
   shutdown() {
+    this.proxy.removeAll();
     this.toast.destroy();
     this.storeUnsubscribe();
   }
