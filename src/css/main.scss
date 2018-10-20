@@ -12,6 +12,11 @@ body {
 body {
   background-color: black;
   color: white;
+  font-family: "Chivo", sans-serif;
+}
+
+button {
+  font-family: inherit;
 }
 
 #game-container,
