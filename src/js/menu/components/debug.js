@@ -9,10 +9,15 @@ export default class DebugMenu extends Component {
     musicStore.setMute(!musicStore.isMuted);
   };
 
+  onToggleMenu = () => {
+    const { gameStore } = this.props;
+    gameStore.setSkipMenu(!gameStore.skipMenu);
+  };
+
   onSlide = e => this.props.musicStore.setVolume(e.target.value);
 
   render() {
-    const { onResume, musicStore, sfxPlayer } = this.props;
+    const { gameStore, onResume, musicStore, sfxPlayer } = this.props;
 
     return (
       <div id="debug-menu" className="menu">
@@ -33,6 +38,11 @@ export default class DebugMenu extends Component {
           <label>
             Mute Background Music:
             <input type="checkbox" checked={musicStore.isMuted} onChange={this.onToggleMute} />
+          </label>
+
+          <label>
+            Bypass Main Menu:
+            <input type="checkbox" checked={gameStore.skipMenu} onChange={this.onToggleMenu} />
           </label>
         </form>
 

@@ -95,6 +95,11 @@ class GameStore {
   setPaused(isPaused) {
     this.isPaused = isPaused;
   }
+
+  @action
+  setSkipMenu(skipMenu) {
+    this.skipMenu = skipMenu;
+  }
 }
 
 const store = new GameStore();
