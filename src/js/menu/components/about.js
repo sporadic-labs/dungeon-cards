@@ -11,8 +11,7 @@ export default class AboutMenu extends Component {
     const { onBack, sfxPlayer } = this.props;
 
     return (
-      <div id="about-menu" className="menu">
-        <div className="menu-title">About</div>
+      <Menu id="about-menu" title="About">
         <div className="brand">
           <div className="created-by">Created by</div>
           <div className="logo-wrap">
@@ -61,7 +60,7 @@ export default class AboutMenu extends Component {
         <ButtonWithSfx sfxPlayer={sfxPlayer} onClick={onBack}>
           Back
         </ButtonWithSfx>
-      </div>
+      </Menu>
     );
   }
 }

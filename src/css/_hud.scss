@@ -129,13 +129,6 @@
   }
 
   .menu {
-    .final-score {
-      margin: 6px auto;
-      padding: 6px;
-      font-size: 24px;
-      text-align: center;
-    }
-
     #about {
       text-align: center;
       font-size: 18px;
@@ -143,6 +136,9 @@
       height: 32px;
       text-shadow: 2px 2px rgb(64, 64, 64);
       transition: all 0.1s ease-in-out;
+      position: absolute;
+      bottom: 2rem;
+      left: 2rem;
       &:hover {
         cursor: pointer;
         color: #c7c3ad;
