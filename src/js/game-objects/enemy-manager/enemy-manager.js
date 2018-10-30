@@ -3,7 +3,6 @@ import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import { DeckDisplay } from "../hud";
 import { SHIFT_DIRECTIONS } from "../card-actions";
 import BlankCard from "./enemy-card/blank-card";
-import store from "../../store/index";
 import PlayerAttackAnimation from "../player-manager/player-attack-animation";
 import { Events } from "phaser";
 

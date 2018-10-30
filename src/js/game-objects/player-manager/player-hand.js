@@ -1,7 +1,7 @@
 import { autorun } from "mobx";
 import PlayerCard from "./player-card";
 import { EventProxy, emitter, EVENT_NAMES } from "../events";
-import store from "../../store";
+import { gameStore } from "../../store";
 import EmitterWithLogging from "../../helpers/emitter-with-logging";
 import { Events } from "phaser";
 import MobXProxy from "../../helpers/mobx-proxy";
@@ -31,8 +31,8 @@ export default class PlayerHand {
     this.cardEmitter.on("pointerout", this.onCardOut, this);
 
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_TURN_COMPLETE, () => {
-      store.setActivePlayerCard(null);
-      store.setFocusedPlayerCard(null);
+      gameStore.setActivePlayerCard(null);
+      gameStore.setFocusedPlayerCard(null);
     });
 
     this.disableSelecting();
@@ -42,10 +42,10 @@ export default class PlayerHand {
 
     this.mobProxy = new MobXProxy();
 
-    this.mobProxy.observe(store, "activePlayerCard", () => {
-      if (store.activePlayerCard) {
+    this.mobProxy.observe(gameStore, "activePlayerCard", () => {
+      if (gameStore.activePlayerCard) {
         this.cards.forEach(card => {
-          if (card !== store.activePlayerCard) {
+          if (card !== gameStore.activePlayerCard) {
             card.disableFocusing();
             card.disableDrag();
           }
@@ -59,13 +59,13 @@ export default class PlayerHand {
       this.depthSort();
     });
 
-    this.mobProxy.observe(store, "focusedPlayerCard", () => {
+    this.mobProxy.observe(gameStore, "focusedPlayerCard", () => {
       this.depthSort();
     });
   }
 
   onCardDragStart(card) {
-    store.setActivePlayerCard(card);
+    gameStore.setActivePlayerCard(card);
     emitter.emit(EVENT_NAMES.PLAYER_CARD_DRAG_START, card);
   }
 
@@ -75,16 +75,16 @@ export default class PlayerHand {
 
   onCardDragEnd(card) {
     emitter.emit(EVENT_NAMES.PLAYER_CARD_DRAG_END, card);
-    store.setActivePlayerCard(null);
-    store.setFocusedPlayerCard(null);
+    gameStore.setActivePlayerCard(null);
+    gameStore.setFocusedPlayerCard(null);
   }
 
   onCardOver(card) {
-    store.setFocusedPlayerCard(card);
+    gameStore.setFocusedPlayerCard(card);
   }
 
   onCardOut(card) {
-    if (store.focusedPlayerCard === card) store.setFocusedPlayerCard(null);
+    if (gameStore.focusedPlayerCard === card) gameStore.setFocusedPlayerCard(null);
   }
 
   enableSelecting() {
@@ -104,7 +104,7 @@ export default class PlayerHand {
   }
 
   getSelected() {
-    return store.activeCard;
+    return gameStore.activeCard;
   }
 
   getNumCards() {
@@ -136,8 +136,8 @@ export default class PlayerHand {
 
     // Place focused card on top of the selected card, so that the player can still see other cards
     // while one is selected
-    if (store.activePlayerCard) store.activePlayerCard.setDepth(this.cards.length);
-    if (store.focusedPlayerCard) store.focusedPlayerCard.setDepth(this.cards.length + 1);
+    if (gameStore.activePlayerCard) gameStore.activePlayerCard.setDepth(this.cards.length);
+    if (gameStore.focusedPlayerCard) gameStore.focusedPlayerCard.setDepth(this.cards.length + 1);
   }
 
   arrangeCards() {
@@ -171,8 +171,8 @@ export default class PlayerHand {
 
   discardCard(card) {
     if (this.cards.includes(card)) {
-      if (card === store.activePlayerCard) store.setActivePlayerCard(null);
-      if (card === store.focusedPlayerCard) store.setFocusedPlayerCard(null);
+      if (card === gameStore.activePlayerCard) gameStore.setActivePlayerCard(null);
+      if (card === gameStore.focusedPlayerCard) gameStore.setFocusedPlayerCard(null);
       this.cards = this.cards.filter(c => c !== card);
       this.deck.discard(card.type);
       this.arrangeCards();

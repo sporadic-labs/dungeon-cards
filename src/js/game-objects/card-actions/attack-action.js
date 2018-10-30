@@ -2,7 +2,7 @@ import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import Action from "./action";
 import logger from "../../helpers/logger";
 import { PopupText } from "../hud";
-import store from "../../store";
+import { gameStore } from "../../store";
 import PlayerAttackAnimation from "../player-manager/player-attack-animation";
 
 export default class AttackAction extends Action {
@@ -37,7 +37,7 @@ export default class AttackAction extends Action {
     const pointer = this.scene.input.activePointer;
     const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
     const isOverBoard = this.board.isWorldPointInBoard(pointer.x, pointer.y);
-    const isOverValidTarget = enemies.length > 0 || store.isTargetingDropZone;
+    const isOverValidTarget = enemies.length > 0 || gameStore.isTargetingDropZone;
 
     // TODO: do something to the card
 
@@ -69,7 +69,7 @@ export default class AttackAction extends Action {
   async onDragEnd(card) {
     this.board.defocusBoard();
 
-    if (store.isTargetingDropZone) {
+    if (gameStore.isTargetingDropZone) {
       emitter.emit(EVENT_NAMES.PLAYER_CARD_DISCARD);
       return;
     }

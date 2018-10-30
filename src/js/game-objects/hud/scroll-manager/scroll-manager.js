@@ -1,7 +1,7 @@
 import Phaser from "phaser";
-import store from "../../../store/index";
+import { gameStore } from "../../../store";
 import MobXProxy from "../../../helpers/mobx-proxy";
-import { EventProxy } from "../../events/index";
+import { EventProxy } from "../../events";
 import Scroll from "./scroll";
 
 /**
@@ -26,7 +26,7 @@ export default class ScrollManager {
     // Listen for new cards to be focused
     this.mobProxy = new MobXProxy();
     this.lastCard = null;
-    this.mobProxy.observe(store, "focusedPlayerCard", change => {
+    this.mobProxy.observe(gameStore, "focusedPlayerCard", change => {
       const card = change.newValue;
       if (!card) {
         this.cancelQueuedScroll();
@@ -37,7 +37,7 @@ export default class ScrollManager {
     });
 
     // Cancel queued instructions if card has been played or unfocused
-    this.mobProxy.observe(store, "activePlayerCard", change => {
+    this.mobProxy.observe(gameStore, "activePlayerCard", change => {
       const card = change.newValue;
       if (!card) this.cancelQueuedScroll();
     });

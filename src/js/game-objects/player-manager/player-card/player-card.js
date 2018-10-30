@@ -1,8 +1,8 @@
 import { PLAYER_CARD_INFO } from "./player-card-info";
 import Phaser from "phaser";
-import { EventProxy } from "../../events/index";
+import { EventProxy } from "../../events";
 import { observe } from "mobx";
-import store from "../../../store/index";
+import { gameStore } from "../../../store";
 import FlipEffect from "../../shared-components/flip-effect";
 import TweenManager from "../../shared-components/tween-manager";
 
@@ -104,8 +104,8 @@ export default class PlayerCard {
         backScale: DRAG_SCALE
       }).setToFront();
 
-      observe(store, "isTargetingDropZone", change => {
-        if (store.activeCard !== this) return;
+      observe(gameStore, "isTargetingDropZone", change => {
+        if (gameStore.activeCard !== this) return;
         const isTargetingDropZone = change.newValue;
         if (isTargetingDropZone) this.reclaimFlip.flipToBack();
         else this.reclaimFlip.flipToFront();

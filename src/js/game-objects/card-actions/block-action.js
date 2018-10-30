@@ -1,5 +1,5 @@
 import { EventProxy, emitter, EVENT_NAMES } from "../events";
-import store from "../../store";
+import { gameStore } from "../../store";
 import Action from "./action";
 
 export default class BlockAction extends Action {
@@ -32,7 +32,7 @@ export default class BlockAction extends Action {
     const pointer = this.scene.input.activePointer;
     const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
     const isOverBoard = this.board.isWorldPointInBoard(pointer.x, pointer.y);
-    const isOverValidTarget = enemies.length > 0 || store.isTargetingDropZone;
+    const isOverValidTarget = enemies.length > 0 || gameStore.isTargetingDropZone;
 
     // TODO: do something to the card
 
@@ -64,7 +64,7 @@ export default class BlockAction extends Action {
   onDragEnd(card) {
     this.board.defocusBoard();
 
-    if (store.isTargetingDropZone) {
+    if (gameStore.isTargetingDropZone) {
       emitter.emit(EVENT_NAMES.PLAYER_CARD_DISCARD);
       return;
     }

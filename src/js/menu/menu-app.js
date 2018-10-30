@@ -53,9 +53,9 @@ class Menu extends Component {
   };
 
   render() {
-    const { gameStore, width, height, musicStore, sfxPlayer } = this.props;
+    const { gameStore, preferencesStore, width, height, musicStore, sfxPlayer } = this.props;
 
-    const commonProps = { gameStore, musicStore, sfxPlayer };
+    const commonProps = { gameStore, preferencesStore, musicStore, sfxPlayer };
     let activeMenu;
     if (gameStore.menuState === MENU_STATES.START_MENU) {
       activeMenu = (

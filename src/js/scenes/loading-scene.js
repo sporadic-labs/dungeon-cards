@@ -3,11 +3,11 @@
  */
 
 import { Scene } from "phaser";
-import { SCENE_NAME } from "./index.js";
+import { SCENE_NAME } from "./index";
 import { loadFonts } from "../font";
 import logger from "../helpers/logger";
-import store from "../store/index.js";
-import { MENU_STATES } from "../menu/menu-states.js";
+import { gameStore, preferencesStore } from "../store";
+import { MENU_STATES } from "../menu/menu-states";
 import { autorun } from "mobx";
 
 export default class LoadingScene extends Scene {
@@ -32,7 +32,7 @@ export default class LoadingScene extends Scene {
     this.load.setPath("resources/");
     this.load.atlas("assets", "atlases/assets.png", "atlases/assets.json");
 
-    if (!store.noAudio) {
+    if (!preferencesStore.noAudio) {
       this.load.audio(
         "music",
         "sounds/music/Chris_Zabriskie_-_05_-_Air_Hockey_Saloon_Compressed.mp3"
@@ -43,18 +43,18 @@ export default class LoadingScene extends Scene {
   }
 
   create() {
-    if (!store.noAudio) {
+    if (!preferencesStore.noAudio) {
       const { musicPlayer } = this.sys.game.globals;
       musicPlayer.init();
     }
 
-    if (store.skipMenu) {
+    if (preferencesStore.skipMenu) {
       this.scene.start(SCENE_NAME.PLAY);
       return;
     }
 
     const dispose = autorun(() => {
-      if (store.hasGameStarted) {
+      if (gameStore.hasGameStarted) {
         this.scene.start(SCENE_NAME.PLAY);
         dispose();
       }
@@ -62,7 +62,7 @@ export default class LoadingScene extends Scene {
 
     // Fail gracefully by allowing the game to load even if the fonts errored
     if (this.fontsLoaded || this.fontsErrored) {
-      store.setMenuState(MENU_STATES.START_MENU);
+      gameStore.setMenuState(MENU_STATES.START_MENU);
     }
   }
 }

@@ -2,7 +2,7 @@ import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import Action from "./action";
 import { PopupText } from "../hud";
 import { PLAYER_CARD_TYPES } from "../player-manager";
-import store from "../../store";
+import { gameStore } from "../../store";
 
 export const SHIFT_DIRECTIONS = {
   RIGHT: 1,
@@ -49,7 +49,7 @@ export default class ShiftAction extends Action {
     const pointer = this.scene.input.activePointer;
     const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
     const isOverBoard = this.board.isWorldPointInBoard(pointer.x, pointer.y);
-    const isOverValidTarget = enemies.length > 0 || store.isTargetingDropZone;
+    const isOverValidTarget = enemies.length > 0 || gameStore.isTargetingDropZone;
 
     // TODO: do something to the card
 

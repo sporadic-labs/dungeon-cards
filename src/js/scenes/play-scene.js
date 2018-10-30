@@ -8,7 +8,7 @@ import { EventProxy, emitter, EVENT_NAMES } from "../game-objects/events";
 import run from "../game-objects/game-runner";
 import Logger from "../helpers/logger";
 import { MENU_STATES } from "../menu/menu-states";
-import store from "../store/index";
+import { gameStore } from "../store";
 import HudToast from "../game-objects/hud/hud-toast";
 import { autorun } from "mobx";
 
@@ -26,9 +26,9 @@ export default class PlayScene extends Scene {
     this.initGame();
 
     this.proxy.on(emitter, EVENT_NAMES.GAME_OVER, win => {
-      store.setGameStarted(false);
-      store.setPaused(true);
-      store.setMenuState(win ? MENU_STATES.GAME_OVER_WON : MENU_STATES.GAME_OVER_LOST);
+      gameStore.setGameStarted(false);
+      gameStore.setPaused(true);
+      gameStore.setMenuState(win ? MENU_STATES.GAME_OVER_WON : MENU_STATES.GAME_OVER_LOST);
 
       this.shutdown();
     });
@@ -37,12 +37,12 @@ export default class PlayScene extends Scene {
       this.shutdown();
 
       this.scene.restart();
-      store.setPaused(false);
+      gameStore.setPaused(false);
     });
 
     const camera = this.cameras.main;
     this.storeUnsubscribe = autorun(() => {
-      if (store.isGamePaused) {
+      if (gameStore.isGamePaused) {
         camera.pan(
           1200,
           400,
@@ -77,11 +77,11 @@ export default class PlayScene extends Scene {
     });
 
     this.input.keyboard.on("keydown_E", event => {
-      store.setPaused(true);
-      store.setMenuState(MENU_STATES.DEBUG);
+      gameStore.setPaused(true);
+      gameStore.setMenuState(MENU_STATES.DEBUG);
     });
 
-    store.setGameStarted(true);
+    gameStore.setGameStarted(true);
 
     run(this.playerManager, this.enemyManager, this.actionRunner);
   }

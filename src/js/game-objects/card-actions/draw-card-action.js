@@ -1,6 +1,6 @@
 import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import Action from "./action";
-import store from "../../store/index";
+import { gameStore } from "../../store";
 
 export default class DrawCardAction extends Action {
   /** @param {Phaser.Scene} scene */
@@ -18,7 +18,7 @@ export default class DrawCardAction extends Action {
   }
 
   onDragEnd(pointer) {
-    if (store.isTargetingDropZone) {
+    if (gameStore.isTargetingDropZone) {
       // Drawing 3 and discarding 1
       if (this.playerManager.canDraw(2)) {
         this.playerManager.drawCard();

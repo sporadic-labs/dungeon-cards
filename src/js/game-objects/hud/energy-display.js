@@ -1,7 +1,7 @@
 import { autorun } from "mobx";
 import { getFontString } from "../../font";
-import store from "../../store";
-import { EventProxy } from "../events/index";
+import { gameStore } from "../../store";
+import { EventProxy } from "../events";
 
 const style = {
   font: getFontString("Chivo", { size: "24px", weight: 600 }),
@@ -31,8 +31,8 @@ export default class EnergyDisplay {
       .setScale(0);
 
     this.dispose = autorun(() => {
-      const card = store.activePlayerCard;
-      if (card && card.getEnergy() > 0 && store.isTargetingDropZone) {
+      const card = gameStore.activePlayerCard;
+      if (card && card.getEnergy() > 0 && gameStore.isTargetingDropZone) {
         this.previewText.setText(`+${card.getEnergy()}`);
         this.showPreviewText();
       } else this.hidePreviewText();

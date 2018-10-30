@@ -5,52 +5,47 @@ import Menu from "./menu";
 
 @observer
 export default class DebugMenu extends Component {
-  onToggleMute = () => {
-    const { musicStore } = this.props;
-    musicStore.setMute(!musicStore.isMuted);
+  onToggleAudio = () => {
+    const { preferencesStore } = this.props;
+    preferencesStore.setAudio(!preferencesStore.noAudio);
   };
 
   onToggleMenu = () => {
-    const { gameStore } = this.props;
-    gameStore.setSkipMenu(!gameStore.skipMenu);
+    const { preferencesStore } = this.props;
+    preferencesStore.setSkipMenu(!preferencesStore.skipMenu);
   };
 
   onSlide = e => this.props.musicStore.setVolume(e.target.value);
 
   render() {
-    const { gameStore, onResume, musicStore, sfxPlayer } = this.props;
+    const { preferencesStore, onResume, sfxPlayer } = this.props;
 
     return (
-      <div id="debug-menu" className="menu">
-        <div className="menu-title">Debug Menu</div>
+      <Menu id="debug-menu" title="Debug Menu">
         <form>
           <label>
-            Volume
+            Mute All Sound:
             <input
-              type="range"
-              value={musicStore.volume}
-              min="0"
-              max="1"
-              step="0.05"
-              onChange={this.onSlide}
+              type="checkbox"
+              checked={preferencesStore.noAudio}
+              onChange={this.onToggleAudio}
             />
           </label>
 
           <label>
-            Mute Background Music:
-            <input type="checkbox" checked={musicStore.isMuted} onChange={this.onToggleMute} />
-          </label>
-
-          <label>
             Bypass Main Menu:
-            <input type="checkbox" checked={gameStore.skipMenu} onChange={this.onToggleMenu} />
+            <input
+              type="checkbox"
+              checked={preferencesStore.skipMenu}
+              onChange={this.onToggleMenu}
+            />
           </label>
         </form>
 
         <ButtonWithSfx sfxPlayer={sfxPlayer} onClick={onResume}>
           Resume Game
         </ButtonWithSfx>
-      </div>
+      </Menu>
     );
   }
 }

@@ -1,5 +1,5 @@
 import { emitter, EVENT_NAMES } from "../events";
-import store from "../../store";
+import { gameStore } from "../../store";
 import { autorun, observe } from "mobx";
 import { EventProxy } from "../events/index";
 import MobXProxy from "../../helpers/mobx-proxy";
@@ -28,7 +28,7 @@ export default class DropTarget {
     this.disable();
 
     this.mobProxy = new MobXProxy();
-    this.mobProxy.observe(store, "activePlayerCard", change => {
+    this.mobProxy.observe(gameStore, "activePlayerCard", change => {
       const card = change.newValue;
       // TODO: clean this logic up and put it into PLAYER_CARD_INFO
       const isDroppable =
@@ -36,7 +36,7 @@ export default class DropTarget {
       if (isDroppable) this.enable();
       else this.disable();
     });
-    this.mobProxy.observe(store, "isTargetingDropZone", change => {
+    this.mobProxy.observe(gameStore, "isTargetingDropZone", change => {
       const isTargetingDropZone = change.newValue;
       if (this.isEnabled) {
         if (isTargetingDropZone) this.focus();
@@ -64,7 +64,7 @@ export default class DropTarget {
   }
 
   disable() {
-    store.setTargetingDropZone(false);
+    gameStore.setTargetingDropZone(false);
     if (this.isEnabled) {
       this.isEnabled = false;
       this.scene.tweens.killTweensOf(this.sprite);
@@ -82,7 +82,7 @@ export default class DropTarget {
   onCardDrag() {
     const pointer = this.scene.input.activePointer;
     const isOver = this.sprite.getBounds().contains(pointer.x, pointer.y);
-    store.setTargetingDropZone(isOver);
+    gameStore.setTargetingDropZone(isOver);
   }
 
   focus() {

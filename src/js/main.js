@@ -10,7 +10,7 @@ import React from "react";
 import { render } from "react-dom";
 
 import Menu from "./menu/menu-app";
-import gameStore from "./store";
+import { gameStore, preferencesStore } from "./store";
 import { GameMusicPlayer, gameMusicStore } from "./sound/game-music/index";
 import GameSfxPlayer from "./sound/game-sfx-player/index";
 
@@ -51,6 +51,7 @@ document.getElementById(containerId).addEventListener("contextmenu", e => {
 render(
   <Menu
     gameStore={gameStore}
+    preferencesStore={preferencesStore}
     musicStore={gameMusicStore}
     sfxPlayer={sfxPlayer}
     width={gameDimensions}
