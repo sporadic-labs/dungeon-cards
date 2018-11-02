@@ -2,6 +2,13 @@ import React, { PureComponent } from "react";
 import classNames from "classnames";
 import style from "./index.module.scss";
 
+/**
+ * Button that plays a SFX on click. Accepts "gray" or "orange" color prop.
+ *
+ * @export
+ * @class ButtonWithSfx
+ * @extends {PureComponent}
+ */
 export default class ButtonWithSfx extends PureComponent {
   onClick = () => {
     const { onClick, sfxPlayer } = this.props;
