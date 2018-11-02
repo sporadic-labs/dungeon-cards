@@ -2,6 +2,8 @@ import React, { PureComponent } from "react";
 import classNames from "classnames";
 import ButtonWithSfx from "../button-with-sfx";
 import style from "./index.module.scss";
+import PauseSvg from "../../../../images/fa-pause-solid.svg";
+import PlaySvg from "../../../../images/fa-pause-solid.svg";
 
 export default class PauseButton extends PureComponent {
   render() {
@@ -13,7 +15,7 @@ export default class PauseButton extends PureComponent {
         sfxPlayer={sfxPlayer}
         onClick={isPaused ? null : onPause}
       >
-        {<i className="fa fa-pause" />}
+        <PauseSvg />
       </ButtonWithSfx>
     );
   }
