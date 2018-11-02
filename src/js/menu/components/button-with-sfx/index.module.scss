@@ -15,6 +15,7 @@ $grayShadowColor: darken($color-dark-gray, 10%);
   letter-spacing: 0.075rem;
   box-shadow: 4px 4px 0 $grayShadowColor;
   color: $color-off-white;
+  text-transform: uppercase;
 
   &:hover {
     transform: translate(2px, 2px);
