@@ -1,0 +1,33 @@
+@import "../../../../css/variables";
+
+.button {
+  display: block;
+  margin: 24px auto;
+  padding: 16px 30px;
+  border-radius: 10px;
+  font-weight: 900;
+  font-size: 0.95rem;
+  letter-spacing: 0.075rem;
+  cursor: pointer;
+  border: none;
+  transition: color 0.1s ease-in-out, background-color 0.1s ease-in-out;
+  box-shadow: 5px 5px 0 darken($color-dark-gray, 10%);
+}
+
+.gray {
+  color: $color-off-white;
+  background-color: $color-dark-gray;
+  &:hover {
+    background-color: $color-off-white;
+    color: $color-dark-gray;
+  }
+}
+
+.orange {
+  color: #c7c3ad;
+  background-color: white;
+  &:hover {
+    color: white;
+    background-color: #c7c3ad;
+  }
+}

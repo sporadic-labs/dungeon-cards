@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import style from "./index.module.scss";
 
 export default class ButtonWithSfx extends Component {
   onClick = () => {
@@ -8,9 +9,10 @@ export default class ButtonWithSfx extends Component {
   };
 
   render() {
-    const { children, sfxPlayer, ...otherProps } = this.props;
+    const { children, sfxPlayer, color = "gray", ...otherProps } = this.props;
+
     return (
-      <button className="button button-gray" {...otherProps} onClick={this.onClick}>
+      <button className={`${style.button} ${style[color]}`} {...otherProps} onClick={this.onClick}>
         {children}
       </button>
     );
