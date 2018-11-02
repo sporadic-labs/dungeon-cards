@@ -6,6 +6,12 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require("webpack");
 
+const makeSassLoader = (isDev, modules = false, sourceMap = true) => [
+  isDev ? { loader: "style-loader", options: { sourceMap } } : MiniCssExtractPlugin.loader,
+  { loader: "css-loader", options: { modules, sourceMap } },
+  { loader: "sass-loader", options: { sourceMap } }
+];
+
 module.exports = function(env, argv) {
   const isDev = argv.mode === "development";
 
@@ -20,35 +26,38 @@ module.exports = function(env, argv) {
     },
     module: {
       rules: [
-        { test: /\.(js|jsx)$/, use: "babel-loader", exclude: /node_modules/ },
         {
-          test: /\.svg$/,
-          use: { loader: "react-svg-loader" }
-        },
-        {
-          test: /\.(scss|sass)$/,
-          use: [
-            isDev
-              ? { loader: "style-loader", options: { sourceMap: true } }
-              : MiniCssExtractPlugin.loader,
-            { loader: "css-loader", options: { sourceMap: true } },
-            { loader: "sass-loader", options: { sourceMap: true } }
+          // Only match a single rule
+          oneOf: [
+            { test: /\.(js|jsx)$/, use: "babel-loader", exclude: /node_modules/ },
+            {
+              test: /\.svg$/,
+              use: { loader: "react-svg-loader" }
+            },
+            {
+              test: /\.module\.(scss|sass)$/,
+              use: makeSassLoader(isDev, true, true)
+            },
+            {
+              test: /\.(scss|sass)$/,
+              use: makeSassLoader(isDev, false, true)
+            },
+            //   Ensure that urls in scss are loaded correctly
+            {
+              test: /\.(eot|ttf|woff|woff2|png|jpg)$/,
+              use: {
+                loader: "file-loader",
+                options: {
+                  // Default is node_modules -> _/node_modules, which doesn't work with gh-pages.
+                  // Instead, don't use [path], just use a [hash] to make file paths unique.
+                  name: "static/[name].[hash:8].[ext]"
+                }
+              }
+            },
+            // Allow shaders to be loaded via glslify
+            { test: /\.(glsl|frag|vert)$/, use: ["raw-loader", "glslify"] }
           ]
-        },
-        //   Ensure that urls in scss are loaded correctly
-        {
-          test: /\.(eot|ttf|woff|woff2|png|jpg)$/,
-          use: {
-            loader: "file-loader",
-            options: {
-              // Default is node_modules -> _/node_modules, which doesn't work with gh-pages.
-              // Instead, don't use [path], just use a [hash] to make file paths unique.
-              name: "static/[name].[hash:8].[ext]"
-            }
-          }
-        },
-        // Allow shaders to be loaded via glslify
-        { test: /\.(glsl|frag|vert)$/, use: ["raw-loader", "glslify"] }
+        }
       ]
     },
     plugins: [
