@@ -103,7 +103,7 @@ class Menu extends Component {
           <PauseButton
             {...commonProps}
             isPaused={gameStore.isPaused}
-            onPause={() => this.goToPauseMenu()}
+            onPause={this.goToPauseMenu}
           />
         ) : (
           ""
