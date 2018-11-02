@@ -1,18 +1,28 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
+import classNames from "classnames";
 import style from "./index.module.scss";
 
-export default class ButtonWithSfx extends Component {
+export default class ButtonWithSfx extends PureComponent {
   onClick = () => {
     const { onClick, sfxPlayer } = this.props;
     sfxPlayer.playButtonClick();
     if (onClick) onClick();
   };
 
+  onMouseDown = event => {
+    event.preventDefault(); // Prevent focus outline from triggering on press
+  };
+
   render() {
-    const { children, sfxPlayer, color = "gray", ...otherProps } = this.props;
+    const { children, sfxPlayer, color = "gray", className, ...otherProps } = this.props;
 
     return (
-      <button className={`${style.button} ${style[color]}`} {...otherProps} onClick={this.onClick}>
+      <button
+        className={classNames(style.button, style[color], className)}
+        onClick={this.onClick}
+        onMouseDown={this.onMouseDown}
+        {...otherProps}
+      >
         {children}
       </button>
     );
