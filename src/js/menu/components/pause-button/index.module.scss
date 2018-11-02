@@ -1,0 +1,18 @@
+.pause {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  margin: 0;
+  padding: 0;
+  font-size: 24px;
+  border-radius: 4px;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  i {
+    margin-left: 2px;
+  }
+}
