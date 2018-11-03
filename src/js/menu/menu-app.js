@@ -53,7 +53,7 @@ class Menu extends Component {
   };
 
   render() {
-    const { gameStore, preferencesStore, width, height, musicStore, sfxPlayer } = this.props;
+    const { gameStore, preferencesStore, musicStore, sfxPlayer } = this.props;
 
     const commonProps = { gameStore, preferencesStore, musicStore, sfxPlayer };
     let activeMenu;
@@ -97,7 +97,7 @@ class Menu extends Component {
     }
 
     return (
-      <div id="hud" style={{ width: `${width}px`, height: `${height}px` }}>
+      <div id="hud">
         {activeMenu}
         {gameStore.hasGameStarted ? (
           <PauseButton

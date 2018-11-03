@@ -18,14 +18,38 @@ button {
   font-family: inherit;
 }
 
-#game-container,
-#menu-container {
+body {
   width: 100vw;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#root {
+  position: relative;
+  flex: 0 0 auto; // Don't grow or shrink, stay at the exact size we tell you
+}
+
+#menu-container {
   position: absolute;
-  left: 0;
   top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+#game-container,
+#menu-container {
+  width: 100%;
+  height: 100%;
+}
+
+#game-container {
+  overflow: hidden;
+}
+
+#game-container canvas {
+  // We need to fight Phaser here and override what it does with the style tag
+  width: 100% !important;
+  height: 100% !important;
 }

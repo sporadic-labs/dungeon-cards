@@ -13,16 +13,19 @@ import Menu from "./menu/menu-app";
 import { gameStore, preferencesStore } from "./store";
 import { GameMusicPlayer, gameMusicStore } from "./sound/game-music/index";
 import GameSfxPlayer from "./sound/game-sfx-player/index";
+import disableRightClickMenu from "./helpers/disable-right-click-menu";
+import makeGameResponsive from "./helpers/make-game-responsive";
 
 logger.setLevel(PRODUCTION ? LOG_LEVEL.OFF : LOG_LEVEL.ALL);
+if (PRODUCTION) disableRightClickMenu("root");
 
-const gameDimensions = 800;
-const containerId = "game-container";
+const gameResolution = 800;
+const canvas = document.querySelector("canvas");
 const game = new Game({
   type: AUTO,
-  parent: containerId,
-  width: gameDimensions,
-  height: gameDimensions,
+  canvas,
+  width: gameResolution,
+  height: gameResolution,
   backgroundColor: "#000",
   pixelArt: false,
   plugins: {
@@ -41,12 +44,6 @@ const sfxPlayer = new GameSfxPlayer(game);
 
 game.globals = { musicStore: gameMusicStore, musicPlayer, sfxPlayer };
 
-// Disable right click menu
-document.getElementById(containerId).addEventListener("contextmenu", e => {
-  e.preventDefault();
-  return false;
-});
-
 // Setup Menus
 render(
   <Menu
@@ -54,8 +51,6 @@ render(
     preferencesStore={preferencesStore}
     musicStore={gameMusicStore}
     sfxPlayer={sfxPlayer}
-    width={gameDimensions}
-    height={gameDimensions}
   />,
   document.getElementById("menu-container")
 );
@@ -63,3 +58,5 @@ render(
 game.scene.add(SCENE_NAME.LOADING, Loading);
 game.scene.add(SCENE_NAME.PLAY, Play);
 game.scene.start(SCENE_NAME.LOADING);
+
+makeGameResponsive("root", 600, gameResolution);
