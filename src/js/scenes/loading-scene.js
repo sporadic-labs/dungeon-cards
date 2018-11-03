@@ -33,10 +33,7 @@ export default class LoadingScene extends Scene {
     this.load.atlas("assets", "atlases/assets.png", "atlases/assets.json");
 
     if (!preferencesStore.noAudio) {
-      this.load.audio(
-        "music",
-        "sounds/music/Chris_Zabriskie_-_05_-_Air_Hockey_Saloon_Compressed.mp3"
-      );
+      this.load.audio("music", "sounds/music/Galway.mp3");
 
       this.load.audio("click1", "sounds/ui/click1.wav");
     }
