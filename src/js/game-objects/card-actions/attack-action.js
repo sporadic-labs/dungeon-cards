@@ -1,9 +1,6 @@
 import { EventProxy, emitter, EVENT_NAMES } from "../events";
 import Action from "./action";
-import logger from "../../helpers/logger";
-import { PopupText } from "../hud";
 import { gameStore } from "../../store";
-import PlayerAttackAnimation from "../player-manager/player-attack-animation";
 
 export default class AttackAction extends Action {
   /** @param {Phaser.Scene} scene */
