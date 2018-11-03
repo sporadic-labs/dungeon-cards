@@ -33,9 +33,10 @@ export default class LoadingScene extends Scene {
     this.load.atlas("assets", "atlases/assets.png", "atlases/assets.json");
 
     if (!preferencesStore.noAudio) {
+      // Bg Music
       this.load.audio("music", "sounds/music/Galway.mp3");
-
-      this.load.audio("click1", "sounds/ui/click1.wav");
+      // Sound FX
+      this.load.audio("button-click", "sounds/ui/click1.wav");
       this.load.audio("sword-clash", "sounds/fx/sword-clash.wav");
     }
   }

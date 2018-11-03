@@ -18,7 +18,7 @@ export default class GameSfxPlayer extends WebAudioSoundManager {
    * @param {*} volume
    * @param {*} loop
    */
-  add(key, maxSimultaneous = 2, volume = 1.0, loop = false) {
+  add(key, maxSimultaneous = 1, volume = 1.0, loop = false) {
     if (!this.loadedSounds[key]) {
       const addedSound = super.add(key, { volume, loop });
       this.loadedSounds[key] = {
@@ -37,7 +37,6 @@ export default class GameSfxPlayer extends WebAudioSoundManager {
    * @param {*} playArguments
    */
   play(key, playArguments) {
-    console.log(`play ${key}`);
     if (preferencesStore.noAudio) return;
     if (!this.loadedSounds[key]) {
       this.add(key);
@@ -56,9 +55,8 @@ export default class GameSfxPlayer extends WebAudioSoundManager {
    *
    */
   playButtonClick() {
-    console.log("play button click");
     if (preferencesStore.noAudio) return;
-    this.play("click1", { volume: this.defaultVolume });
+    this.play("button-click", { volume: this.defaultVolume });
   }
 
   /**

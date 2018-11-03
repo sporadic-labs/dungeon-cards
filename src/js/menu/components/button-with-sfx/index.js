@@ -21,7 +21,7 @@ export default class ButtonWithSfx extends PureComponent {
   };
 
   render() {
-    const { children, sfxPlayer, color = "gray", className, ...otherProps } = this.props;
+    const { children, sfxPlayer, color = "gray", className, onClick, ...otherProps } = this.props;
 
     return (
       <button
