@@ -36,6 +36,7 @@ export default class LoadingScene extends Scene {
       this.load.audio("music", "sounds/music/Galway.mp3");
 
       this.load.audio("click1", "sounds/ui/click1.wav");
+      this.load.audio("sword-clash", "sounds/fx/sword-clash.wav");
     }
   }
 
