@@ -7,8 +7,7 @@ export default class GameOverMenu extends Component {
     const { onMainMenu, onRestart, gameWon, sfxPlayer } = this.props;
 
     return (
-      <div id="game-over" className="menu">
-        <div className="menu-title">Game Over</div>
+      <Menu id="game-over" title="Game Over">
         <div className="menu-title">You {gameWon ? "won!  Nice!" : "lost.  Bummer..."}</div>
         <ButtonWithSfx sfxPlayer={sfxPlayer} onClick={onRestart}>
           Restart
@@ -16,7 +15,7 @@ export default class GameOverMenu extends Component {
         <ButtonWithSfx sfxPlayer={sfxPlayer} onClick={onMainMenu}>
           Main Menu
         </ButtonWithSfx>
-      </div>
+      </Menu>
     );
   }
 }
