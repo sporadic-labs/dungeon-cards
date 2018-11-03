@@ -8,6 +8,9 @@ export default class PlayerAttackAnimation {
   constructor(scene, x, y) {
     this.scene = scene;
 
+    this.sfxPlayer = this.scene.game.globals.sfxPlayer;
+    this.sfxPlayer.add("sword-clash", 2, 0.3, false);
+
     this.sprite = scene.add.sprite(0, 0, "assets", "attacks/player-slash");
     this.sprite.flipY = true;
     this.sprite.setVisible(false);
@@ -16,7 +19,7 @@ export default class PlayerAttackAnimation {
   }
 
   fadeout(delay) {
-    this.scene.game.globals.sfxPlayer.play("sword-clash", { volume: 0.4 });
+    this.sfxPlayer.play("sword-clash");
 
     setTimeout(() => {
       this.sprite.setVisible(true);
