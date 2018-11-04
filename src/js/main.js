@@ -2,7 +2,7 @@ import "babel-polyfill";
 import "../css/main.scss";
 
 import { AUTO, Game } from "phaser";
-import { Loading, Play, SCENE_NAME } from "./scenes";
+import { SCENE_NAME, installScenes } from "./scenes";
 import logger, { LOG_LEVEL } from "./helpers/logger";
 import PhaserLifecyclePlugin from "phaser-lifecycle-plugin/src/";
 
@@ -55,8 +55,7 @@ render(
   document.getElementById("menu-container")
 );
 
-game.scene.add(SCENE_NAME.LOADING, Loading);
-game.scene.add(SCENE_NAME.PLAY, Play);
+installScenes(game);
 game.scene.start(SCENE_NAME.LOADING);
 
 makeGameResponsive("root", 600, gameResolution);
