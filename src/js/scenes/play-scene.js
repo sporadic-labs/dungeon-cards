@@ -14,9 +14,6 @@ import { autorun } from "mobx";
 
 export default class PlayScene extends Scene {
   create() {
-    const { width, height } = this.sys.game.config;
-    this.add.tileSprite(0, 0, 10 * width, 10 * height, "assets", "background-vector");
-
     this.gameBoard = new GameBoard(this, 5, 4);
 
     this.toast = new HudToast(this);

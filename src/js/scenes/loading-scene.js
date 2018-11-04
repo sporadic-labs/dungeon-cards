@@ -42,6 +42,9 @@ export default class LoadingScene extends Scene {
   }
 
   create() {
+    this.scene.start(SCENE_NAME.BACKGROUND);
+    this.scene.sendToBack(SCENE_NAME.BACKGROUND);
+
     if (!preferencesStore.noAudio) {
       const { musicPlayer } = this.sys.game.globals;
       musicPlayer.init();
