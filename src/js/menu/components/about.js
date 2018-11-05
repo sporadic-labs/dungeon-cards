@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 
-import Logo from "../../../images/sporadicLabs-logo-color-64.png";
-import Website from "../../../images/sporadicLabs-logo-white-32.png";
-import Github from "../../../images/GitHub-Mark-Light-32px.png";
+import logo from "../../../images/sporadicLabs-logo-color-64.png";
+import WebsiteSvg from "../../../images/sporadic-labs-one-color.svg";
+import GithubSvg from "../../../images/github.svg";
 import ButtonWithSfx from "./button-with-sfx";
 import Menu from "./menu";
+import Link from "./link/index";
 
 export default class AboutMenu extends Component {
   render() {
@@ -15,28 +16,28 @@ export default class AboutMenu extends Component {
         <div className="brand">
           <div className="created-by">Created by</div>
           <div className="logo-wrap">
-            <img src={Logo} />
+            <img src={logo} />
             <span className="logo-text">Sporadic Labs</span>
           </div>
         </div>
         <div id="credits-wrap">
           <div id="credits-title">Sporadic Labs is:</div>
-          <a
+          <Link
             href="https://github.com/mikewesthad"
             alt="Github"
             target="_blank"
             rel="noopener noreferrer"
           >
             Mike Hadley
-          </a>
-          <a
+          </Link>
+          <Link
             href="https://github.com/retwedt"
             alt="Github"
             target="_blank"
             rel="noopener noreferrer"
           >
             Rex Twedt
-          </a>
+          </Link>
         </div>
         <div className="links">
           <a
@@ -45,7 +46,7 @@ export default class AboutMenu extends Component {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img src={Github} />
+            <GithubSvg className="svg-link" style={{ height: "30px" }} />
           </a>
           <a
             href="https://sporadic-labs.github.io/"
@@ -53,7 +54,7 @@ export default class AboutMenu extends Component {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img src={Website} />
+            <WebsiteSvg className="svg-link" style={{ height: "30px" }} />
           </a>
         </div>
 

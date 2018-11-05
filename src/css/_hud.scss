@@ -110,14 +110,21 @@
       #credits-title {
         font-size: 16px;
       }
-      a {
-        display: block;
-        text-decoration: none;
-        color: #fff;
+
+      & > * {
+        margin: 0 5px;
+      }
+    }
+
+    .svg-link {
+      * {
+        fill: $text-dark-color;
         transition: all 0.1s ease-in-out;
-        &:hover {
-          color: #c7c3ad;
-          transition: all 0.1s ease-in-out;
+      }
+
+      &:hover {
+        * {
+          fill: $color-orange;
         }
       }
     }
@@ -126,14 +133,10 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      a {
-        margin: 12px;
-        transition: all 0.1s ease-in-out;
-        &:hover {
-          opacity: 0.5;
-          cursor: pointer;
-          transition: all 0.1s ease-in-out;
-        }
+      margin-top: 5px;
+
+      & > * {
+        margin: 0 5px;
       }
     }
   }
