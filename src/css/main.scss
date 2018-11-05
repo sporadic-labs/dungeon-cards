@@ -1,4 +1,5 @@
 @import "../../node_modules/typeface-chivo/index.css";
+@import "variables";
 @import "hud";
 
 html,
@@ -9,20 +10,17 @@ body {
 
 body {
   background-color: black;
-  color: white;
+  color: $text-dark-color;
   font-family: "Chivo", sans-serif;
-}
-
-button {
-  font-family: inherit;
-}
-
-body {
   width: 100vw;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+button {
+  font-family: inherit;
 }
 
 #root {
