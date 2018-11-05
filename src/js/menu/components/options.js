@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { observer } from "mobx-react";
 import ButtonWithSfx from "./button-with-sfx";
 import Menu from "./menu";
+import Slider from "./slider/index";
+import Checkbox from "./checkbox/index";
 
 @observer
 export default class OptionsMenu extends Component {
@@ -18,21 +20,14 @@ export default class OptionsMenu extends Component {
     return (
       <Menu id="options" title="Options">
         <form>
-          <label>
+          <label className="label">
             Volume
-            <input
-              type="range"
-              value={musicStore.volume}
-              min="0"
-              max="1"
-              step="0.05"
-              onChange={this.onSlide}
-            />
+            <Slider value={musicStore.volume} min="0" max="1" step="0.05" onChange={this.onSlide} />
           </label>
 
-          <label>
+          <label className="label">
             Mute Background Music:
-            <input type="checkbox" checked={musicStore.isMuted} onChange={this.onToggleMute} />
+            <Checkbox checked={musicStore.isMuted} onChange={this.onToggleMute} />
           </label>
         </form>
 
