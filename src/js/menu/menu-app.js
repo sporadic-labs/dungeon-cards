@@ -96,21 +96,7 @@ class Menu extends Component {
       activeMenu = <DebugMenu {...commonProps} onResume={this.resumeGame} />;
     }
 
-    return (
-      <div id="hud">
-        {activeMenu}
-        {gameStore.hasGameStarted ? (
-          <PauseButton
-            {...commonProps}
-            isPaused={gameStore.isPaused}
-            onPause={this.goToPauseMenu}
-            onResume={this.resumeGame}
-          />
-        ) : (
-          ""
-        )}
-      </div>
-    );
+    return <div id="hud">{activeMenu}</div>;
   }
 }
 

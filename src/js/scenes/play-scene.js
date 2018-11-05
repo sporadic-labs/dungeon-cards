@@ -11,9 +11,15 @@ import { MENU_STATES } from "../menu/menu-states";
 import { gameStore } from "../store";
 import HudToast from "../game-objects/hud/hud-toast";
 import { autorun } from "mobx";
+import Button from "../game-objects/hud/button";
 
 export default class PlayScene extends Scene {
   create() {
+    // MH: cameras can't be shared across scenes, so we need to rethink this BG scene idea. For now,
+    // load another tile bg in this scene
+    const { width, height } = this.sys.game.config;
+    this.add.tileSprite(0, 0, 2 * width, 1 * height, "assets", "background-vector").setOrigin(0, 0);
+
     this.gameBoard = new GameBoard(this, 5, 4);
 
     this.toast = new HudToast(this);
@@ -113,6 +119,16 @@ export default class PlayScene extends Scene {
       this.enemyManager,
       this.gameBoard
     );
+
+    const pauseButton = new Button(this, 15, 15, {
+      origin: { x: 0, y: 0 },
+      framePrefix: "ui/pause-",
+      onDown: () => {
+        pauseButton.setIsPressed(false); // Pausing the game === no pointer up event, so reset press
+        gameStore.setPaused(true);
+        gameStore.setMenuState(MENU_STATES.PAUSE);
+      }
+    });
   }
 
   shutdown() {

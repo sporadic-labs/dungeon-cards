@@ -31,7 +31,7 @@ export default class ActionRunner {
     this.toast = scene.toast;
 
     const { height } = scene.sys.game.config;
-    this.endTurnButton = new EndTurnButton(scene, 80, height / 2 - 16);
+    this.endTurnButton = new EndTurnButton(scene, 15, height / 2, { x: 0, y: 0.5 });
     this.endTurnButton.deactivate();
 
     this.proxy.on(scene.events, "shutdown", this.destroy, this);
