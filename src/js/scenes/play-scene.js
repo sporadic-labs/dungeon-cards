@@ -14,11 +14,22 @@ import { autorun } from "mobx";
 import Button from "../game-objects/hud/button";
 
 export default class PlayScene extends Scene {
+  panToMenuArea() {
+    camera.pan(1200, 400, 600, "Expo", false);
+  }
+  panToGameArea() {
+    this.time.delayedCall(200, () => camera.pan(400, 400, 600, "Expo", false));
+  }
+
   create() {
     // MH: cameras can't be shared across scenes, so we need to rethink this BG scene idea. For now,
     // load another tile bg in this scene
     const { width, height } = this.sys.game.config;
     this.add.tileSprite(0, 0, 2 * width, 1 * height, "assets", "background-vector").setOrigin(0, 0);
+
+    // Hacky: start off screen (menu area) and pan in to the game zone
+    this.cameras.main.scrollX = 1200;
+    this.panToGameArea();
 
     this.gameBoard = new GameBoard(this, 5, 4);
 
@@ -46,37 +57,11 @@ export default class PlayScene extends Scene {
     const camera = this.cameras.main;
     this.storeUnsubscribe = autorun(() => {
       if (gameStore.isGamePaused) {
-        camera.pan(
-          1200,
-          400,
-          600,
-          "Expo",
-          false,
-          (camera, progress, x, y) => {
-            if (progress === 1) {
-              this.scene.pause();
-            }
-          },
-          this
-        );
+        camera.once("camerapancomplete", () => this.scene.pause());
+        this.panToMenuArea();
       } else {
         this.scene.resume();
-        this.time.delayedCall(200, () => {
-          camera.pan(
-            400,
-            400,
-            600,
-            "Expo",
-            false,
-            (camera, progress, x, y) => {
-              if (progress === 1) {
-                // TODO(rex): Is there an easy way to pause/resume interactivity for a scene?
-                console.log("resume pan done");
-              }
-            },
-            this
-          );
-        });
+        panToGameArea();
       }
     });
 
