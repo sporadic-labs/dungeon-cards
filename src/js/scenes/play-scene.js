@@ -17,6 +17,7 @@ export default class PlayScene extends Scene {
   panToMenuArea() {
     this.cameras.main.pan(1200, 400, 600, "Expo", false);
   }
+
   panToGameArea() {
     this.time.delayedCall(200, () => this.cameras.main.pan(400, 400, 600, "Expo", false));
   }
