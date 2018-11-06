@@ -7,7 +7,6 @@ export default class Menu extends Component {
 
     return (
       <div className="menu" {...otherProps}>
-        <div className="menu-overlay" />
         <img src={scrollBgSrc} className="menu-scroll" />
         <div className="menu-title">{title}</div>
         {children}
