@@ -13,6 +13,12 @@ class GameStore {
   menuStateHistory = []; // Reverse chronological order
 
   @observable
+  menuState = null;
+
+  @observable
+  lastMenuState = null;
+
+  @observable
   hasGameStarted = false;
 
   @observable
@@ -27,11 +33,6 @@ class GameStore {
   @computed
   get gameStarted() {
     return this.hasGameStarted;
-  }
-
-  @computed
-  get menuState() {
-    return this.menuStateHistory.length > 0 ? this.menuStateHistory[0] : null;
   }
 
   @computed
@@ -73,15 +74,21 @@ class GameStore {
   setMenuState(newMenuState) {
     if (this.menuStateHistory.length === 0) {
       this.menuStateHistory = [newMenuState];
+      this.lastMenuState = null;
+      this.menuState = newMenuState;
     } else if (newMenuState !== this.menuStateHistory[0]) {
+      this.lastMenuState = this.menuStateHistory[0];
       this.menuStateHistory = [newMenuState, ...this.menuStateHistory.slice(0, maxMenuHistory - 1)];
+      this.menuState = newMenuState;
     }
   }
 
   @action
   goBackOneMenuState() {
     if (this.menuStateHistory.length > 0) {
+      this.lastMenuState = this.menuState;
       this.menuStateHistory = [...this.menuStateHistory.slice(1)];
+      this.menuState = this.menuStateHistory[0];
     }
   }
 
