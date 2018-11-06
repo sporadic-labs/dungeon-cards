@@ -61,21 +61,22 @@ export default class PlayScene extends Scene {
         );
       } else {
         this.scene.resume();
-
-        camera.pan(
-          400,
-          400,
-          600,
-          "Expo",
-          false,
-          (camera, progress, x, y) => {
-            if (progress === 1) {
-              // TODO(rex): Is there an easy way to pause/resume interactivity for a scene?
-              console.log("resume pan done");
-            }
-          },
-          this
-        );
+        this.time.delayedCall(200, () => {
+          camera.pan(
+            400,
+            400,
+            600,
+            "Expo",
+            false,
+            (camera, progress, x, y) => {
+              if (progress === 1) {
+                // TODO(rex): Is there an easy way to pause/resume interactivity for a scene?
+                console.log("resume pan done");
+              }
+            },
+            this
+          );
+        });
       }
     });
 

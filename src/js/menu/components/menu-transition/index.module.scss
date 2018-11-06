@@ -1,0 +1,41 @@
+$delayDurationMs: 250;
+$transitionDurationMs: 250;
+
+:export {
+  delayDurationMs: $delayDurationMs;
+  transitionDurationMs: $transitionDurationMs;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.enter,
+.exit {
+  animation-duration: #{$transitionDurationMs}ms;
+  animation-fill-mode: both;
+}
+
+.enter {
+  animation-name: fadeIn;
+  animation-delay: #{$delayDurationMs}ms;
+}
+
+.exit {
+  animation-name: fadeOut;
+  pointer-events: none; /* Stop interactivity on fading page */
+}

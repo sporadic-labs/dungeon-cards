@@ -11,6 +11,7 @@ import {
   PauseButton,
   DebugMenu
 } from "./components";
+import MenuTransition from "./components/menu-transition";
 
 @observer
 class Menu extends Component {
@@ -96,7 +97,11 @@ class Menu extends Component {
       activeMenu = <DebugMenu {...commonProps} onResume={this.resumeGame} />;
     }
 
-    return <div id="hud">{activeMenu}</div>;
+    return (
+      <div id="hud">
+        <MenuTransition gameStore={gameStore}>{activeMenu}</MenuTransition>
+      </div>
+    );
   }
 }
 
