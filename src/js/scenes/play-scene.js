@@ -15,10 +15,10 @@ import Button from "../game-objects/hud/button";
 
 export default class PlayScene extends Scene {
   panToMenuArea() {
-    camera.pan(1200, 400, 600, "Expo", false);
+    this.cameras.main.pan(1200, 400, 600, "Expo", false);
   }
   panToGameArea() {
-    this.time.delayedCall(200, () => camera.pan(400, 400, 600, "Expo", false));
+    this.time.delayedCall(200, () => this.cameras.main.pan(400, 400, 600, "Expo", false));
   }
 
   create() {
@@ -61,7 +61,7 @@ export default class PlayScene extends Scene {
         this.panToMenuArea();
       } else {
         this.scene.resume();
-        panToGameArea();
+        this.panToGameArea();
       }
     });
 
