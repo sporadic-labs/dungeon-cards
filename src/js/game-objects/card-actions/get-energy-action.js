@@ -8,6 +8,7 @@ export default class GetEnergyAction extends Action {
     super();
 
     this.scene = scene;
+    this.sound = this.scene.sound; // TODO: use this.scene.game.globals.sfxPlayer
     this.card = card;
     this.proxy = new EventProxy();
     this.playerManager = playerManager;
@@ -18,6 +19,7 @@ export default class GetEnergyAction extends Action {
 
   onDragEnd(pointer) {
     if (gameStore.isTargetingDropZone) {
+      this.sound.play("card-place-3");
       this.playerManager.addEnergy(this.card.getEnergy());
       emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
     } else {

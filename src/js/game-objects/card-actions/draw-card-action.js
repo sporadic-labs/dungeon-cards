@@ -13,6 +13,7 @@ export default class DrawCardAction extends Action {
     this.proxy = new EventProxy();
     this.playerManager = playerManager;
     this.scroll = playerManager.scroll;
+    this.sound = this.scene.sound; // TODO: use this.scene.game.globals.sfxPlayer
 
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DRAG_END, this.onDragEnd, this);
   }
@@ -21,6 +22,7 @@ export default class DrawCardAction extends Action {
     if (gameStore.isTargetingDropZone) {
       // Drawing 3 and discarding 1
       if (this.playerManager.canDraw(2)) {
+        this.sound.play("card-place-3");
         this.playerManager.drawCard();
         this.playerManager.drawCard();
         this.playerManager.drawCard();

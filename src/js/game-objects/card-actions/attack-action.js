@@ -9,6 +9,7 @@ export default class AttackAction extends Action {
 
     this.actionRunner = actionRunner;
     this.scene = scene;
+    this.sound = this.scene.sound; // TODO: use this.scene.game.globals.sfxPlayer
     this.card = card;
     this.attackPattern = card.cardInfo.cells;
     this.damage = 1;
@@ -67,6 +68,7 @@ export default class AttackAction extends Action {
     this.board.defocusBoard();
 
     if (gameStore.isTargetingDropZone) {
+      this.sound.play("card-place-3");
       emitter.emit(EVENT_NAMES.PLAYER_CARD_DISCARD);
       return;
     }
@@ -85,6 +87,8 @@ export default class AttackAction extends Action {
       emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
       return;
     }
+
+    this.sound.play("card-place-3");
 
     // Get a list of enemies affected by this attack.
     const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);

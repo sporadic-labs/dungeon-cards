@@ -23,6 +23,7 @@ export default class ShiftAction extends Action {
     this.proxy = new EventProxy();
     this.playerManager = playerManager;
     this.enemyManager = enemyManager;
+    this.sound = this.scene.sound; // TODO: use this.scene.game.globals.sfxPlayer
 
     this.showMessage = true; // Any better ideas?
 
@@ -122,6 +123,7 @@ export default class ShiftAction extends Action {
       return;
     }
 
+    this.sound.play("card-place-3");
     const enemies = this.getEnemiesWithinRange(this.board, pointer, this.attackPattern);
     this.enemyManager
       .shiftEnemies(enemies, this.direction)

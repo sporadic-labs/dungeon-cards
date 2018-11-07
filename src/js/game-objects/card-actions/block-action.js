@@ -14,6 +14,7 @@ export default class BlockAction extends Action {
     this.proxy = new EventProxy();
     this.enemyManager = enemyManager;
     this.scene = scene;
+    this.sound = this.scene.sound; // TODO: use this.scene.game.globals.sfxPlayer
 
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DRAG, this.onDrag, this);
     this.proxy.on(emitter, EVENT_NAMES.PLAYER_CARD_DRAG_END, this.onDragEnd, this);
