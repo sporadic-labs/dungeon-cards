@@ -41,6 +41,7 @@ export default class LoadingScene extends Scene {
       this.load.audio("card-slide-2", "sounds/fx/card-slide-2-processed.mp3");
       this.load.audio("card-slide-7", "sounds/fx/card-slide-7-processed.mp3");
       this.load.audio("card-place-3", "sounds/fx/card-place-3-processed.mp3");
+      this.load.audio("incorrect", "sounds/fx/incorrect.mp3");
     }
   }
 

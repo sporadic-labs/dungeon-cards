@@ -23,6 +23,7 @@ export default class GetEnergyAction extends Action {
       this.playerManager.addEnergy(this.card.getEnergy());
       emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
     } else {
+      this.sound.play("incorrect");
       emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
     }
   }

@@ -75,6 +75,7 @@ export default class AttackAction extends Action {
 
     const pointer = this.scene.input.activePointer;
     if (!this.board.isWorldPointInBoard(pointer.x, pointer.y)) {
+      this.sound.play("incorrect");
       this.actionRunner.showToast("You can't play that card there.");
       emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
       return;
@@ -82,6 +83,7 @@ export default class AttackAction extends Action {
 
     const enoughEnergyForAttack = this.playerManager.canUseCard(this.card);
     if (!enoughEnergyForAttack) {
+      this.sound.play("incorrect");
       this.enemyManager.defocusAllEnemies();
       this.actionRunner.showToast("You don't have enough energy for that.");
       emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);

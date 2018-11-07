@@ -28,6 +28,7 @@ export default class DrawCardAction extends Action {
         this.playerManager.drawCard();
         emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
       } else {
+        this.sound.play("incorrect");
         this.actionRunner.showToast("You can't draw cards - you'll have too many!");
         emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
       }
