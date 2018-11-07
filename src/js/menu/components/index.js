@@ -1,4 +1,4 @@
-import StartMenu from "./start";
+import StartMenu from "./start-menu";
 import AboutMenu from "./about";
 import GameOverMenu from "./game-over";
 import OptionsMenu from "./options";

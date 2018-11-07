@@ -8,7 +8,6 @@ import {
   GameOverMenu,
   OptionsMenu,
   PauseMenu,
-  PauseButton,
   DebugMenu
 } from "./components";
 import MenuTransition from "./components/menu-transition";
