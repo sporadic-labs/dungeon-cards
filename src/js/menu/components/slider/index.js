@@ -13,6 +13,6 @@ export default class Slider extends PureComponent {
   render() {
     const { className, ...otherProps } = this.props;
 
-    return <input className={classNames(style.slider, className)} type="range" />;
+    return <input className={classNames(style.slider, className)} type="range" {...otherProps} />;
   }
 }
