@@ -112,9 +112,9 @@ export default class PlayerHand {
     return this.cards.length;
   }
 
-  async drawCard() {
+  async drawCard(noAudio = false) {
     if (!this.deck.anyCardsRemaining()) return;
-    this.sound.play("card-slide-7");
+    if (!noAudio) this.sound.play("card-slide-7");
     const position = this.deckDisplay.getPosition();
     // Tell a card to animate from deck position to hand
     const cardId = this.deck.draw();
@@ -128,9 +128,9 @@ export default class PlayerHand {
     this.depthSort();
   }
 
-  drawCards(numCards) {
+  drawCards(numCards, noAudio = false) {
     const numCanDraw = Math.min(this.deck.getNumCardsRemaining(), numCards);
-    for (let i = 0; i < numCanDraw; i++) this.drawCard();
+    for (let i = 0; i < numCanDraw; i++) this.drawCard(noAudio);
   }
 
   depthSort() {
