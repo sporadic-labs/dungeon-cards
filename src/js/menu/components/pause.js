@@ -14,7 +14,7 @@ export default class PauseMenu extends Component {
         <ButtonWithSfx sfxPlayer={sfxPlayer} onClick={onOptions}>
           Options
         </ButtonWithSfx>
-        <ButtonWithSfx sfxPlayer={sfxPlayer} onClick={onResume}>
+        <ButtonWithSfx color="green" sfxPlayer={sfxPlayer} onClick={onResume}>
           Resume Game
         </ButtonWithSfx>
       </Menu>
