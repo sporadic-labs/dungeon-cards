@@ -59,25 +59,6 @@
     font-size: 1.1rem;
   }
 
-  .menu {
-    #about {
-      text-align: center;
-      font-size: 18px;
-      width: 32px;
-      height: 32px;
-      text-shadow: 2px 2px rgb(64, 64, 64);
-      transition: all 0.1s ease-in-out;
-      position: absolute;
-      bottom: 2rem;
-      left: 2rem;
-      &:hover {
-        cursor: pointer;
-        color: #c7c3ad;
-        transition: all 0.1s ease-in-out;
-      }
-    }
-  }
-
   #about-menu {
     padding: 36px;
 
