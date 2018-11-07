@@ -1,6 +1,21 @@
 @import "../../../../css/variables";
 
-$grayShadowColor: darken($color-dark-gray, 10%);
+$greenShadowColor: #0f7d75;
+
+@mixin dropShadowButton($backgroundColor, $shadowColor) {
+  background-color: $backgroundColor;
+  box-shadow: 2px 2px 0 $shadowColor;
+
+  &:hover {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 $shadowColor;
+  }
+
+  &:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0px 0px 0 $shadowColor;
+  }
+}
 
 .button {
   border: none;
@@ -12,25 +27,18 @@ $grayShadowColor: darken($color-dark-gray, 10%);
   border-radius: 7.861px;
   font-weight: 900;
   font-size: 1.1rem;
-  box-shadow: 2px 2px 0 $grayShadowColor;
   color: $color-off-white;
   text-transform: uppercase;
-
-  &:hover {
-    transform: translate(1px, 1px);
-    box-shadow: 1px 1px 0 $grayShadowColor;
-  }
-
-  &:active {
-    transform: translate(2px, 2px);
-    box-shadow: 0px 0px 0 $grayShadowColor;
-  }
 }
 
 .gray {
-  background-color: $color-dark-gray;
+  @include dropShadowButton($color-dark-gray, darken($color-dark-gray, 10%));
 }
 
 .orange {
-  background-color: $color-orange;
+  @include dropShadowButton($color-orange, #9c501e);
+}
+
+.green {
+  @include dropShadowButton($color-green, #0f7d75);
 }
