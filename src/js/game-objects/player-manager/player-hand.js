@@ -18,6 +18,7 @@ export default class PlayerHand {
     this.deckDisplay = deckDisplay;
     this.cards = [];
     this.selectingEnabled = false;
+    this.sound = this.scene.sound; // TODO: use this.scene.game.globals.sfxPlayer
 
     this.proxy = new EventProxy();
 
@@ -113,6 +114,7 @@ export default class PlayerHand {
 
   async drawCard() {
     if (!this.deck.anyCardsRemaining()) return;
+    this.sound.play("card-slide-7");
     const position = this.deckDisplay.getPosition();
     // Tell a card to animate from deck position to hand
     const cardId = this.deck.draw();
