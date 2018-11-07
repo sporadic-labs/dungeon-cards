@@ -44,6 +44,7 @@ export default class Button {
     this.onDown = onDown;
     this.isHovered = false;
     this.isPressed = false;
+    this.sfxPlayer = this.scene.game.globals.sfxPlayer;
 
     this.frameNames = {
       [BUTTON_STATE.NORMAL]: `${framePrefix}${frameMapping.normal}`,
@@ -130,6 +131,7 @@ export default class Button {
   }
 
   onPointerDown() {
+    this.sfxPlayer.playButtonClick();
     this.isPressed = true;
     this.updateFrame();
     this.onDown();
