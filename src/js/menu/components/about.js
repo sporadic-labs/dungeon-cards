@@ -6,6 +6,7 @@ import GithubSvg from "../../../images/github.svg";
 import ButtonWithSfx from "./button-with-sfx";
 import Menu from "./menu";
 import Link from "./link/index";
+import Image from "./image";
 
 export default class AboutMenu extends Component {
   render() {
@@ -16,7 +17,7 @@ export default class AboutMenu extends Component {
         <div className="brand">
           <div className="created-by">Created by</div>
           <div className="logo-wrap">
-            <img src={logo} />
+            <Image src={logo} />
             <span className="logo-text">Sporadic Labs</span>
           </div>
         </div>
