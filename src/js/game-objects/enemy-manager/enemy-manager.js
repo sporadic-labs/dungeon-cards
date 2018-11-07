@@ -16,6 +16,7 @@ export default class EnemyManager {
     this.scene = scene;
     this.gameBoard = gameBoard;
     this.deck = enemyDeck;
+    this.sound = this.scene.sound; // TODO: use this.scene.game.globals.sfxPlayer
 
     this.proxy = new EventProxy();
 
@@ -275,6 +276,7 @@ export default class EnemyManager {
         const blank = new BlankCard(this.scene, spawnPosition.x, spawnPosition.y);
         return blank
           .fadeIn(delay)
+          .then(() => this.sound.play("card-slide-2"))
           .then(() => blank.moveTo(cx, spawnPosition.y))
           .then(() => blank.moveTo(cx, cy))
           .then(() => blank.flip())
@@ -286,6 +288,7 @@ export default class EnemyManager {
         this.gameBoard.putAt(location.x, location.y, enemy);
         return enemy
           .fadeIn(delay)
+          .then(() => this.sound.play("card-slide-2"))
           .then(() => enemy.moveTo(cx, spawnPosition.y))
           .then(() => enemy.moveTo(cx, cy))
           .then(() => enemy.flip());

@@ -38,6 +38,8 @@ export default class LoadingScene extends Scene {
       // Sound FX
       this.load.audio("button-click", "sounds/ui/click1.wav");
       this.load.audio("sword-clash", "sounds/fx/sword-clash.wav");
+      this.load.audio("card-slide-2", "sounds/fx/card-slide-2.ogg"); // TODO: mp3
+      this.load.audio("card-slide-7", "sounds/fx/card-slide-7.ogg"); // TODO: mp3
     }
   }
 
