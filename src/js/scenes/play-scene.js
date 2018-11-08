@@ -83,7 +83,13 @@ export default class PlayScene extends Scene {
       { id: ENEMY_CARD_TYPES.BLANK, quantity: 30 }
     ];
 
-    const enemyDeck = new Deck(enemyDeckComposition);
+    // Enemy deck, ensuring that at least one enemy is always spawed
+    const enemyDeck = new Deck(enemyDeckComposition, cards => {
+      let firstDrawIndex = cards.length - 4; // 4 columns of enemies
+      do {
+        Phaser.Utils.Array.Shuffle(cards);
+      } while (cards.slice(firstDrawIndex).every(c => c === ENEMY_CARD_TYPES.BLANK));
+    });
     this.enemyManager = new EnemyManager(this, this.gameBoard, enemyDeck);
 
     const playerDeckComposition = [

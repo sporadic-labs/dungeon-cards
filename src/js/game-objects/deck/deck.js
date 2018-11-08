@@ -11,8 +11,11 @@ export default class Deck {
   /**
    * @param {Object[]} composition An array of objects that describes the composition of the types
    * of cards in the deck, in the form { id: 0, quantity: 10 }
+   * @param {function} [shuffle=Phaser.Utils.Array.Shuffle] The function used to shuffle the array
+   * of cards in place. Useful for implementing shuffles that must meet certain conditions. The
+   * "top" of the cards deck array is the last element in the array.
    */
-  constructor(composition) {
+  constructor(composition, shuffle = Phaser.Utils.Array.Shuffle) {
     this.composition = composition;
 
     this.cardsInDeck = [];
@@ -23,7 +26,7 @@ export default class Deck {
     composition.map(({ id, quantity }) => {
       this.cardsInDeck = this.cardsInDeck.concat(new Array(quantity).fill(id));
     });
-    Phaser.Utils.Array.Shuffle(this.cardsInDeck);
+    shuffle(this.cardsInDeck);
 
     this.totalCardsInDeck = this.cardsInDeck.length;
   }
