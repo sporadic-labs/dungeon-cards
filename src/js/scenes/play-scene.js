@@ -77,6 +77,7 @@ export default class PlayScene extends Scene {
     this.toast = new HudToast(this);
 
     this.proxy = new EventProxy();
+    this.proxy.on(this.events, "shutdown", this.shutdown, this);
 
     this.initGame();
 
@@ -84,16 +85,12 @@ export default class PlayScene extends Scene {
       gameStore.setGameStarted(false);
       gameStore.setPaused(true);
       gameStore.setMenuState(win ? MENU_STATES.GAME_OVER_WON : MENU_STATES.GAME_OVER_LOST);
-
-      this.shutdown();
       this.panner.tweenToMenuArea();
     });
 
     this.proxy.on(emitter, EVENT_NAMES.GAME_START, () => {
-      this.shutdown();
-
-      this.scene.restart();
       gameStore.setPaused(false);
+      this.scene.restart();
     });
 
     const camera = this.cameras.main;
