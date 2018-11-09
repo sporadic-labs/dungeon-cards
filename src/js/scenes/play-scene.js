@@ -13,15 +13,54 @@ import HudToast from "../game-objects/hud/hud-toast";
 import { autorun } from "mobx";
 import Button from "../game-objects/hud/button";
 
+/**
+ * Util class to control panning between menu area and the game area.
+ * @class CameraPanner
+ */
+class CameraPanner {
+  /**
+   * @param {Phaser.Scene} scene
+   * @param {Phaser.Cameras.Scene2D} camera
+   * @memberof CameraPanner
+   */
+  constructor(scene, camera) {
+    this.time = scene.time;
+    this.camera = camera;
+    this.panEvent = null;
+    this.duration = 600;
+    this.menuX = 1200;
+    this.gameX = 400;
+    this.proxy = new EventProxy();
+    this.proxy.on(scene.events, "shutdown", this.destroy, this);
+    this.proxy.on(scene.events, "destory", this.destroy, this);
+  }
+  setToMenuArea() {
+    this.camera.scrollX = this.menuX;
+  }
+  setToGameArea() {
+    this.camera.scrollX = this.gameX;
+  }
+  tweenToMenuArea() {
+    this.stopPan();
+    this.camera.pan(this.menuX, this.camera.midPoint.y, this.duration, "Expo", false);
+  }
+  tweenToGameArea() {
+    // Delay gives DOM menu time to disappear
+    this.panEvent = this.time.delayedCall(200, () =>
+      this.camera.pan(this.gameX, this.camera.midPoint.y, this.duration, "Expo", false)
+    );
+  }
+  stopPan() {
+    this.camera.panEffect.reset();
+    if (this.panEvent) this.panEvent.destroy();
+  }
+  destroy() {
+    this.stopPan();
+    this.proxy.removeAll();
+  }
+}
+
 export default class PlayScene extends Scene {
-  panToMenuArea() {
-    this.cameras.main.pan(1200, 400, 600, "Expo", false);
-  }
-
-  panToGameArea() {
-    this.time.delayedCall(200, () => this.cameras.main.pan(400, 400, 600, "Expo", false));
-  }
-
   create() {
     // MH: cameras can't be shared across scenes, so we need to rethink this BG scene idea. For now,
     // load another tile bg in this scene
@@ -29,8 +68,9 @@ export default class PlayScene extends Scene {
     this.add.tileSprite(0, 0, 2 * width, 1 * height, "assets", "background-vector").setOrigin(0, 0);
 
     // Hacky: start off screen (menu area) and pan in to the game zone
-    this.cameras.main.scrollX = 1200;
-    this.panToGameArea();
+    this.panner = new CameraPanner(this, this.cameras.main);
+    this.panner.setToMenuArea();
+    this.panner.tweenToGameArea();
 
     this.gameBoard = new GameBoard(this, 5, 4);
 
@@ -46,6 +86,7 @@ export default class PlayScene extends Scene {
       gameStore.setMenuState(win ? MENU_STATES.GAME_OVER_WON : MENU_STATES.GAME_OVER_LOST);
 
       this.shutdown();
+      this.panner.tweenToMenuArea();
     });
 
     this.proxy.on(emitter, EVENT_NAMES.GAME_START, () => {
@@ -59,10 +100,10 @@ export default class PlayScene extends Scene {
     this.storeUnsubscribe = autorun(() => {
       if (gameStore.isGamePaused) {
         camera.once("camerapancomplete", () => this.scene.pause());
-        this.panToMenuArea();
+        this.panner.tweenToMenuArea();
       } else {
         this.scene.resume();
-        this.panToGameArea();
+        this.panner.tweenToGameArea();
       }
     });
 
