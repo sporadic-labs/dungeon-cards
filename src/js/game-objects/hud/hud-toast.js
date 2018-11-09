@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { getFontString } from "../../font";
+import { EventProxy } from "../events/index";
 
 const style = {
   font: getFontString("Chivo", { size: "18px", weight: 600 }),
@@ -19,6 +20,10 @@ export default class HudToast {
     this.messages = [];
 
     this.messageQueue = [];
+
+    this.proxy = new EventProxy();
+    this.proxy.on(scene.events, "shutdown", this.destroy, this);
+    this.proxy.on(scene.events, "destroy", this.destroy, this);
   }
 
   setMessage(text) {
@@ -73,6 +78,7 @@ export default class HudToast {
   }
 
   destroy() {
+    this.proxy.removeAll();
     this.messages.forEach(message => {
       this.scene.tweens.killTweensOf(message);
       message.destroy();

@@ -167,7 +167,6 @@ export default class PlayScene extends Scene {
 
   shutdown() {
     this.input.keyboard.removeAllListeners();
-    this.toast.destroy();
     this.storeUnsubscribe();
     this.proxy.removeAll();
   }
