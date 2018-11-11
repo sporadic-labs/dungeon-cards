@@ -3,6 +3,7 @@ import { emitter, EVENT_NAMES } from "../../events";
 import FlipEffect from "../../shared-components/flip-effect";
 import { EventProxy } from "../../events/index";
 import ShakeEffect from "./shake-effect";
+import FadeEffect from "./fade-effect";
 
 export default class EnemyCard {
   /**
@@ -44,6 +45,7 @@ export default class EnemyCard {
 
     this.flipEffect = new FlipEffect(scene, this.cardFront, this.cardBack).setToBack();
     this.shakeEffect = new ShakeEffect(scene);
+    this.fadeEffect = new FadeEffect(scene, [this.cardFront, this.cardBack]);
 
     this.selected = false;
     this.focused = false;
@@ -169,32 +171,13 @@ export default class EnemyCard {
   }
 
   fadeIn(delay) {
-    this.scene.tweens.killTweensOf([this.cardFront, this.cardBack]);
     this.cardFront.alpha = 0;
-    return new Promise(resolve => {
-      this.scene.tweens.add({
-        targets: [this.cardFront, this.cardBack],
-        alpha: 1,
-        delay: delay,
-        duration: 350,
-        ease: "Quad.easeOut",
-        onComplete: resolve
-      });
-    });
+    this.cardBack.alpha = 0;
+    return this.fadeEffect.fadeIn(delay);
   }
 
   fadeOut(delay) {
-    this.scene.tweens.killTweensOf([this.cardFront, this.cardBack]);
-    return new Promise(resolve => {
-      this.scene.tweens.add({
-        targets: [this.cardFront, this.cardBack],
-        alpha: 0,
-        delay: delay,
-        duration: 350,
-        ease: "Quad.easeOut",
-        onComplete: resolve
-      });
-    });
+    return this.fadeEffect.fadeOut(delay);
   }
 
   die(delay) {
@@ -240,5 +223,6 @@ export default class EnemyCard {
     this.cardBack.destroy();
     this.flipEffect.destroy();
     this.shakeEffect.destroy();
+    this.fadeEffect.destroy();
   }
 }
