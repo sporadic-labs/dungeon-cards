@@ -1,5 +1,3 @@
-import { EventProxy } from "../../events/index";
-
 /**
  * Isolated shake tween that can be applied to any object with x/y/angle properties. Apply the shake
  * to the target object via applyTo(...) in the game loop.
@@ -14,9 +12,6 @@ export default class ShakeEffect {
     this.x = 0;
     this.y = 0;
     this.angle = 0;
-    this.eventProxy = new EventProxy();
-    this.eventProxy.on(scene.events, "shutdown", this.destroy, this);
-    this.eventProxy.on(scene.events, "destroy", this.destroy, this);
   }
 
   start() {
@@ -47,6 +42,5 @@ export default class ShakeEffect {
 
   destroy() {
     this.stop();
-    this.eventProxy.removeAll();
   }
 }
