@@ -2,6 +2,7 @@ import { ENEMY_CARD_INFO } from "./enemy-card-types";
 import { emitter, EVENT_NAMES } from "../../events";
 import FlipEffect from "../../shared-components/flip-effect";
 import { EventProxy } from "../../events/index";
+import ShakeEffect from "./shake-effect";
 
 export default class EnemyCard {
   /**
@@ -15,8 +16,10 @@ export default class EnemyCard {
     this.type = type;
     this.health = ENEMY_CARD_INFO[type].health;
 
+    // Source of truth for transformation so that effects can be applied on top
     this.x = x;
     this.y = y;
+    this.angle = 0;
 
     this.cardEmitter = emitter;
 
@@ -40,6 +43,7 @@ export default class EnemyCard {
     this.eventProxy = new EventProxy();
 
     this.flipEffect = new FlipEffect(scene, this.cardFront, this.cardBack).setToBack();
+    this.shakeEffect = new ShakeEffect(scene);
 
     this.selected = false;
     this.focused = false;
@@ -47,6 +51,18 @@ export default class EnemyCard {
     this.turnsBlocked = null;
 
     this.enableSoftFocus();
+  }
+
+  update() {
+    // Apply transformation to sprites
+    this.cardFront.setPosition(this.x, this.y);
+    this.cardBack.setPosition(this.x, this.y);
+    this.cardFront.angle = this.angle;
+    this.cardBack.angle = this.angle;
+
+    // Apply effects on top of transform
+    this.shakeEffect.applyTo(this.cardFront);
+    this.shakeEffect.applyTo(this.cardBack);
   }
 
   setBlocked(shouldBeBlocked = true) {
@@ -83,7 +99,7 @@ export default class EnemyCard {
   }
 
   getPosition() {
-    return { x: this.cardFront.x, y: this.cardFront.y };
+    return { x: this.x, y: this.y };
   }
 
   enableSelecting() {
@@ -117,20 +133,7 @@ export default class EnemyCard {
   }
 
   shake() {
-    this.scene.tweens.killTweensOf(this.cardFront);
-    const { x, y, angle } = this.cardFront;
-    this.timeline = this.scene.tweens.timeline({
-      targets: this.cardFront,
-      ease: Phaser.Math.Easing.Quadratic.InOut,
-      loop: -1,
-      duration: 40,
-      tweens: [
-        { x: x - 1, y: y - 1, angle: angle + 1 },
-        { x: x + 1, y: y + 1.5, angle: angle - 1.5 },
-        { x: x + 0.5, y: y + 1, angle: angle + 0.5 },
-        { x: x - 1.5, y: y - 0.5, angle: angle - 0.5 }
-      ]
-    });
+    this.shakeEffect.start();
   }
 
   focus() {
@@ -209,10 +212,10 @@ export default class EnemyCard {
 
   // Move via center
   moveTo(x, y, delay = 0) {
-    this.scene.tweens.killTweensOf([this.cardFront, this.cardBack]);
+    this.scene.tweens.killTweensOf(this);
     return new Promise(resolve => {
       this.scene.tweens.add({
-        targets: [this.cardFront, this.cardBack],
+        targets: this,
         x: x,
         y: y,
         delay: delay,
@@ -240,9 +243,10 @@ export default class EnemyCard {
   destroy() {
     this.eventProxy.removeAll();
     this.scene.lifecycle.remove(this);
-    this.scene.tweens.killTweensOf([this.cardFront, this.cardBack]);
+    this.scene.tweens.killTweensOf([this.cardFront, this.cardBack, this]);
     this.cardFront.destroy();
     this.cardBack.destroy();
     this.flipEffect.destroy();
+    this.shakeEffect.destroy();
   }
 }
