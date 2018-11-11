@@ -139,11 +139,7 @@ export default class EnemyCard {
   focus() {
     if (this.focused) return;
     this.focused = true;
-
     this.scene.tweens.killTweensOf(this.cardFront);
-    // this.cardEmitter.emit("pointerover", this);
-
-    // this.scene.tweens.killTweensOf(this.container);
     return new Promise(resolve => {
       this.scene.tweens.add({
         targets: this.cardFront,
@@ -159,11 +155,7 @@ export default class EnemyCard {
   defocus() {
     if (!this.focused) return;
     this.focused = false;
-
     this.scene.tweens.killTweensOf(this.cardFront);
-    // this.cardEmitter.emit("pointerout", this);
-
-    // this.scene.tweens.killTweensOf(this.container);
     return new Promise(resolve => {
       this.scene.tweens.add({
         targets: this.cardFront,
