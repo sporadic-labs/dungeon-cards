@@ -1,6 +1,6 @@
 import FlipEffect from "../../shared-components/flip-effect";
 import { EventProxy } from "../../events/index";
-import FadeEffect from "./fade-effect";
+import TweenEffect from "./tween-effect";
 
 export default class BlankCard {
   /**
@@ -22,7 +22,11 @@ export default class BlankCard {
 
     this.eventProxy = new EventProxy();
     this.flipEffect = new FlipEffect(scene, this.cardFront, this.cardBack).setToBack();
-    this.fadeEffect = new FadeEffect(scene, [this.cardFront, this.cardBack]);
+    this.fadeEffect = new TweenEffect(scene, {
+      targets: [this.cardFront, this.cardBack],
+      duration: 350,
+      ease: "Quad.easeOut"
+    });
   }
 
   getPosition() {
@@ -32,11 +36,11 @@ export default class BlankCard {
   fadeIn(delay) {
     this.cardFront.alpha = 0;
     this.cardBack.alpha = 0;
-    return this.fadeEffect.fadeIn(delay);
+    return this.fadeEffect.to({ alpha: 1, delay });
   }
 
   fadeOut(delay) {
-    return this.fadeEffect.fadeOut(delay);
+    return this.fadeEffect.to({ alpha: 0, delay });
   }
 
   // Move via center
