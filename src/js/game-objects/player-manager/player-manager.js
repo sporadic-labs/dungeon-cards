@@ -5,11 +5,6 @@ import { DeckDisplay, DropTarget, EnergyDisplay } from "../hud";
 import { getFontString } from "../../font";
 import ScrollManager from "../hud/scroll-manager";
 
-const style = {
-  font: getFontString("Chivo", { size: "24px", weight: 600 }),
-  fill: "#E5E0D6"
-};
-
 const MAX_HAND = 10;
 
 export default class PlayerManager {
@@ -40,9 +35,6 @@ export default class PlayerManager {
     this.toast = this.scene.toast;
 
     this.dropTarget = new DropTarget(scene, width / 2, height - 196);
-    this.playerHandCount = scene.add
-      .text(width / 2, height - 16, this.playerHand.getNumCards(), style)
-      .setOrigin(0.5, 0.5);
     this.energyDisplay = new EnergyDisplay(scene, 45, height - 45);
     this.scroll = new ScrollManager(scene, width - 185, height / 2 - 148);
 
@@ -63,7 +55,6 @@ export default class PlayerManager {
   async drawCard() {
     // TODO: animate the card and wait for the animation to stop before resolving the async promise
     this.playerHand.drawCard();
-    this.playerHandCount.setText(this.playerHand.getNumCards());
     this.deckDisplay.setValue(this.deck.getNumCardsRemaining());
   }
 
@@ -106,7 +97,6 @@ export default class PlayerManager {
 
   discardCard(card) {
     this.playerHand.discardCard(card);
-    this.playerHandCount.setText(this.playerHand.getNumCards());
     return Promise.resolve();
   }
 
