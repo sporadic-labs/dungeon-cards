@@ -31,6 +31,7 @@ export default class PlayerManager {
 
     this.playerHand = new PlayerHand(scene, this.deck, this.deckDisplay);
     this.playerHand.drawCards(6, true);
+    this.deckDisplay.setValue(this.deck.getNumCardsRemaining());
 
     this.toast = this.scene.toast;
 
