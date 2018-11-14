@@ -242,8 +242,8 @@ export default class EnemyManager {
         delay
       );
       this.gameBoard.removeAt(boardPos.x, boardPos.y);
-      if (!isNextOpen) promise.then(() => this.removeEnemy(enemy));
-      else if (!enemy.isBlocked()) this.gameBoard.putAt(nextBoardPos.x, nextBoardPos.y, enemy);
+      if (isNextOpen) this.gameBoard.putAt(nextBoardPos.x, nextBoardPos.y, enemy);
+      else promise.then(() => this.removeEnemy(enemy));
       delay += 50;
       return promise;
     });
