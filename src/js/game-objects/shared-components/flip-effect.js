@@ -63,7 +63,7 @@ export default class FlipEffect {
     this.flipTween = this.scene.tweens.add({
       targets: this,
       flipProgress: -1,
-      duration: 3000,
+      duration: 300,
       ease: "Quad.easeOut",
       onStart: this.onFlipStart,
       onStartScope: this,
@@ -80,7 +80,7 @@ export default class FlipEffect {
     this.flipTween = this.scene.tweens.add({
       targets: this,
       flipProgress: 1,
-      duration: 3000,
+      duration: 300,
       ease: "Quad.easeOut",
       onStart: this.onFlipStart,
       onStartScope: this,
