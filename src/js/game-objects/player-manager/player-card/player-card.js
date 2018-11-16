@@ -249,6 +249,13 @@ export default class PlayerCard {
 
     this.state = CARD_STATE.RETURNING;
 
+    // It's possible for the flip effect and the below tween to fight with one another and result in
+    // the card ending in the wrong final scale value. To fix that, force the flip to be done.
+    if (this.reclaimFlip && this.reclaimFlip.isFlipping()) {
+      this.reclaimFlip.stopFlip();
+      this.reclaimFlip.setToFront();
+    }
+
     this.tweenManager.stopAll();
     this.tweenManager.add("dragEndScale", {
       targets: this.cardFront,

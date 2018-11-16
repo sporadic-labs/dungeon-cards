@@ -40,12 +40,30 @@ export default class FlipEffect {
     return this;
   }
 
-  flipToBack() {
+  /**
+   * Check if a flip is running.
+   * @returns {Boolean}
+   * @memberof FlipEffect
+   */
+  isFlipping() {
+    return this.flipTween && this.flipTween.isPlaying();
+  }
+
+  /**
+   * Immediately stop any tweening. If it's running, it will freezing mid-flip and won't emit the
+   * "complete" event.
+   * @memberof FlipEffect
+   */
+  stopFlip() {
     if (this.flipTween) this.flipTween.stop();
+  }
+
+  flipToBack() {
+    this.stopFlip();
     this.flipTween = this.scene.tweens.add({
       targets: this,
       flipProgress: -1,
-      duration: 300,
+      duration: 3000,
       ease: "Quad.easeOut",
       onStart: this.onFlipStart,
       onStartScope: this,
@@ -58,11 +76,11 @@ export default class FlipEffect {
   }
 
   flipToFront() {
-    if (this.flipTween) this.flipTween.stop();
+    this.stopFlip();
     this.flipTween = this.scene.tweens.add({
       targets: this,
       flipProgress: 1,
-      duration: 300,
+      duration: 3000,
       ease: "Quad.easeOut",
       onStart: this.onFlipStart,
       onStartScope: this,
@@ -104,6 +122,6 @@ export default class FlipEffect {
     this.scene = undefined;
     this.front = undefined;
     this.back = undefined;
-    if (this.flipTween) this.flipTween.stop();
+    this.stopFlip();
   }
 }
