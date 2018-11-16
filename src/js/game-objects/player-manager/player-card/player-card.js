@@ -326,6 +326,12 @@ export default class PlayerCard {
   }
 
   postUpdate() {
+    // Ensure that the card's hitbox factors in the focus offset, which fixes two things:
+    //  - hover at bottom of card no longer results in infinitely cycling between focused/unfocused.
+    //  - you now cannot pick up the card below the focused card, which left the focused card
+    //    focused while you selected & dragged another card around.
+    this.cardFront.input.hitArea.setSize(this.card.width, this.card.height + -this.focusOffset);
+
     let focusOffsetX = 0;
     let focusOffsetY = 0;
     if (this.focusOffset !== 0) {
