@@ -26,45 +26,45 @@ export default class ModalDialog {
 
     this.modalBackground = scene.add
       .graphics({
-        x: x - this.modalWidth / 2,
-        y: y - this.modalHeight / 2
+        x: 0,
+        y:0 
       })
       .fillStyle(0xffffff, 1.0)
       .fillRoundedRect(0, 0, this.modalWidth, this.modalHeight, cornerRadius);
 
     this.modalShadow = scene.add
       .graphics({
-        x: x - this.modalWidth / 2 + shadowOffset,
-        y: y - this.modalHeight / 2 + shadowOffset
+        x:shadowOffset,
+        y:shadowOffset
       })
       .setAlpha(0.4)
       .fillStyle(0xffffff, 1.0)
       .fillRoundedRect(0, 0, this.modalWidth, this.modalHeight, cornerRadius);
 
-    this.contentText = scene.add.text(x, y, text, style).setOrigin(0.5, 0.5);
+    this.contentText = scene.add
+      .text(this.modalWidth / 2, this.modalHeight / 2, text, style)
+      .setOrigin(0.5, 0.5);
+
+    this.actionButton = new Button(scene, this.modalWidth / 2, this.modalHeight - 20, {
+      framePrefix: "ui/end-turn-",
+      onDown: () => emitter.emit(EVENT_NAMES.PLAYER_TURN_ATTEMPT_COMPLETE)
+    });
 
     this.closeButton = new Button(scene, this.modalWidth - 10, 10, {
       framePrefix: "ui/end-turn-",
-      origin,
       onDown: () => emitter.emit(EVENT_NAMES.PLAYER_TURN_ATTEMPT_COMPLETE)
     });
 
-    this.actionButton = new Button(scene, x, y, {
-      framePrefix: "ui/end-turn-",
-      origin,
-      onDown: () => emitter.emit(EVENT_NAMES.PLAYER_TURN_ATTEMPT_COMPLETE)
-    });
-
-    this.dialog = scene.add
-      .container(x, y, [
-        this.modalShadow,
-        this.modalBackground,
-        this.contentText,
-        this.actionButton,
-        this.closeButton
-      ])
-      .setSize(this.card.width, this.card.height)
-      .setInteractive();
+    this.dialog = scene.add.container(        x - this.modalWidth / 2,
+      y - this.modalHeight / 2, [
+      this.modalShadow,
+      this.modalBackground
+      // this.contentText,
+      // this.actionButton,
+      // this.closeButton
+    ]);
+    //   .setSize(this.modalWidth, this.modalHeight)
+    //   .setInteractive();
   }
 
   setContent(value) {

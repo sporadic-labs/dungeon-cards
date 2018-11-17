@@ -1,7 +1,10 @@
 import { Scene } from "phaser";
+
 import { gameStore, GAME_STATES } from "../store/index";
 import MobXProxy from "../helpers/mobx-proxy";
 import { EventProxy } from "../game-objects/events/index";
+
+import ModalDialog from "../game-objects/hud/modal-dialog";
 
 export default class InstructionsScene extends Scene {
   create() {
@@ -17,6 +20,8 @@ export default class InstructionsScene extends Scene {
       if (state === GAME_STATES.INSTRUCTIONS) this.openInstructions();
       else this.closeInstructions();
     });
+
+    this.dialog = new ModalDialog(this, 0, 0, "this is a test!");
 
     this.proxy = new EventProxy();
     this.proxy.on(this.events, "shutdown", this.shutdown, this);
