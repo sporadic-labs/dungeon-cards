@@ -12,6 +12,8 @@ import { gameStore } from "../store";
 import HudToast from "../game-objects/hud/hud-toast";
 import { autorun } from "mobx";
 import Button from "../game-objects/hud/button";
+import { SCENE_NAME } from "./index";
+import { GAME_STATES, preferencesStore } from "../store/index";
 
 /**
  * Util class to control panning between menu area and the game area.
@@ -112,6 +114,10 @@ export default class PlayScene extends Scene {
     gameStore.setGameStarted(true);
 
     run(this.playerManager, this.enemyManager, this.actionRunner);
+
+    if (preferencesStore.showInstructionsOnPlay) {
+      gameStore.setGameState(GAME_STATES.INSTRUCTIONS);
+    }
   }
 
   initGame() {
