@@ -1,11 +1,12 @@
 import { emitter, EVENT_NAMES } from "../events";
-import Button from "./button";
+import Button from "./button-sprite";
 
 import { getFontString } from "../../font";
 
 const modalWidth = 600;
 const modalHeight = 300;
 const modalPadding = 25;
+const lineHeight = 24;
 const shadowOffset = 5;
 const cornerRadius = 20;
 
@@ -48,21 +49,21 @@ export default class ModalDialog {
       .fillRoundedRect(0, 0, this.modalWidth, this.modalHeight, cornerRadius);
 
     this.titleText = scene.add
-      .text(this.modalWidth / 2, modalPadding, titleText, style)
+      .text(this.modalWidth / 2, lineHeight + modalPadding, titleText, style)
       .setOrigin(0.5, 0.5);
 
     this.contentText = scene.add
       .text(this.modalWidth / 2, this.modalHeight / 2, instructionsText, style)
       .setOrigin(0.5, 0.5);
 
-    this.actionButton = new Button(scene, this.modalWidth / 2, this.modalHeight - 20, {
+    this.actionButton = new Button(scene, this.modalWidth / 2, this.modalHeight - modalPadding, {
       framePrefix: "ui/end-turn-",
-      onDown: () => emitter.emit(EVENT_NAMES.PLAYER_TURN_ATTEMPT_COMPLETE)
+      onDown: () => emitter.emit(EVENT_NAMES.INSTRUCTIONS_NEXT)
     });
 
-    this.closeButton = new Button(scene, this.modalWidth - 10, 10, {
+    this.closeButton = new Button(scene, this.modalWidth - modalPadding, modalPadding, {
       framePrefix: "ui/end-turn-",
-      onDown: () => emitter.emit(EVENT_NAMES.PLAYER_TURN_ATTEMPT_COMPLETE)
+      onDown: () => emitter.emit(EVENT_NAMES.INSTRUCTIONS_CLOSE)
     });
 
     this.dialog = scene.add
@@ -70,9 +71,9 @@ export default class ModalDialog {
         this.modalShadow,
         this.modalBackground,
         this.contentText,
-        this.titleText
-        // this.actionButton,
-        // this.closeButton
+        this.titleText,
+        this.actionButton,
+        this.closeButton
       ])
       .setSize(this.modalWidth, this.modalHeight)
       .setInteractive();
