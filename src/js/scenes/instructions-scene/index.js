@@ -3,6 +3,7 @@ import { gameStore, GAME_STATES } from "../../store/index";
 import MobXProxy from "../../helpers/mobx-proxy";
 import { EventProxy } from "../../game-objects/events/index";
 import ModalDialog from "../../game-objects/hud/modal-dialog";
+import instructions from "./instructions";
 
 export default class InstructionsScene extends Scene {
   create() {
@@ -23,8 +24,8 @@ export default class InstructionsScene extends Scene {
       this,
       width / 2,
       height / 2,
-      "Test Instructions!",
-      "Here are some test instructions to make sure this component is working correctly."
+      instructions[0].title,
+      instructions[0].text
     );
 
     this.proxy = new EventProxy();
