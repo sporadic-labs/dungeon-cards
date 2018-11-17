@@ -8,6 +8,9 @@ class PreferencesStore {
   @observable
   noAudio = false;
 
+  @observable
+  showInstructionsOnPlay = true;
+
   @action
   setSkipMenu(skipMenu) {
     this.skipMenu = skipMenu;
@@ -16,6 +19,11 @@ class PreferencesStore {
   @action
   setAudio(noAudio) {
     this.noAudio = noAudio;
+  }
+
+  @action
+  setShowInstructionsOnPlay(showInstructionsOnPlay) {
+    this.showInstructionsOnPlay = showInstructionsOnPlay;
   }
 }
 
