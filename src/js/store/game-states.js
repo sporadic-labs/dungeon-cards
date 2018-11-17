@@ -1,0 +1,6 @@
+const GAME_STATES = {
+  PLAY: "PLAY",
+  INSTRUCTIONS: "INSTRUCTIONS"
+};
+
+export default GAME_STATES;
