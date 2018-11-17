@@ -21,7 +21,13 @@ export default class InstructionsScene extends Scene {
       else this.closeInstructions();
     });
 
-    this.dialog = new ModalDialog(this, 0, 0, "this is a test!");
+    this.dialog = new ModalDialog(
+      this,
+      width / 2,
+      height / 2,
+      "Test Instructions!",
+      "Here are some test instructions to make sure this component is working correctly."
+    );
 
     this.proxy = new EventProxy();
     this.proxy.on(this.events, "shutdown", this.shutdown, this);
