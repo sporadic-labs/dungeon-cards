@@ -1,7 +1,7 @@
 import Loading from "./loading-scene";
 import Play from "./play-scene";
 import Background from "./background-scene";
-import Instructions from "./instructions-scene";
+import Instructions from "./instructions-scene/index";
 
 const SCENE_NAME = {
   LOADING: "LOADING",
