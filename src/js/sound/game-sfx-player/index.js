@@ -37,6 +37,7 @@ export default class GameSfxPlayer extends WebAudioSoundManager {
    * @param {*} playArguments
    */
   play(key, playArguments) {
+    console.log("Attempting to play a sound!");
     if (preferencesStore.noAudio) return;
     if (!this.loadedSounds[key]) {
       this.add(key);
@@ -44,9 +45,13 @@ export default class GameSfxPlayer extends WebAudioSoundManager {
     const sound = this.loadedSounds[key];
     let didPlay = false;
     if (sound.currentlyPlaying < sound.maxSimultaneous) {
+      console.log("Playing this sound is allowed.");
+      console.log(sound.currentlyPlaying);
+      console.log(sound.maxSimultaneous);
       sound.currentlyPlaying++;
       sound.phaserSound.once("ended", _ => sound.currentlyPlaying--);
-      didPlay = sound.phaserSound.play(playArguments);
+      // didPlay = sound.phaserSound.play(playArguments);
+      didPlay = super.play(key, playArguments);
     }
     return didPlay;
   }
