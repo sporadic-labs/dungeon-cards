@@ -30,6 +30,9 @@ class GameStore {
   @observable
   isPaused = false;
 
+  @observable
+  gameState = null;
+
   @computed
   get gameStarted() {
     return this.hasGameStarted;
@@ -43,6 +46,11 @@ class GameStore {
   @computed
   get activeCard() {
     return this.activePlayerCard;
+  }
+
+  @action
+  setGameState(gameState) {
+    this.gameState = gameState;
   }
 
   @action
