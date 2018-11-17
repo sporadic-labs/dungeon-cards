@@ -50,8 +50,8 @@ export default class GameSfxPlayer extends WebAudioSoundManager {
       console.log(sound.maxSimultaneous);
       sound.currentlyPlaying++;
       sound.phaserSound.once("ended", _ => sound.currentlyPlaying--);
-      // didPlay = sound.phaserSound.play(playArguments);
-      didPlay = super.play(key, playArguments);
+      didPlay = sound.phaserSound.play(playArguments);
+      // didPlay = super.play(key, playArguments);
     }
     return didPlay;
   }
