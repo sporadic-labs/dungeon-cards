@@ -36,14 +36,15 @@ export default class LoadingScene extends Scene {
       // Bg Music
       this.load.audio("music", "sounds/music/Galway.mp3");
       // Sound FX
-      this.load.audio("button-click", "sounds/ui/click1.wav");
-      this.load.audio("sword-clash", "sounds/fx/sword-clash.wav");
+      this.load.audio("button-click", "sounds/ui/click-1.mp3");
+      this.load.audio("sword-clash", "sounds/fx/sword-clash.mp3");
+      this.load.audio("sword-swish", "sounds/fx/sword-swish.mp3");
       this.load.audio("card-slide-2", "sounds/fx/card-slide-2-processed.mp3");
       this.load.audio("card-slide-7", "sounds/fx/card-slide-7-processed.mp3");
+      this.load.audio("card-flip-1", "sounds/fx/card-flip-1.mp3");
+      this.load.audio("card-flip-2", "sounds/fx/card-flip-2.mp3");
       this.load.audio("card-place-3", "sounds/fx/card-place-3-processed.mp3");
       this.load.audio("incorrect", "sounds/fx/incorrect.mp3");
-      this.load.audio("sword-swish", "sounds/fx/sword-swish.flac");
-      this.load.audio("card-flip-1", "sounds/fx/card-flip-1.wav");
     }
   }
 
