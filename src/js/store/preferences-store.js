@@ -11,6 +11,8 @@ class PreferencesStore {
   @observable
   hasSeenInstructions = false;
 
+  @observable
+  lastPlayed = null;
 
   @action
   setSkipMenu(skipMenu) {
@@ -32,8 +34,12 @@ class PreferencesStore {
     this.skipMenu = false;
     this.noAudio = false;
     this.hasSeenInstructions = false;
+    this.lastPlayed = null;
   }
 
+  @action
+  setLastPlayed(lastPlayed) {
+    this.lastPlayed = lastPlayed;
   }
 }
 

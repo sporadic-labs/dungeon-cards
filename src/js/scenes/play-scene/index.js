@@ -132,6 +132,8 @@ export default class PlayScene extends Scene {
         gameStore.setGameState(GAME_STATES.INSTRUCTIONS);
       });
     }
+
+    preferencesStore.setLastPlayed(Date.now());
   }
 
   shutdown() {
