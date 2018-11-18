@@ -10,7 +10,6 @@ export default class InstructionsArrow {
 
     this.sprite = scene.add.sprite(x, y, "assets", "ui/look-here-down");
     this.sprite.setOrigin(0.5, 0.5);
-    // this.sprite.setScale(0.8, 0.8);
     this.sprite.setRotation(angle);
 
     this.timeline = this.scene.tweens.timeline({
