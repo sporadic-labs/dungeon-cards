@@ -137,6 +137,6 @@ export default class Button extends GameObjects.Sprite {
 
   destroy() {
     this.proxy.removeAll();
-    this.destroy();
+    super.destroy();
   }
 }

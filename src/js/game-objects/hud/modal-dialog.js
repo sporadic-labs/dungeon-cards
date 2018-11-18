@@ -12,7 +12,7 @@ const cornerRadius = 20;
 
 const style = {
   font: getFontString("Chivo", { size: "24px", weight: 600 }),
-  fill: "#E5E0D6",
+  fill: "#3c3e42",
   wordWrap: { width: modalWidth - modalPadding * 2, useAdvancedWrap: true }
 };
 
@@ -39,7 +39,7 @@ export default class ModalDialog {
         x: 0,
         y: 0
       })
-      .fillStyle(0xffffff, 1.0)
+      .fillStyle(0xe5e0d6, 1.0)
       .fillRoundedRect(0, 0, this.modalWidth, this.modalHeight, cornerRadius);
 
     this.modalShadow = scene.add
@@ -48,6 +48,7 @@ export default class ModalDialog {
         y: shadowOffset
       })
       .fillStyle(0xb5b5b5, 1.0)
+      // .fillStyle(0x94979b, 1)
       .fillRoundedRect(0, 0, this.modalWidth, this.modalHeight, cornerRadius);
 
     this.titleText = scene.add
@@ -123,6 +124,6 @@ export default class ModalDialog {
   }
 
   destroy() {
-    this.cardFront.destroy();
+    this.dialog.destroy();
   }
 }
