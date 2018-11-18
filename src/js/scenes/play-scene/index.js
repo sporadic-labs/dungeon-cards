@@ -13,6 +13,7 @@ import HudToast from "../../game-objects/hud/hud-toast";
 import Button from "../../game-objects/hud/button";
 import { GAME_STATES, preferencesStore } from "../../store/index";
 import CameraPanner from "./panner";
+import MobXProxy from "../../helpers/mobx-proxy";
 
 export default class PlayScene extends Scene {
   create() {
@@ -83,6 +84,13 @@ export default class PlayScene extends Scene {
       }
     });
 
+    this.mobProxy = new MobXProxy();
+    this.mobProxy.observe(gameStore, "gameState", change => {
+      const state = change.newValue;
+      if (state === GAME_STATES.INSTRUCTIONS) this.scene.pause();
+      else this.scene.resume();
+    });
+
     this.proxy = new EventProxy();
     this.proxy.on(this.events, "shutdown", this.shutdown, this);
 
@@ -119,7 +127,9 @@ export default class PlayScene extends Scene {
     run(this.playerManager, this.enemyManager, this.actionRunner);
 
     if (preferencesStore.showInstructionsOnPlay) {
-      gameStore.setGameState(GAME_STATES.INSTRUCTIONS);
+      this.proxy.once(emitter, EVENT_NAMES.ENEMY_TURN_END, () =>
+        gameStore.setGameState(GAME_STATES.INSTRUCTIONS)
+      );
     }
   }
 
@@ -127,5 +137,6 @@ export default class PlayScene extends Scene {
     this.input.keyboard.removeAllListeners();
     this.storeUnsubscribe();
     this.proxy.removeAll();
+    this.mobProxy.destroy();
   }
 }
