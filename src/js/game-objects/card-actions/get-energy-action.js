@@ -7,6 +7,7 @@ export default class GetEnergyAction extends Action {
   constructor(actionRunner, scene, card, playerManager, gameBoard, enemyManager) {
     super();
 
+    this.actionRunner = actionRunner;
     this.scene = scene;
     this.sound = this.scene.sound; // TODO: use this.scene.game.globals.sfxPlayer
     this.card = card;
@@ -24,6 +25,7 @@ export default class GetEnergyAction extends Action {
       emitter.emit(EVENT_NAMES.ACTION_COMPLETE, this.card);
     } else {
       this.sound.play("incorrect");
+      this.actionRunner.showToast("You can't play that card there.");
       emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
     }
   }

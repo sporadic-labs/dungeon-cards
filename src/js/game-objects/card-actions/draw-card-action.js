@@ -33,6 +33,8 @@ export default class DrawCardAction extends Action {
         emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
       }
     } else {
+      this.sound.play("incorrect");
+      this.actionRunner.showToast("You can't play that card there.");
       emitter.emit(EVENT_NAMES.ACTION_UNSUCCESSFUL);
     }
   }
