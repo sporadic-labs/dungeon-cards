@@ -97,13 +97,22 @@ export default class Button {
   }
 
   disableInteractivity() {
-    this.isHovered = false;
-    this.isPressed = false;
-    this.updateFrame();
+    this.reset();
     this.sprite.off("pointerdown", this.onPointerDown, this);
     this.sprite.off("pointerup", this.onPointerUp, this);
     this.sprite.off("pointerover", this.onPointerOver, this);
     this.sprite.off("pointerout", this.onPointerOut, this);
+  }
+
+  /**
+   * Reset the internal state of the button to not hovered and not pressed. This is useful in edge
+   * cases, e.g. when the game is paused immediately when a button is pressed.
+   * @memberof Button
+   */
+  reset() {
+    this.isHovered = false;
+    this.isPressed = false;
+    this.updateFrame();
   }
 
   updateFrame() {

@@ -29,9 +29,10 @@ export default class PlayScene extends Scene {
 
     this.gameBoard = new GameBoard(this, 5, 4);
 
-    this.instructionsButton = new Button(this, 100, 40, {
+    const helpButton = new Button(this, 100, 40, {
       framePrefix: "ui/help-",
       onDown: () => {
+        helpButton.reset(); // Pausing the game === no pointer up event, so reset press
         gameStore.setGameState(GAME_STATES.INSTRUCTIONS);
       }
     });
@@ -78,7 +79,7 @@ export default class PlayScene extends Scene {
       origin: { x: 0, y: 0 },
       framePrefix: "ui/pause-",
       onDown: () => {
-        pauseButton.setIsPressed(false); // Pausing the game === no pointer up event, so reset press
+        pauseButton.reset(); // Pausing the game === no pointer up event, so reset press
         gameStore.setPaused(true);
         gameStore.setMenuState(MENU_STATES.PAUSE);
       }
