@@ -37,49 +37,6 @@ export default class PlayScene extends Scene {
 
     this.toast = new HudToast(this);
 
-    this.proxy = new EventProxy();
-    this.proxy.on(this.events, "shutdown", this.shutdown, this);
-
-    this.initGame();
-
-    this.proxy.on(emitter, EVENT_NAMES.GAME_OVER, win => {
-      gameStore.setGameStarted(false);
-      gameStore.setPaused(true);
-      gameStore.setMenuState(win ? MENU_STATES.GAME_OVER_WON : MENU_STATES.GAME_OVER_LOST);
-      this.panner.tweenToMenuArea();
-    });
-
-    this.proxy.on(emitter, EVENT_NAMES.GAME_START, () => {
-      gameStore.setPaused(false);
-      this.scene.restart();
-    });
-
-    const camera = this.cameras.main;
-    this.storeUnsubscribe = autorun(() => {
-      if (gameStore.isGamePaused) {
-        camera.once("camerapancomplete", () => this.scene.pause());
-        this.panner.tweenToMenuArea();
-      } else {
-        this.scene.resume();
-        this.panner.tweenToGameArea();
-      }
-    });
-
-    this.input.keyboard.on("keydown_E", event => {
-      gameStore.setPaused(true);
-      gameStore.setMenuState(MENU_STATES.DEBUG);
-    });
-
-    gameStore.setGameStarted(true);
-
-    run(this.playerManager, this.enemyManager, this.actionRunner);
-
-    if (preferencesStore.showInstructionsOnPlay) {
-      gameStore.setGameState(GAME_STATES.INSTRUCTIONS);
-    }
-  }
-
-  initGame() {
     const enemyDeckComposition = [
       { id: ENEMY_CARD_TYPES.WEAK_ENEMY, quantity: 17 },
       { id: ENEMY_CARD_TYPES.STRONG_ENEMY, quantity: 3 },
@@ -125,6 +82,45 @@ export default class PlayScene extends Scene {
         gameStore.setMenuState(MENU_STATES.PAUSE);
       }
     });
+
+    this.proxy = new EventProxy();
+    this.proxy.on(this.events, "shutdown", this.shutdown, this);
+
+    this.proxy.on(emitter, EVENT_NAMES.GAME_OVER, win => {
+      gameStore.setGameStarted(false);
+      gameStore.setPaused(true);
+      gameStore.setMenuState(win ? MENU_STATES.GAME_OVER_WON : MENU_STATES.GAME_OVER_LOST);
+      this.panner.tweenToMenuArea();
+    });
+
+    this.proxy.on(emitter, EVENT_NAMES.GAME_START, () => {
+      gameStore.setPaused(false);
+      this.scene.restart();
+    });
+
+    const camera = this.cameras.main;
+    this.storeUnsubscribe = autorun(() => {
+      if (gameStore.isGamePaused) {
+        camera.once("camerapancomplete", () => this.scene.pause());
+        this.panner.tweenToMenuArea();
+      } else {
+        this.scene.resume();
+        this.panner.tweenToGameArea();
+      }
+    });
+
+    this.input.keyboard.on("keydown_E", event => {
+      gameStore.setPaused(true);
+      gameStore.setMenuState(MENU_STATES.DEBUG);
+    });
+
+    gameStore.setGameStarted(true);
+
+    run(this.playerManager, this.enemyManager, this.actionRunner);
+
+    if (preferencesStore.showInstructionsOnPlay) {
+      gameStore.setGameState(GAME_STATES.INSTRUCTIONS);
+    }
   }
 
   shutdown() {
