@@ -76,9 +76,11 @@ export default class PlayScene extends Scene {
 
     this.gameBoard = new GameBoard(this, 5, 4);
 
-    this.instructionsButton = new Button(this, 100, 50, {
+    this.instructionsButton = new Button(this, 100, 40, {
       framePrefix: "ui/help-",
-      onDown: () => emitter.emit(EVENT_NAMES.INSTRUCTIONS_FOCUS)
+      onDown: () => {
+        gameStore.setGameState(GAME_STATES.INSTRUCTIONS);
+      }
     });
 
     this.toast = new HudToast(this);

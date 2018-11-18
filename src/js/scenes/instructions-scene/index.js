@@ -17,13 +17,8 @@ export default class InstructionsScene extends Scene {
     this.mobProxy = new MobXProxy();
     this.mobProxy.observe(gameStore, "gameState", change => {
       const state = change.newValue;
-      if (state === GAME_STATES.INSTRUCTIONS) {
-        this.openInstructions();
-
-        // JUST FOR TESTING!
-        console.log("Opening! And simulating clicking!");
-        setInterval(() => this.onModalClick(), 1500);
-      } else this.closeInstructions();
+      if (state === GAME_STATES.INSTRUCTIONS) this.openInstructions();
+      else this.closeInstructions();
     });
 
     this.instructionIndex = 0;
@@ -47,7 +42,20 @@ export default class InstructionsScene extends Scene {
   showInstructionStep(i) {
     const { width, height } = this.game.config;
     const { title, text, modalPosition, arrowPosition, arrowAngle } = instructions[i];
-    this.dialog = new ModalDialog(this, modalPosition.x, modalPosition.y, title, text);
+    this.dialog = new ModalDialog(
+      this,
+      modalPosition.x,
+      modalPosition.y,
+      title,
+      text,
+      () => {
+        this.onModalClick();
+      },
+      () => {
+        this.closeInstructions();
+        gameStore.setGameState(GAME_STATES.PLAY);
+      }
+    );
     this.arrow = new Arrow(this, arrowPosition.x, arrowPosition.y, arrowAngle);
   }
 
