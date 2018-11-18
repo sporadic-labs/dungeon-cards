@@ -9,7 +9,8 @@ class PreferencesStore {
   noAudio = false;
 
   @observable
-  showInstructionsOnPlay = true;
+  hasSeenInstructions = false;
+
 
   @action
   setSkipMenu(skipMenu) {
@@ -22,8 +23,17 @@ class PreferencesStore {
   }
 
   @action
-  setShowInstructionsOnPlay(showInstructionsOnPlay) {
-    this.showInstructionsOnPlay = showInstructionsOnPlay;
+  setHasSeenInstructions(hasSeenInstructions) {
+    this.hasSeenInstructions = hasSeenInstructions;
+  }
+
+  @action
+  reset() {
+    this.skipMenu = false;
+    this.noAudio = false;
+    this.hasSeenInstructions = false;
+  }
+
   }
 }
 

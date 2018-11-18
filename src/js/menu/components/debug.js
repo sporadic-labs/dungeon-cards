@@ -15,6 +15,11 @@ export default class DebugMenu extends Component {
     preferencesStore.setSkipMenu(!preferencesStore.skipMenu);
   };
 
+  onResetPreferences = () => {
+    const { preferencesStore } = this.props;
+    preferencesStore.reset();
+  };
+
   onSlide = e => this.props.musicStore.setVolume(e.target.value);
 
   render() {
@@ -41,6 +46,10 @@ export default class DebugMenu extends Component {
             />
           </label>
         </form>
+
+        <ButtonWithSfx sfxPlayer={sfxPlayer} onClick={this.onResetPreferences}>
+          Reset Preferences
+        </ButtonWithSfx>
 
         <ButtonWithSfx sfxPlayer={sfxPlayer} onClick={onResume}>
           Resume Game

@@ -1,5 +1,5 @@
 import { Scene } from "phaser";
-import { gameStore, GAME_STATES } from "../../store/index";
+import { gameStore, GAME_STATES, preferencesStore } from "../../store/index";
 import MobXProxy from "../../helpers/mobx-proxy";
 import { EventProxy } from "../../game-objects/events/index";
 import ModalDialog from "../../game-objects/hud/modal-dialog";
@@ -69,6 +69,7 @@ export default class InstructionsScene extends Scene {
     });
     this.instructionIndex = 0;
     this.showInstructionStep(this.instructionIndex);
+    preferencesStore.setHasSeenInstructions(true);
   }
 
   closeInstructions() {
