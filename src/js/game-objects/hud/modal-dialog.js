@@ -102,6 +102,6 @@ export default class ModalDialog {
   }
 
   destroy() {
-    this.cardFront.destroy();
+    this.dialog.destroy();
   }
 }
