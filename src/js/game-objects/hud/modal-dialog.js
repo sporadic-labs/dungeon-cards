@@ -16,6 +16,11 @@ const style = {
   wordWrap: { width: modalWidth - modalPadding * 2, useAdvancedWrap: true }
 };
 
+const titleStyle = {
+  ...style,
+  font: getFontString("Chivo", { size: "32px", weight: 900 })
+};
+
 export default class ModalDialog {
   /**
    * @param {Phaser.Scene} scene
@@ -52,7 +57,7 @@ export default class ModalDialog {
       .fillRoundedRect(0, 0, this.modalWidth, this.modalHeight, cornerRadius);
 
     this.titleText = scene.add
-      .text(this.modalWidth / 2, lineHeight + modalPadding, titleText, style)
+      .text(this.modalWidth / 2, lineHeight + modalPadding, titleText, titleStyle)
       .setOrigin(0.5, 0.5);
 
     this.contentText = scene.add
