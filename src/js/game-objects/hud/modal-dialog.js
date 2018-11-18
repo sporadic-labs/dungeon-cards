@@ -4,7 +4,7 @@ import Button from "./button-sprite";
 import { getFontString } from "../../font";
 
 const modalWidth = 600;
-const modalHeight = 300;
+const modalHeight = 380;
 const modalPadding = 25;
 const lineHeight = 24;
 const shadowOffset = 5;
@@ -21,15 +21,18 @@ export default class ModalDialog {
    * @param {Phaser.Scene} scene
    * @param {*} type
    */
-  constructor(scene, x, y, titleText, instructionsText) {
+  constructor(scene, x, y, titleText, instructionsText, onAction = null, onClose = null) {
     this.scene = scene;
 
     this.x = x;
     this.y = y;
 
-    // Store these values on
+    // Store these values just in case.
     this.modalWidth = modalWidth;
     this.modalHeight = modalHeight;
+
+    this.actionCallback = onAction;
+    this.closeCallback = onClose;
 
     this.modalBackground = scene.add
       .graphics({
@@ -44,8 +47,7 @@ export default class ModalDialog {
         x: shadowOffset,
         y: shadowOffset
       })
-      .setAlpha(0.4)
-      .fillStyle(0xffffff, 1.0)
+      .fillStyle(0xb5b5b5, 1.0)
       .fillRoundedRect(0, 0, this.modalWidth, this.modalHeight, cornerRadius);
 
     this.titleText = scene.add
@@ -56,14 +58,21 @@ export default class ModalDialog {
       .text(this.modalWidth / 2, this.modalHeight / 2, instructionsText, style)
       .setOrigin(0.5, 0.5);
 
-    this.actionButton = new Button(scene, this.modalWidth / 2, this.modalHeight - modalPadding, {
-      framePrefix: "ui/end-turn-",
-      onDown: () => emitter.emit(EVENT_NAMES.INSTRUCTIONS_NEXT)
-    });
+    this.actionButton = new Button(
+      scene,
+      this.modalWidth / 2,
+      this.modalHeight - 2 * modalPadding,
+      {
+        framePrefix: "ui/next-instruction-",
+        // onDown: () => emitter.emit(EVENT_NAMES.INSTRUCTIONS_NEXT)
+        onDown: () => (this.actionCallback ? this.actionCallback() : null)
+      }
+    );
 
-    this.closeButton = new Button(scene, this.modalWidth - modalPadding, modalPadding, {
-      framePrefix: "ui/end-turn-",
-      onDown: () => emitter.emit(EVENT_NAMES.INSTRUCTIONS_CLOSE)
+    this.closeButton = new Button(scene, this.modalWidth - 1.4 * modalPadding, 1.4 * modalPadding, {
+      framePrefix: "ui/close-button-",
+      // onDown: () => emitter.emit(EVENT_NAMES.INSTRUCTIONS_CLOSE)
+      onDown: () => (this.closeCallback ? this.closeCallback() : null)
     });
 
     this.dialog = scene.add
@@ -99,6 +108,18 @@ export default class ModalDialog {
     this.x = x;
     this.y = y;
     this.dialog.setPosition(x - this.modalWidth / 2, y - this.modalHeight / 2);
+  }
+
+  setActionFrame(frame) {
+    this.actionButton.setFrame("assets", frame);
+  }
+
+  onAction(cb) {
+    this.actionButton.onDown = cb;
+  }
+
+  onClose(cb) {
+    this.closeButton.onDown = cb;
   }
 
   destroy() {
