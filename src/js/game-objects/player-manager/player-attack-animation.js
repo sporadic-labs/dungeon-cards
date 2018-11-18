@@ -14,8 +14,7 @@ export default class PlayerAttackAnimation {
     console.log(didPlay);
 
     this.sprite = scene.add.sprite(0, 0, "assets", "attacks/player-slash");
-    this.sprite.flipY = true;
-    this.sprite.setRotation((-Math.PI / 180) * 60);
+    this.sprite.setRotation((-Math.PI / 180) * 20);
     this.sprite.setVisible(false);
 
     this.setPosition(x, y);
