@@ -46,8 +46,8 @@ export default class InstructionsScene extends Scene {
 
   showInstructionStep(i) {
     const { width, height } = this.game.config;
-    const { title, text, arrowPosition, arrowAngle } = instructions[i];
-    this.dialog = new ModalDialog(this, width / 2, height / 2, title, text);
+    const { title, text, modalPosition, arrowPosition, arrowAngle } = instructions[i];
+    this.dialog = new ModalDialog(this, modalPosition.x, modalPosition.y, title, text);
     this.arrow = new Arrow(this, arrowPosition.x, arrowPosition.y, arrowAngle);
   }
 
