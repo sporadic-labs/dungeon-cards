@@ -17,25 +17,38 @@ export default class InstructionsScene extends Scene {
     this.mobProxy = new MobXProxy();
     this.mobProxy.observe(gameStore, "gameState", change => {
       const state = change.newValue;
-      if (state === GAME_STATES.INSTRUCTIONS) this.openInstructions();
-      else this.closeInstructions();
+      if (state === GAME_STATES.INSTRUCTIONS) {
+        this.openInstructions();
+
+        // JUST FOR TESTING!
+        console.log("Opening! And simulating clicking!");
+        setInterval(() => this.onModalClick(), 1500);
+      } else this.closeInstructions();
     });
 
-    this.dialog = new ModalDialog(
-      this,
-      width / 2,
-      height / 2,
-      instructions[0].title,
-      instructions[0].text
-    );
-
-    instructions.forEach(instruction => {
-      const { arrowPosition, arrowAngle } = instruction;
-      new Arrow(this, arrowPosition.x, arrowPosition.y, arrowAngle);
-    });
+    this.instructionIndex = 0;
 
     this.proxy = new EventProxy();
     this.proxy.on(this.events, "shutdown", this.shutdown, this);
+  }
+
+  onModalClick() {
+    this.instructionIndex += 1;
+    if (this.instructionIndex >= instructions.length) {
+      this.closeInstructions();
+      gameStore.setGameState(GAME_STATES.PLAY);
+    } else {
+      this.arrow.destroy();
+      this.dialog.destroy();
+      this.showInstructionStep(this.instructionIndex);
+    }
+  }
+
+  showInstructionStep(i) {
+    const { width, height } = this.game.config;
+    const { title, text, arrowPosition, arrowAngle } = instructions[i];
+    this.dialog = new ModalDialog(this, width / 2, height / 2, title, text);
+    this.arrow = new Arrow(this, arrowPosition.x, arrowPosition.y, arrowAngle);
   }
 
   openInstructions() {
@@ -46,6 +59,8 @@ export default class InstructionsScene extends Scene {
       ease: "Quad.easeOut",
       alpha: 1
     });
+    this.instructionIndex = 0;
+    this.showInstructionStep(this.instructionIndex);
   }
 
   closeInstructions() {
@@ -56,11 +71,15 @@ export default class InstructionsScene extends Scene {
       ease: "Quad.easeOut",
       alpha: 0
     });
+    if (this.arrow) this.arrow.destroy();
+    if (this.dialog) this.dialog.destroy();
   }
 
   shutdown() {
     if (this.overlayTween) this.overlayTween.stop();
     this.proxy.removeAll();
     this.mobProxy.destroy();
+    if (this.arrow) this.arrow.destroy();
+    if (this.dialog) this.dialog.destroy();
   }
 }
