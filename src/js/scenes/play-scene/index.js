@@ -128,9 +128,10 @@ export default class PlayScene extends Scene {
     run(this.playerManager, this.enemyManager, this.actionRunner);
 
     if (preferencesStore.showInstructionsOnPlay) {
-      this.proxy.once(emitter, EVENT_NAMES.ENEMY_TURN_END, () =>
-        gameStore.setGameState(GAME_STATES.INSTRUCTIONS)
-      );
+      this.proxy.once(emitter, EVENT_NAMES.ENEMY_TURN_END, () => {
+        preferencesStore.setShowInstructionsOnPlay(false);
+        gameStore.setGameState(GAME_STATES.INSTRUCTIONS);
+      });
     }
   }
 
