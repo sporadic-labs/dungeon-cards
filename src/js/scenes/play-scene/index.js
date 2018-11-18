@@ -1,66 +1,18 @@
 import { Scene } from "phaser";
-import Deck from "../game-objects/deck";
-import { GameBoard } from "../game-objects/gameboard/gameboard";
-import EnemyManager, { ENEMY_CARD_TYPES } from "../game-objects/enemy-manager";
-import PlayerManager, { PLAYER_CARD_TYPES } from "../game-objects/player-manager";
-import ActionRunner from "../game-objects/card-actions";
-import { EventProxy, emitter, EVENT_NAMES } from "../game-objects/events";
-import run from "../game-objects/game-runner";
-import Logger from "../helpers/logger";
-import { MENU_STATES } from "../menu/menu-states";
-import { gameStore } from "../store";
-import HudToast from "../game-objects/hud/hud-toast";
 import { autorun } from "mobx";
-import Button from "../game-objects/hud/button";
-import { SCENE_NAME } from "./index";
-import { GAME_STATES, preferencesStore } from "../store/index";
-
-/**
- * Util class to control panning between menu area and the game area.
- * @class CameraPanner
- */
-class CameraPanner {
-  /**
-   * @param {Phaser.Scene} scene
-   * @param {Phaser.Cameras.Scene2D} camera
-   * @memberof CameraPanner
-   */
-  constructor(scene, camera) {
-    this.time = scene.time;
-    this.camera = camera;
-    this.panEvent = null;
-    this.duration = 600;
-    this.menuX = 1200;
-    this.gameX = 400;
-    this.proxy = new EventProxy();
-    this.proxy.on(scene.events, "shutdown", this.destroy, this);
-    this.proxy.on(scene.events, "destory", this.destroy, this);
-  }
-  setToMenuArea() {
-    this.camera.scrollX = this.menuX;
-  }
-  setToGameArea() {
-    this.camera.scrollX = this.gameX;
-  }
-  tweenToMenuArea() {
-    this.stopPan();
-    this.camera.pan(this.menuX, this.camera.midPoint.y, this.duration, "Expo", false);
-  }
-  tweenToGameArea() {
-    // Delay gives DOM menu time to disappear
-    this.panEvent = this.time.delayedCall(200, () =>
-      this.camera.pan(this.gameX, this.camera.midPoint.y, this.duration, "Expo", false)
-    );
-  }
-  stopPan() {
-    this.camera.panEffect.reset();
-    if (this.panEvent) this.panEvent.destroy();
-  }
-  destroy() {
-    this.stopPan();
-    this.proxy.removeAll();
-  }
-}
+import Deck from "../../game-objects/deck";
+import { GameBoard } from "../../game-objects/gameboard/gameboard";
+import EnemyManager, { ENEMY_CARD_TYPES } from "../../game-objects/enemy-manager";
+import PlayerManager, { PLAYER_CARD_TYPES } from "../../game-objects/player-manager";
+import ActionRunner from "../../game-objects/card-actions";
+import { EventProxy, emitter, EVENT_NAMES } from "../../game-objects/events";
+import run from "../../game-objects/game-runner";
+import { MENU_STATES } from "../../menu/menu-states";
+import { gameStore } from "../../store";
+import HudToast from "../../game-objects/hud/hud-toast";
+import Button from "../../game-objects/hud/button";
+import { GAME_STATES, preferencesStore } from "../../store/index";
+import CameraPanner from "./panner";
 
 export default class PlayScene extends Scene {
   create() {

@@ -1,5 +1,5 @@
 import Loading from "./loading-scene";
-import Play from "./play-scene";
+import Play from "./play-scene/index";
 import Background from "./background-scene";
 import Instructions from "./instructions-scene/index";
 
