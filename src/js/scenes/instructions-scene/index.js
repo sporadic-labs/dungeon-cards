@@ -4,12 +4,13 @@ import MobXProxy from "../../helpers/mobx-proxy";
 import { EventProxy } from "../../game-objects/events/index";
 import ModalDialog from "../../game-objects/hud/modal-dialog";
 import instructions from "./instructions";
+import Arrow from "../../game-objects/hud/arrow";
 
 export default class InstructionsScene extends Scene {
   create() {
     const { width, height } = this.game.config;
     this.overlay = this.add.graphics();
-    this.overlay.fillStyle(0x000000, 0.25);
+    this.overlay.fillStyle(0x000000, 0.1);
     this.overlay.fillRect(0, 0, width, height);
     this.overlay.setAlpha(0);
 
@@ -27,6 +28,11 @@ export default class InstructionsScene extends Scene {
       instructions[0].title,
       instructions[0].text
     );
+
+    instructions.forEach(instruction => {
+      const { arrowPosition, arrowAngle } = instruction;
+      new Arrow(this, arrowPosition.x, arrowPosition.y, arrowAngle);
+    });
 
     this.proxy = new EventProxy();
     this.proxy.on(this.events, "shutdown", this.shutdown, this);
