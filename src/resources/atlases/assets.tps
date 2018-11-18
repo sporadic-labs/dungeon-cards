@@ -4,7 +4,9 @@
         <key>fileFormatVersion</key>
         <int>4</int>
         <key>texturePackerVersion</key>
-        <string>4.10.0</string>
+        <string>4.5.0</string>
+        <key>fileName</key>
+        <string>C:/Users/rex/Documents/GitHub/dungeon-cards/src/resources/atlases/assets.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -127,6 +129,22 @@
                 <uint>1</uint>
             </struct>
         </struct>
+        <key>andEngine</key>
+        <struct type="AndEngine">
+            <key>minFilter</key>
+            <enum type="AndEngine::MinFilter">Linear</enum>
+            <key>packageName</key>
+            <string>Texture</string>
+            <key>wrap</key>
+            <struct type="AndEngineWrap">
+                <key>s</key>
+                <enum type="AndEngineWrap::Wrap">Clamp</enum>
+                <key>t</key>
+                <enum type="AndEngineWrap::Wrap">Clamp</enum>
+            </struct>
+            <key>magFilter</key>
+            <enum type="AndEngine::MagFilter">MagLinear</enum>
+        </struct>
         <key>dataFileNames</key>
         <map type="GFileNameMap">
             <key>data</key>
@@ -210,6 +228,8 @@
             </struct>
             <key type="filename">assets/attacks/enemy-attack.png</key>
             <key type="filename">assets/attacks/player-attack.png</key>
+            <key type="filename">assets/ui/close-button-hover.png</key>
+            <key type="filename">assets/ui/close-button-pressed.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -459,6 +479,19 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">assets/ui/close-button-normal.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>13,13,26,25</rect>
+                <key>scale9Paddings</key>
+                <rect>13,13,26,25</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">assets/ui/deck-0-cards.png</key>
             <key type="filename">assets/ui/deck-1-card.png</key>
             <key type="filename">assets/ui/deck-2-cards.png</key>
@@ -472,6 +505,47 @@
                 <rect>23,28,46,56</rect>
                 <key>scale9Paddings</key>
                 <rect>23,28,46,56</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/ui/done-instruction-hover.png</key>
+            <key type="filename">assets/ui/done-instruction-normal.png</key>
+            <key type="filename">assets/ui/done-instruction-pressed.png</key>
+            <key type="filename">assets/ui/next-instruction-hover.png</key>
+            <key type="filename">assets/ui/next-instruction-normal.png</key>
+            <key type="filename">assets/ui/next-instruction-pressed.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>24,12,48,24</rect>
+                <key>scale9Paddings</key>
+                <rect>24,12,48,24</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/ui/drop-target/cards_00.png</key>
+            <key type="filename">assets/ui/drop-target/cards_01.png</key>
+            <key type="filename">assets/ui/drop-target/cards_02.png</key>
+            <key type="filename">assets/ui/drop-target/cards_03.png</key>
+            <key type="filename">assets/ui/drop-target/cards_04.png</key>
+            <key type="filename">assets/ui/drop-target/cards_05.png</key>
+            <key type="filename">assets/ui/drop-target/cards_06.png</key>
+            <key type="filename">assets/ui/drop-target/cards_07.png</key>
+            <key type="filename">assets/ui/drop-target/cards_08.png</key>
+            <key type="filename">assets/ui/drop-target/cards_09.png</key>
+            <key type="filename">assets/ui/drop-target/cards_10.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>28,20,56,39</rect>
+                <key>scale9Paddings</key>
+                <rect>28,20,56,39</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -512,6 +586,61 @@
                 <rect>15,15,29,30</rect>
                 <key>scale9Paddings</key>
                 <rect>15,15,29,30</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/ui/help-hover.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>10,10,21,21</rect>
+                <key>scale9Paddings</key>
+                <rect>10,10,21,21</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/ui/help-normal.png</key>
+            <key type="filename">assets/ui/help-pressed.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>10,10,21,20</rect>
+                <key>scale9Paddings</key>
+                <rect>10,10,21,20</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/ui/look-here-down.png</key>
+            <key type="filename">assets/ui/look-here-up.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,22,33,43</rect>
+                <key>scale9Paddings</key>
+                <rect>16,22,33,43</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/ui/look-here-left.png</key>
+            <key type="filename">assets/ui/look-here-right.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>22,16,44,33</rect>
+                <key>scale9Paddings</key>
+                <rect>22,16,44,33</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
