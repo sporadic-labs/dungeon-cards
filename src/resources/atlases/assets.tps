@@ -56,7 +56,7 @@
         <key>jxrCompressionLevel</key>
         <uint>0</uint>
         <key>ditherType</key>
-        <enum type="SettingsBase::DitherType">NearestNeighbour</enum>
+        <enum type="SettingsBase::DitherType">PngQuantLow</enum>
         <key>backgroundColor</key>
         <uint>0</uint>
         <key>libGdx</key>
@@ -82,7 +82,7 @@
         <key>atfFormats</key>
         <string></string>
         <key>textureFormat</key>
-        <enum type="SettingsBase::TextureFormat">png</enum>
+        <enum type="SettingsBase::TextureFormat">png8</enum>
         <key>borderPadding</key>
         <uint>0</uint>
         <key>maxTextureSize</key>
@@ -459,19 +459,29 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">assets/ui/deck-0-cards.png</key>
-            <key type="filename">assets/ui/deck-1-card.png</key>
-            <key type="filename">assets/ui/deck-2-cards.png</key>
-            <key type="filename">assets/ui/deck-3-cards.png</key>
+            <key type="filename">assets/ui/arrow-shadow.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>23,28,46,56</rect>
+                <rect>21,17,41,33</rect>
                 <key>scale9Paddings</key>
-                <rect>23,28,46,56</rect>
+                <rect>21,17,41,33</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/ui/arrow.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>17,21,33,41</rect>
+                <key>scale9Paddings</key>
+                <rect>17,21,33,41</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
