@@ -118,10 +118,12 @@ export default class PlayScene extends Scene {
       }
     });
 
-    this.input.keyboard.on("keydown_E", event => {
-      gameStore.setPaused(true);
-      gameStore.setMenuState(MENU_STATES.DEBUG);
-    });
+    if (IS_DEVELOPMENT) {
+      this.input.keyboard.on("keydown_E", event => {
+        gameStore.setPaused(true);
+        gameStore.setMenuState(MENU_STATES.DEBUG);
+      });
+    }
 
     gameStore.setGameStarted(true);
 
