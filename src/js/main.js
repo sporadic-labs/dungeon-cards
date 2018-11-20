@@ -16,8 +16,8 @@ import GameSfxPlayer from "./sound/game-sfx-player/index";
 import disableRightClickMenu from "./helpers/disable-right-click-menu";
 import makeGameResponsive from "./helpers/make-game-responsive";
 
-logger.setLevel(PRODUCTION ? LOG_LEVEL.OFF : LOG_LEVEL.ALL);
-if (PRODUCTION) disableRightClickMenu("root");
+logger.setLevel(IS_PRODUCTION ? LOG_LEVEL.OFF : LOG_LEVEL.ALL);
+if (IS_PRODUCTION) disableRightClickMenu("root");
 
 const gameResolution = 800;
 const canvas = document.querySelector("canvas");

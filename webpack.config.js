@@ -80,7 +80,8 @@ module.exports = function(env, argv) {
         "typeof EXPERIMENTAL": JSON.stringify(false),
         "typeof PLUGIN_CAMERA3D": JSON.stringify(false),
         "typeof PLUGIN_FBINSTANT": JSON.stringify(false),
-        PRODUCTION: !isDev
+        IS_PRODUCTION: !isDev,
+        IS_DEVELOPMENT: isDev
       })
     ],
     devtool: isDev ? "eval-source-map" : "source-map"
