@@ -1,7 +1,7 @@
 {
   "name": "phaser-3-sanbox",
   "description": "Phaser 3 & Webpack 4 Sandbox",
-  "version": "0.1.0",
+  "version": "0.9.0",
   "authors": [
     "Rex Twedt",
     "Mike Hadley"
