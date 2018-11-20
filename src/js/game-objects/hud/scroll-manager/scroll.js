@@ -15,6 +15,11 @@ const titleStyle = {
   wordWrap: { width: 120 }
 };
 
+const roundGameObjectPosition = go => {
+  go.x = Math.round(go.x);
+  go.y = Math.round(go.y);
+};
+
 /**
  * @export
  * @class Scroll
@@ -79,9 +84,9 @@ export default class Scroll {
     this.energyText.setPosition(0, this.costText.getBottomLeft().y + this.spacing / 8);
     this.container.setPosition(this.cx, this.cy - this.container.getBounds().height / 2);
 
-    // Mask synced to the scroll body animation
-    const mask = new Phaser.Display.Masks.BitmapMask(scene, this.scrollBody);
-    this.container.setMask(mask);
+    // Force integer positioning otherwise text is blurry
+    roundGameObjectPosition(this.container);
+    this.container.each(roundGameObjectPosition);
 
     this.scrollBody.anims.play("body-open");
     this.scrollRollers.anims.play("rollers-open");
