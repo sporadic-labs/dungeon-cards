@@ -32,6 +32,7 @@ export default class Scroll {
    */
   constructor(scene, x, y, cardInfo) {
     this.scene = scene;
+    this.eventProxy = new EventProxy();
 
     const bodyFrames = scene.anims.generateFrameNames("assets", {
       prefix: "scroll/scroll-body-",
@@ -91,9 +92,34 @@ export default class Scroll {
     this.scrollBody.anims.play("body-open");
     this.scrollRollers.anims.play("rollers-open");
 
-    this.eventProxy = new EventProxy();
+    // Sync up a mask with the scroll animation. Unfortunately, the easy way - using BitmapMask with
+    // the scroll body's current texture - causes gray anti-aliasing artifacts around the image in
+    // the scroll. So, instead, sync up a graphics object with the animation and use that!
+    this.shape = this.scene.make.graphics();
+    this.mask = new Phaser.Display.Masks.GeometryMask(scene, this.shape);
+    this.container.setMask(this.mask);
+    this.maskTween = this.scene.tweens.addCounter({
+      from: 0,
+      to: 1,
+      duration: this.scene.anims.get("body-open").duration
+    });
+    // Only need to redraw the mask in sync with frame changes
+    this.eventProxy.on(this.scrollBody, "animationupdate", () =>
+      this.redrawMask(this.maskTween.getValue())
+    );
+
     this.eventProxy.once(scene.events, "shutdown", this.destroy, this);
     this.eventProxy.once(scene.events, "destroy", this.destroy, this);
+  }
+
+  redrawMask(fraction) {
+    // The mask shape needs to be drawing in global/world coordinates - not local coordinates to the
+    // container
+    const { x, y, width, height } = this.scrollBody;
+    const maskedHeight = fraction * height;
+    this.shape.clear();
+    this.shape.fillStyle(0x000000);
+    this.shape.fillRect(x - width / 2, y - maskedHeight / 2, width, maskedHeight);
   }
 
   fadeOut() {
@@ -108,7 +134,10 @@ export default class Scroll {
   }
 
   destroy() {
+    if (this.maskTween) this.maskTween.stop();
     if (this.tween) this.tween.stop();
+    this.shape.destroy();
+    this.mask.destroy();
     this.eventProxy.removeAll();
     this.container.destroy();
     this.scrollBody.destroy();
