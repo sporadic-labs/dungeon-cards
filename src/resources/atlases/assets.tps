@@ -485,6 +485,7 @@
                 <false/>
             </struct>
             <key type="filename">assets/ui/close-button-hover.png</key>
+            <key type="filename">assets/ui/help-hover-old.png</key>
             <key type="filename">assets/ui/help-hover.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -500,7 +501,9 @@
             </struct>
             <key type="filename">assets/ui/close-button-normal.png</key>
             <key type="filename">assets/ui/close-button-pressed.png</key>
+            <key type="filename">assets/ui/help-normal-old.png</key>
             <key type="filename">assets/ui/help-normal.png</key>
+            <key type="filename">assets/ui/help-pressed-old.png</key>
             <key type="filename">assets/ui/help-pressed.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
