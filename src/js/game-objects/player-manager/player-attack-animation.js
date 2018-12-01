@@ -10,8 +10,6 @@ export default class PlayerAttackAnimation {
 
     this.sfxPlayer = this.scene.game.globals.sfxPlayer;
     this.sfxPlayer.add("sword-clash", 2, 0.3, false);
-    const didPlay = this.sfxPlayer.play("sword-clash");
-    console.log(didPlay);
 
     this.sprite = scene.add.sprite(0, 0, "assets", "attacks/player-slash");
     this.sprite.setRotation((-Math.PI / 180) * 20);
@@ -23,6 +21,7 @@ export default class PlayerAttackAnimation {
   fadeout(delay) {
     setTimeout(() => {
       this.sprite.setVisible(true);
+      this.sfxPlayer.play("sword-clash");
     }, delay);
     return new Promise((resolve, reject) => {
       this.scene.tweens.add({
