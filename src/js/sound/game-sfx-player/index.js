@@ -18,17 +18,17 @@ export default class GameSfxPlayer extends WebAudioSoundManager {
    * @param {*} volume
    * @param {*} loop
    */
-  add(key, maxSimultaneous = 1, volume = 1.0, loop = false) {
+  add(key, maxSimultaneous = 1, volume = this.defaultVolume, loop = false) {
+    const addedSound = super.add(key, { volume, loop });
     if (!this.loadedSounds[key]) {
-      const addedSound = super.add(key, { volume, loop });
       this.loadedSounds[key] = {
         key,
         maxSimultaneous,
-        currentlyPlaying: 0,
-        phaserSound: addedSound
+        currentlyPlaying: 0
       };
     }
-    return this.loadedSounds[key].phaserSound;
+    addedSound.once("ended", _ => this.loadedSounds[key].currentlyPlaying--);
+    return addedSound;
   }
 
   /**
@@ -37,21 +37,15 @@ export default class GameSfxPlayer extends WebAudioSoundManager {
    * @param {*} playArguments
    */
   play(key, playArguments) {
-    console.log("Attempting to play a sound!");
     if (preferencesStore.noAudio) return;
-    if (!this.loadedSounds[key]) {
-      this.add(key);
-    }
-    const sound = this.loadedSounds[key];
+    1;
+    const sound = this.add(key);
+    const soundInfo = this.loadedSounds[key];
     let didPlay = false;
-    if (sound.currentlyPlaying < sound.maxSimultaneous) {
-      console.log("Playing this sound is allowed.");
-      console.log(sound.currentlyPlaying);
-      console.log(sound.maxSimultaneous);
-      sound.currentlyPlaying++;
-      sound.phaserSound.once("ended", _ => sound.currentlyPlaying--);
-      didPlay = sound.phaserSound.play(playArguments);
-      // didPlay = super.play(key, playArguments);
+    if (soundInfo.currentlyPlaying < soundInfo.maxSimultaneous) {
+      soundInfo.currentlyPlaying++;
+      sound.once("ended", _ => sound.currentlyPlaying--);
+      didPlay = super.play(key);
     }
     return didPlay;
   }
@@ -61,7 +55,7 @@ export default class GameSfxPlayer extends WebAudioSoundManager {
    */
   playButtonClick() {
     if (preferencesStore.noAudio) return;
-    this.play("button-click", { volume: this.defaultVolume });
+    this.play("button-click");
   }
 
   /**
